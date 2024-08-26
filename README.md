@@ -92,4 +92,5 @@ This project is licensed under the [MIT License](LICENSE).
 
 ![alt text](image.png)
 
-
+I have achieved an accuracy of 53.33% 
+![alt text](image-1.png)

@@ -6,7 +6,11 @@ import json
 
 import chromadb
 from chromadb.config import Settings
-from vector_db_models import EMBEDDING_FUNCTION
+from sql_bot.vector_db.vector_db_models import EMBEDDING_FUNCTION
+
+import warnings
+warnings.filterwarnings("ignore")
+
 
 
 def create_vector_db(

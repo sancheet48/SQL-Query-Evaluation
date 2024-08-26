@@ -72,7 +72,7 @@ def main():
         sys.exit(1)
 
     schema = create_schema(db_schema)
-    with open("llm_schema.txt", "w") as file:
+    with open("sql_bot/lib/llm_schema.txt", "w") as file:
         json.dump(schema, file, indent=2)
 
     print("Schema created successfully!")

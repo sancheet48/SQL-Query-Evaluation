@@ -1,43 +1,2238 @@
 [
     {
-        "question": "What is the average weight of Japanese cars with 4 cylinders that were produced from 1975 to 1980?",
-        "llm_answer": "SELECT AVG(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T1.cylinders = 4 AND T2.model_year BETWEEN 1975 AND 1980",
+        "question": "Tell the origin country of car no.382.",
+        "llm_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T1.ID = 382",
         "llm_results": [
             [
-                2176.0163934426228
+                "Japan"
+            ],
+            [
+                "Japan"
             ]
         ],
-        "correct_answer": "SELECT AVG(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T2.model_year BETWEEN 1975 AND 1980 AND T1.cylinders = 4 AND T3.country = 'Japan'",
+        "correct_answer": "SELECT DISTINCT T2.country FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T1.ID = 382",
         "correct_results": [
             [
-                2176.0163934426228
+                "Japan"
             ]
         ]
     },
     {
-        "question": "Among the cars with 8 cylinders, what is the name of the one that's the most expensive?",
-        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8 ORDER BY T2.price DESC LIMIT 1",
+        "question": "Calculate the percentage of cars that belong to the USA.",
+        "llm_answer": "SELECT CAST(SUM(CASE WHEN T2.country = 1 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'USA'",
         "llm_results": [
             [
-                "plymouth fury gran sedan"
+                100.0
             ]
         ],
-        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8 ORDER BY T2.price DESC LIMIT 1",
+        "correct_answer": "SELECT CAST(SUM(CASE WHEN T2.country = 'USA' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin",
         "correct_results": [
             [
-                "plymouth fury gran sedan"
+                65.46242774566474
             ]
         ]
     },
     {
-        "question": "Which car in the database provides the best crash protection based on its weight? How much is it?",
-        "llm_answer": "I cannot answer this question. The provided database schema does not contain information about crash protection for the cars.",
+        "question": "Provide the engine displacement status of the $37443.85589 car.",
+        "llm_answer": "`SELECT T1.displacement FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = 37443.85589`",
         "llm_results": "Error",
-        "correct_answer": "SELECT T1.ID, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.weight DESC LIMIT 1",
+        "correct_answer": "SELECT T1.displacement FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = '37443.85589'",
         "correct_results": [
             [
-                45,
+                200.0
+            ]
+        ]
+    },
+    {
+        "question": "List the name of the most expensive car.",
+        "llm_answer": "`SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1`",
+        "llm_results": "Error",
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1",
+        "correct_results": [
+            [
+                "plymouth fury gran sedan"
+            ]
+        ]
+    },
+    {
+        "question": "Provide the name and model of the car with the highest price.",
+        "llm_answer": "SELECT T1.car_name, T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1",
+        "llm_results": [
+            [
+                "plymouth fury gran sedan",
+                73
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name, T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1",
+        "correct_results": [
+            [
+                "plymouth fury gran sedan",
+                73
+            ]
+        ]
+    },
+    {
+        "question": "List the names and prices of the cars with model 82 and mileage per gallon of greater than 30.",
+        "llm_answer": "SELECT T1.car_name ,  T3.price FROM data AS T1 JOIN production AS T2 ON T1.ID = T2.ID JOIN price AS T3 ON T1.ID = T3.ID WHERE T2.model_year = 82 AND T1.mpg  >  30",
+        "llm_results": [],
+        "correct_answer": "SELECT T2.car_name, T1.price FROM price AS T1 INNER JOIN data AS T2 ON T1.ID = T2.ID WHERE T2.model = 82 AND T2.mpg > 30",
+        "correct_results": [
+            [
+                "chevrolet cavalier 2-door",
+                40000.0
+            ],
+            [
+                "pontiac j2000 se hatchback",
+                27074.39484
+            ],
+            [
+                "volkswagen rabbit l",
+                33472.79144
+            ],
+            [
+                "mazda glc custom l",
+                44607.86606
+            ],
+            [
+                "mazda glc custom",
+                34686.42339
+            ],
+            [
+                "plymouth horizon miser",
+                48111.1021
+            ],
+            [
+                "mercury lynx l",
+                30000.0
+            ],
+            [
+                "nissan stanza xe",
+                34612.00874
+            ],
+            [
+                "honda accord",
+                30000.0
+            ],
+            [
+                "toyota corolla",
+                30000.0
+            ],
+            [
+                "honda civic",
+                30000.0
+            ],
+            [
+                "honda civic (auto)",
+                30000.0
+            ],
+            [
+                "datsun 310 gx",
+                30000.0
+            ],
+            [
+                "oldsmobile cutlass ciera (diesel)",
+                9944.306349
+            ],
+            [
+                "toyota celica gt",
                 20000.0
+            ],
+            [
+                "dodge charger 2.2",
+                17421.6269
+            ],
+            [
+                "vw pickup",
+                37000.0
+            ],
+            [
+                "dodge rampage",
+                47800.0
+            ],
+            [
+                "chevy s-10",
+                9000.0
+            ]
+        ]
+    },
+    {
+        "question": "Calculate the average price of cars from Europe.",
+        "llm_answer": "SELECT AVG(T2.price) FROM country AS T1 INNER JOIN production AS T2 ON T1.origin = T2.country INNER JOIN price AS T3 ON T2.ID = T3.ID WHERE T1.country = 'Europe'",
+        "llm_results": "Error",
+        "correct_answer": "SELECT AVG(T1.price) FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Europe'",
+        "correct_results": [
+            [
+                29751.51903526471
+            ]
+        ]
+    },
+    {
+        "question": "Which country produced the most fuel-efficient car?",
+        "llm_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin ORDER BY T1.mpg DESC LIMIT 1",
+        "llm_results": [
+            [
+                "Japan"
+            ]
+        ],
+        "correct_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country ORDER BY T1.mpg DESC LIMIT 1",
+        "correct_results": [
+            [
+                "Japan"
+            ]
+        ]
+    },
+    {
+        "question": "List the price of Ford cars from model 1970 to 1980.",
+        "llm_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID INNER JOIN production AS T3 ON T1.ID = T3.ID WHERE T1.car_name LIKE 'Ford%' AND T3.model_year BETWEEN 1970 AND 1980",
+        "llm_results": [
+            [
+                20000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                14228.30388
+            ],
+            [
+                14228.30388
+            ],
+            [
+                14228.30388
+            ],
+            [
+                14228.30388
+            ],
+            [
+                14228.30388
+            ],
+            [
+                25797.48544
+            ],
+            [
+                26417.43542
+            ],
+            [
+                26417.43542
+            ],
+            [
+                26417.43542
+            ],
+            [
+                26417.43542
+            ],
+            [
+                26417.43542
+            ],
+            [
+                30000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                44211.91218
+            ],
+            [
+                44211.91218
+            ],
+            [
+                40000.0
+            ],
+            [
+                36453.30104
+            ],
+            [
+                20000.0
+            ],
+            [
+                20000.0
+            ],
+            [
+                20000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                20000.0
+            ],
+            [
+                50306.15305
+            ],
+            [
+                50306.15305
+            ],
+            [
+                50306.15305
+            ],
+            [
+                36489.40106
+            ],
+            [
+                36489.40106
+            ],
+            [
+                33726.80756
+            ],
+            [
+                33726.80756
+            ],
+            [
+                33726.80756
+            ],
+            [
+                33726.80756
+            ],
+            [
+                33726.80756
+            ],
+            [
+                20000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                36836.73869
+            ],
+            [
+                36836.73869
+            ],
+            [
+                36836.73869
+            ],
+            [
+                36836.73869
+            ],
+            [
+                36836.73869
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                27027.84106
+            ],
+            [
+                27027.84106
+            ],
+            [
+                27027.84106
+            ],
+            [
+                43956.27279
+            ],
+            [
+                43956.27279
+            ],
+            [
+                30000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                34458.38738
+            ],
+            [
+                16968.55626
+            ],
+            [
+                16968.55626
+            ],
+            [
+                16968.55626
+            ],
+            [
+                16968.55626
+            ],
+            [
+                16968.55626
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                47075.03525
+            ],
+            [
+                47075.03525
+            ],
+            [
+                47075.03525
+            ],
+            [
+                50179.77946
+            ],
+            [
+                50179.77946
+            ],
+            [
+                50179.77946
+            ],
+            [
+                50179.77946
+            ],
+            [
+                50179.77946
+            ],
+            [
+                26411.47262
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                20000.0
+            ],
+            [
+                36453.91629
+            ],
+            [
+                40000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                40000.0
+            ],
+            [
+                35375.46418
+            ],
+            [
+                20000.0
+            ],
+            [
+                52480.06755
+            ],
+            [
+                25696.08888
+            ],
+            [
+                25696.08888
+            ],
+            [
+                17032.34506
+            ],
+            [
+                24749.73654
+            ]
+        ],
+        "correct_answer": "SELECT DISTINCT T3.price FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN price AS T3 ON T3.ID = T2.ID WHERE T1.car_name LIKE 'ford%' AND T2.model_year BETWEEN 1970 AND 1980",
+        "correct_results": [
+            [
+                20000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                14228.30388
+            ],
+            [
+                25797.48544
+            ],
+            [
+                26417.43542
+            ],
+            [
+                44211.91218
+            ],
+            [
+                40000.0
+            ],
+            [
+                36453.30104
+            ],
+            [
+                50306.15305
+            ],
+            [
+                36489.40106
+            ],
+            [
+                33726.80756
+            ],
+            [
+                36836.73869
+            ],
+            [
+                27027.84106
+            ],
+            [
+                43956.27279
+            ],
+            [
+                34458.38738
+            ],
+            [
+                16968.55626
+            ],
+            [
+                47075.03525
+            ],
+            [
+                50179.77946
+            ],
+            [
+                26411.47262
+            ],
+            [
+                36453.91629
+            ],
+            [
+                35375.46418
+            ],
+            [
+                52480.06755
+            ],
+            [
+                25696.08888
+            ],
+            [
+                17032.34506
+            ],
+            [
+                24749.73654
+            ]
+        ]
+    },
+    {
+        "question": "List the car's name with a price worth greater than 85% of the average price of all cars.",
+        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > (SELECT AVG(price) FROM price) * 0.85",
+        "llm_results": [
+            [
+                "chevrolet chevelle malibu"
+            ],
+            [
+                "plymouth satellite"
+            ],
+            [
+                "amc rebel sst"
+            ],
+            [
+                "ford galaxie 500"
+            ],
+            [
+                "chevrolet impala"
+            ],
+            [
+                "plymouth fury iii"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "amc ambassador dpl"
+            ],
+            [
+                "dodge challenger se"
+            ],
+            [
+                "plymouth 'cuda 340"
+            ],
+            [
+                "chevrolet monte carlo"
+            ],
+            [
+                "buick estate wagon (sw)"
+            ],
+            [
+                "toyota corona mark ii"
+            ],
+            [
+                "volkswagen 1131 deluxe sedan"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "audi 100 ls"
+            ],
+            [
+                "ford f250"
+            ],
+            [
+                "chevy c20"
+            ],
+            [
+                "hi 1200d"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc gremlin"
+            ],
+            [
+                "plymouth satellite custom"
+            ],
+            [
+                "chevrolet chevelle malibu"
+            ],
+            [
+                "ford torino 500"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "chevrolet impala"
+            ],
+            [
+                "pontiac catalina brougham"
+            ],
+            [
+                "ford galaxie 500"
+            ],
+            [
+                "ford country squire (sw)"
+            ],
+            [
+                "amc hornet sportabout (sw)"
+            ],
+            [
+                "ford mustang"
+            ],
+            [
+                "mercury capri 2000"
+            ],
+            [
+                "peugeot 304"
+            ],
+            [
+                "toyota corolla 1200"
+            ],
+            [
+                "datsun 1200"
+            ],
+            [
+                "volkswagen model 111"
+            ],
+            [
+                "plymouth cricket"
+            ],
+            [
+                "toyota corona hardtop"
+            ],
+            [
+                "volkswagen type 3"
+            ],
+            [
+                "chevrolet vega"
+            ],
+            [
+                "ford pinto runabout"
+            ],
+            [
+                "chevrolet impala"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "plymouth fury iii"
+            ],
+            [
+                "oldsmobile delta 88 royale"
+            ],
+            [
+                "chrysler newport royal"
+            ],
+            [
+                "mazda rx2 coupe"
+            ],
+            [
+                "ford gran torino (sw)"
+            ],
+            [
+                "plymouth satellite custom (sw)"
+            ],
+            [
+                "volvo 145e (sw)"
+            ],
+            [
+                "volkswagen 411 (sw)"
+            ],
+            [
+                "renault 12 (sw)"
+            ],
+            [
+                "datsun 510 (sw)"
+            ],
+            [
+                "toyouta corona mark ii (sw)"
+            ],
+            [
+                "toyota corolla 1600 (sw)"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "ford gran torino"
+            ],
+            [
+                "dodge coronet custom"
+            ],
+            [
+                "mercury marquis brougham"
+            ],
+            [
+                "chevrolet caprice classic"
+            ],
+            [
+                "ford ltd"
+            ],
+            [
+                "plymouth fury gran sedan"
+            ],
+            [
+                "chrysler new yorker brougham"
+            ],
+            [
+                "buick electra 225 custom"
+            ],
+            [
+                "amc ambassador brougham"
+            ],
+            [
+                "chevrolet nova custom"
+            ],
+            [
+                "amc hornet"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "volkswagen super beetle"
+            ],
+            [
+                "plymouth custom suburb"
+            ],
+            [
+                "oldsmobile vista cruiser"
+            ],
+            [
+                "toyota carina"
+            ],
+            [
+                "chevrolet vega"
+            ],
+            [
+                "maxda rx3"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "mercury capri v6"
+            ],
+            [
+                "chevrolet monte carlo s"
+            ],
+            [
+                "pontiac grand prix"
+            ],
+            [
+                "fiat 128"
+            ],
+            [
+                "opel manta"
+            ],
+            [
+                "audi 100ls"
+            ],
+            [
+                "volvo 144ea"
+            ],
+            [
+                "dodge dart custom"
+            ],
+            [
+                "saab 99le"
+            ],
+            [
+                "toyota mark ii"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "amc hornet"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "datsun b210"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "toyota corolla 1200"
+            ],
+            [
+                "chevrolet vega"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "plymouth satellite sebring"
+            ],
+            [
+                "ford gran torino"
+            ],
+            [
+                "dodge coronet custom (sw)"
+            ],
+            [
+                "ford gran torino (sw)"
+            ],
+            [
+                "amc matador (sw)"
+            ],
+            [
+                "audi fox"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "dodge colt"
+            ],
+            [
+                "fiat 128"
+            ],
+            [
+                "honda civic"
+            ],
+            [
+                "subaru"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "ford ltd"
+            ],
+            [
+                "buick century"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "plymouth fury"
+            ],
+            [
+                "buick skyhawk"
+            ],
+            [
+                "chevrolet monza 2+2"
+            ],
+            [
+                "ford mustang ii"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "pontiac astro"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc pacer"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "volvo 244dl"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "fiat 131"
+            ],
+            [
+                "capri ii"
+            ],
+            [
+                "dodge colt"
+            ],
+            [
+                "renault 12tl"
+            ],
+            [
+                "chevrolet chevelle malibu classic"
+            ],
+            [
+                "ford gran torino"
+            ],
+            [
+                "plymouth valiant"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "chevrolet chevette"
+            ],
+            [
+                "chevrolet woody"
+            ],
+            [
+                "honda civic"
+            ],
+            [
+                "dodge aspen se"
+            ],
+            [
+                "ford granada ghia"
+            ],
+            [
+                "pontiac ventura sj"
+            ],
+            [
+                "amc pacer d/l"
+            ],
+            [
+                "datsun b-210"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "volvo 245"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "chevy c10"
+            ],
+            [
+                "buick opel isuzu deluxe"
+            ],
+            [
+                "plymouth arrow gs"
+            ],
+            [
+                "datsun f-10 hatchback"
+            ],
+            [
+                "chevrolet caprice classic"
+            ],
+            [
+                "oldsmobile cutlass supreme"
+            ],
+            [
+                "dodge monaco brougham"
+            ],
+            [
+                "buick skylark"
+            ],
+            [
+                "plymouth volare custom"
+            ],
+            [
+                "ford granada"
+            ],
+            [
+                "chevrolet monte carlo landau"
+            ],
+            [
+                "ford thunderbird"
+            ],
+            [
+                "volkswagen rabbit custom"
+            ],
+            [
+                "ford mustang ii 2+2"
+            ],
+            [
+                "chevrolet chevette"
+            ],
+            [
+                "dodge colt m/m"
+            ],
+            [
+                "subaru dl"
+            ],
+            [
+                "datsun 810"
+            ],
+            [
+                "volkswagen rabbit custom diesel"
+            ],
+            [
+                "ford fiesta"
+            ],
+            [
+                "mazda glc deluxe"
+            ],
+            [
+                "datsun b210 gx"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "oldsmobile cutlass salon brougham"
+            ],
+            [
+                "dodge diplomat"
+            ],
+            [
+                "mercury monarch ghia"
+            ],
+            [
+                "pontiac phoenix lj"
+            ],
+            [
+                "ford fairmont (auto)"
+            ],
+            [
+                "ford fairmont (man)"
+            ],
+            [
+                "plymouth volare"
+            ],
+            [
+                "amc concord"
+            ],
+            [
+                "buick century special"
+            ],
+            [
+                "mercury zephyr"
+            ],
+            [
+                "dodge aspen"
+            ],
+            [
+                "amc concord d/l"
+            ],
+            [
+                "chevrolet monte carlo landau"
+            ],
+            [
+                "ford futura"
+            ],
+            [
+                "dodge magnum xe"
+            ],
+            [
+                "chevrolet chevette"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "datsun 510"
+            ],
+            [
+                "plymouth sapporo"
+            ],
+            [
+                "oldsmobile starfire sx"
+            ],
+            [
+                "datsun 200-sx"
+            ],
+            [
+                "audi 5000"
+            ],
+            [
+                "volvo 264gl"
+            ],
+            [
+                "saab 99gle"
+            ],
+            [
+                "volkswagen scirocco"
+            ],
+            [
+                "mercury zephyr 6"
+            ],
+            [
+                "dodge aspen 6"
+            ],
+            [
+                "chevrolet caprice classic"
+            ],
+            [
+                "ford ltd landau"
+            ],
+            [
+                "ford country squire (sw)"
+            ],
+            [
+                "chevrolet malibu classic (sw)"
+            ],
+            [
+                "vw rabbit custom"
+            ],
+            [
+                "dodge colt hatchback custom"
+            ],
+            [
+                "amc spirit dl"
+            ],
+            [
+                "cadillac eldorado"
+            ],
+            [
+                "oldsmobile cutlass salon brougham"
+            ],
+            [
+                "plymouth horizon"
+            ],
+            [
+                "datsun 210"
+            ],
+            [
+                "fiat strada custom"
+            ],
+            [
+                "buick skylark limited"
+            ],
+            [
+                "chevrolet citation"
+            ],
+            [
+                "oldsmobile omega brougham"
+            ],
+            [
+                "pontiac phoenix"
+            ],
+            [
+                "vw rabbit"
+            ],
+            [
+                "datsun 310"
+            ],
+            [
+                "chevrolet citation"
+            ],
+            [
+                "amc concord"
+            ],
+            [
+                "dodge aspen"
+            ],
+            [
+                "audi 4000"
+            ],
+            [
+                "toyota corona liftback"
+            ],
+            [
+                "mazda 626"
+            ],
+            [
+                "datsun 510 hatchback"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "mazda glc"
+            ],
+            [
+                "dodge colt"
+            ],
+            [
+                "datsun 210"
+            ],
+            [
+                "vw rabbit c (diesel)"
+            ],
+            [
+                "vw dasher (diesel)"
+            ],
+            [
+                "audi 5000s (diesel)"
+            ],
+            [
+                "renault lecar deluxe"
+            ],
+            [
+                "subaru dl"
+            ],
+            [
+                "vokswagen rabbit"
+            ],
+            [
+                "datsun 280-zx"
+            ],
+            [
+                "mazda rx-7 gs"
+            ],
+            [
+                "triumph tr7 coupe"
+            ],
+            [
+                "honda accord"
+            ],
+            [
+                "plymouth reliant"
+            ],
+            [
+                "chevrolet citation"
+            ],
+            [
+                "plymouth reliant"
+            ],
+            [
+                "toyota starlet"
+            ],
+            [
+                "honda civic 1300"
+            ],
+            [
+                "toyota tercel"
+            ],
+            [
+                "mazda glc 4"
+            ],
+            [
+                "plymouth horizon 4"
+            ],
+            [
+                "volkswagen jetta"
+            ],
+            [
+                "renault 18i"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "datsun 200sx"
+            ],
+            [
+                "mazda 626"
+            ],
+            [
+                "volvo diesel"
+            ],
+            [
+                "toyota cressida"
+            ],
+            [
+                "datsun 810 maxima"
+            ],
+            [
+                "buick century"
+            ],
+            [
+                "oldsmobile cutlass ls"
+            ],
+            [
+                "ford granada gl"
+            ],
+            [
+                "chevrolet cavalier"
+            ],
+            [
+                "chevrolet cavalier wagon"
+            ],
+            [
+                "chevrolet cavalier 2-door"
+            ],
+            [
+                "pontiac j2000 se hatchback"
+            ],
+            [
+                "pontiac phoenix"
+            ],
+            [
+                "ford fairmont futura"
+            ],
+            [
+                "amc concord dl"
+            ],
+            [
+                "volkswagen rabbit l"
+            ],
+            [
+                "mazda glc custom l"
+            ],
+            [
+                "mazda glc custom"
+            ],
+            [
+                "plymouth horizon miser"
+            ],
+            [
+                "mercury lynx l"
+            ],
+            [
+                "nissan stanza xe"
+            ],
+            [
+                "honda accord"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "honda civic"
+            ],
+            [
+                "honda civic (auto)"
+            ],
+            [
+                "datsun 310 gx"
+            ],
+            [
+                "buick century limited"
+            ],
+            [
+                "chrysler lebaron medallion"
+            ],
+            [
+                "vw pickup"
+            ],
+            [
+                "dodge rampage"
+            ],
+            [
+                "ford ranger"
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price * 100 > ( SELECT AVG(price) * 85 FROM price )",
+        "correct_results": [
+            [
+                "chevrolet chevelle malibu"
+            ],
+            [
+                "plymouth satellite"
+            ],
+            [
+                "amc rebel sst"
+            ],
+            [
+                "ford galaxie 500"
+            ],
+            [
+                "chevrolet impala"
+            ],
+            [
+                "plymouth fury iii"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "amc ambassador dpl"
+            ],
+            [
+                "dodge challenger se"
+            ],
+            [
+                "plymouth 'cuda 340"
+            ],
+            [
+                "chevrolet monte carlo"
+            ],
+            [
+                "buick estate wagon (sw)"
+            ],
+            [
+                "toyota corona mark ii"
+            ],
+            [
+                "volkswagen 1131 deluxe sedan"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "audi 100 ls"
+            ],
+            [
+                "ford f250"
+            ],
+            [
+                "chevy c20"
+            ],
+            [
+                "hi 1200d"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc gremlin"
+            ],
+            [
+                "plymouth satellite custom"
+            ],
+            [
+                "chevrolet chevelle malibu"
+            ],
+            [
+                "ford torino 500"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "chevrolet impala"
+            ],
+            [
+                "pontiac catalina brougham"
+            ],
+            [
+                "ford galaxie 500"
+            ],
+            [
+                "ford country squire (sw)"
+            ],
+            [
+                "amc hornet sportabout (sw)"
+            ],
+            [
+                "ford mustang"
+            ],
+            [
+                "mercury capri 2000"
+            ],
+            [
+                "peugeot 304"
+            ],
+            [
+                "toyota corolla 1200"
+            ],
+            [
+                "datsun 1200"
+            ],
+            [
+                "volkswagen model 111"
+            ],
+            [
+                "plymouth cricket"
+            ],
+            [
+                "toyota corona hardtop"
+            ],
+            [
+                "volkswagen type 3"
+            ],
+            [
+                "chevrolet vega"
+            ],
+            [
+                "ford pinto runabout"
+            ],
+            [
+                "chevrolet impala"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "plymouth fury iii"
+            ],
+            [
+                "oldsmobile delta 88 royale"
+            ],
+            [
+                "chrysler newport royal"
+            ],
+            [
+                "mazda rx2 coupe"
+            ],
+            [
+                "ford gran torino (sw)"
+            ],
+            [
+                "plymouth satellite custom (sw)"
+            ],
+            [
+                "volvo 145e (sw)"
+            ],
+            [
+                "volkswagen 411 (sw)"
+            ],
+            [
+                "renault 12 (sw)"
+            ],
+            [
+                "datsun 510 (sw)"
+            ],
+            [
+                "toyouta corona mark ii (sw)"
+            ],
+            [
+                "toyota corolla 1600 (sw)"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "ford gran torino"
+            ],
+            [
+                "dodge coronet custom"
+            ],
+            [
+                "mercury marquis brougham"
+            ],
+            [
+                "chevrolet caprice classic"
+            ],
+            [
+                "ford ltd"
+            ],
+            [
+                "plymouth fury gran sedan"
+            ],
+            [
+                "chrysler new yorker brougham"
+            ],
+            [
+                "buick electra 225 custom"
+            ],
+            [
+                "amc ambassador brougham"
+            ],
+            [
+                "chevrolet nova custom"
+            ],
+            [
+                "amc hornet"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "volkswagen super beetle"
+            ],
+            [
+                "plymouth custom suburb"
+            ],
+            [
+                "oldsmobile vista cruiser"
+            ],
+            [
+                "toyota carina"
+            ],
+            [
+                "chevrolet vega"
+            ],
+            [
+                "maxda rx3"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "mercury capri v6"
+            ],
+            [
+                "chevrolet monte carlo s"
+            ],
+            [
+                "pontiac grand prix"
+            ],
+            [
+                "fiat 128"
+            ],
+            [
+                "opel manta"
+            ],
+            [
+                "audi 100ls"
+            ],
+            [
+                "volvo 144ea"
+            ],
+            [
+                "dodge dart custom"
+            ],
+            [
+                "saab 99le"
+            ],
+            [
+                "toyota mark ii"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "amc hornet"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "datsun b210"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "toyota corolla 1200"
+            ],
+            [
+                "chevrolet vega"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "plymouth satellite sebring"
+            ],
+            [
+                "ford gran torino"
+            ],
+            [
+                "dodge coronet custom (sw)"
+            ],
+            [
+                "ford gran torino (sw)"
+            ],
+            [
+                "amc matador (sw)"
+            ],
+            [
+                "audi fox"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "dodge colt"
+            ],
+            [
+                "fiat 128"
+            ],
+            [
+                "honda civic"
+            ],
+            [
+                "subaru"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "ford ltd"
+            ],
+            [
+                "buick century"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "plymouth fury"
+            ],
+            [
+                "buick skyhawk"
+            ],
+            [
+                "chevrolet monza 2+2"
+            ],
+            [
+                "ford mustang ii"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "pontiac astro"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc pacer"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "volvo 244dl"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "fiat 131"
+            ],
+            [
+                "capri ii"
+            ],
+            [
+                "dodge colt"
+            ],
+            [
+                "renault 12tl"
+            ],
+            [
+                "chevrolet chevelle malibu classic"
+            ],
+            [
+                "ford gran torino"
+            ],
+            [
+                "plymouth valiant"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "chevrolet chevette"
+            ],
+            [
+                "chevrolet woody"
+            ],
+            [
+                "honda civic"
+            ],
+            [
+                "dodge aspen se"
+            ],
+            [
+                "ford granada ghia"
+            ],
+            [
+                "pontiac ventura sj"
+            ],
+            [
+                "amc pacer d/l"
+            ],
+            [
+                "datsun b-210"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "volvo 245"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "chevy c10"
+            ],
+            [
+                "buick opel isuzu deluxe"
+            ],
+            [
+                "plymouth arrow gs"
+            ],
+            [
+                "datsun f-10 hatchback"
+            ],
+            [
+                "chevrolet caprice classic"
+            ],
+            [
+                "oldsmobile cutlass supreme"
+            ],
+            [
+                "dodge monaco brougham"
+            ],
+            [
+                "buick skylark"
+            ],
+            [
+                "plymouth volare custom"
+            ],
+            [
+                "ford granada"
+            ],
+            [
+                "chevrolet monte carlo landau"
+            ],
+            [
+                "ford thunderbird"
+            ],
+            [
+                "volkswagen rabbit custom"
+            ],
+            [
+                "ford mustang ii 2+2"
+            ],
+            [
+                "chevrolet chevette"
+            ],
+            [
+                "dodge colt m/m"
+            ],
+            [
+                "subaru dl"
+            ],
+            [
+                "datsun 810"
+            ],
+            [
+                "volkswagen rabbit custom diesel"
+            ],
+            [
+                "ford fiesta"
+            ],
+            [
+                "mazda glc deluxe"
+            ],
+            [
+                "datsun b210 gx"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "oldsmobile cutlass salon brougham"
+            ],
+            [
+                "dodge diplomat"
+            ],
+            [
+                "mercury monarch ghia"
+            ],
+            [
+                "pontiac phoenix lj"
+            ],
+            [
+                "ford fairmont (auto)"
+            ],
+            [
+                "ford fairmont (man)"
+            ],
+            [
+                "plymouth volare"
+            ],
+            [
+                "amc concord"
+            ],
+            [
+                "buick century special"
+            ],
+            [
+                "mercury zephyr"
+            ],
+            [
+                "dodge aspen"
+            ],
+            [
+                "amc concord d/l"
+            ],
+            [
+                "chevrolet monte carlo landau"
+            ],
+            [
+                "ford futura"
+            ],
+            [
+                "dodge magnum xe"
+            ],
+            [
+                "chevrolet chevette"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "datsun 510"
+            ],
+            [
+                "plymouth sapporo"
+            ],
+            [
+                "oldsmobile starfire sx"
+            ],
+            [
+                "datsun 200-sx"
+            ],
+            [
+                "audi 5000"
+            ],
+            [
+                "volvo 264gl"
+            ],
+            [
+                "saab 99gle"
+            ],
+            [
+                "volkswagen scirocco"
+            ],
+            [
+                "mercury zephyr 6"
+            ],
+            [
+                "dodge aspen 6"
+            ],
+            [
+                "chevrolet caprice classic"
+            ],
+            [
+                "ford ltd landau"
+            ],
+            [
+                "ford country squire (sw)"
+            ],
+            [
+                "chevrolet malibu classic (sw)"
+            ],
+            [
+                "vw rabbit custom"
+            ],
+            [
+                "dodge colt hatchback custom"
+            ],
+            [
+                "amc spirit dl"
+            ],
+            [
+                "cadillac eldorado"
+            ],
+            [
+                "oldsmobile cutlass salon brougham"
+            ],
+            [
+                "plymouth horizon"
+            ],
+            [
+                "datsun 210"
+            ],
+            [
+                "fiat strada custom"
+            ],
+            [
+                "buick skylark limited"
+            ],
+            [
+                "chevrolet citation"
+            ],
+            [
+                "oldsmobile omega brougham"
+            ],
+            [
+                "pontiac phoenix"
+            ],
+            [
+                "vw rabbit"
+            ],
+            [
+                "datsun 310"
+            ],
+            [
+                "chevrolet citation"
+            ],
+            [
+                "amc concord"
+            ],
+            [
+                "dodge aspen"
+            ],
+            [
+                "audi 4000"
+            ],
+            [
+                "toyota corona liftback"
+            ],
+            [
+                "mazda 626"
+            ],
+            [
+                "datsun 510 hatchback"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "mazda glc"
+            ],
+            [
+                "dodge colt"
+            ],
+            [
+                "datsun 210"
+            ],
+            [
+                "vw rabbit c (diesel)"
+            ],
+            [
+                "vw dasher (diesel)"
+            ],
+            [
+                "audi 5000s (diesel)"
+            ],
+            [
+                "renault lecar deluxe"
+            ],
+            [
+                "subaru dl"
+            ],
+            [
+                "vokswagen rabbit"
+            ],
+            [
+                "datsun 280-zx"
+            ],
+            [
+                "mazda rx-7 gs"
+            ],
+            [
+                "triumph tr7 coupe"
+            ],
+            [
+                "honda accord"
+            ],
+            [
+                "plymouth reliant"
+            ],
+            [
+                "chevrolet citation"
+            ],
+            [
+                "plymouth reliant"
+            ],
+            [
+                "toyota starlet"
+            ],
+            [
+                "honda civic 1300"
+            ],
+            [
+                "toyota tercel"
+            ],
+            [
+                "mazda glc 4"
+            ],
+            [
+                "plymouth horizon 4"
+            ],
+            [
+                "volkswagen jetta"
+            ],
+            [
+                "renault 18i"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "datsun 200sx"
+            ],
+            [
+                "mazda 626"
+            ],
+            [
+                "volvo diesel"
+            ],
+            [
+                "toyota cressida"
+            ],
+            [
+                "datsun 810 maxima"
+            ],
+            [
+                "buick century"
+            ],
+            [
+                "oldsmobile cutlass ls"
+            ],
+            [
+                "ford granada gl"
+            ],
+            [
+                "chevrolet cavalier"
+            ],
+            [
+                "chevrolet cavalier wagon"
+            ],
+            [
+                "chevrolet cavalier 2-door"
+            ],
+            [
+                "pontiac j2000 se hatchback"
+            ],
+            [
+                "pontiac phoenix"
+            ],
+            [
+                "ford fairmont futura"
+            ],
+            [
+                "amc concord dl"
+            ],
+            [
+                "volkswagen rabbit l"
+            ],
+            [
+                "mazda glc custom l"
+            ],
+            [
+                "mazda glc custom"
+            ],
+            [
+                "plymouth horizon miser"
+            ],
+            [
+                "mercury lynx l"
+            ],
+            [
+                "nissan stanza xe"
+            ],
+            [
+                "honda accord"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "honda civic"
+            ],
+            [
+                "honda civic (auto)"
+            ],
+            [
+                "datsun 310 gx"
+            ],
+            [
+                "buick century limited"
+            ],
+            [
+                "chrysler lebaron medallion"
+            ],
+            [
+                "vw pickup"
+            ],
+            [
+                "dodge rampage"
+            ],
+            [
+                "ford ranger"
             ]
         ]
     },
@@ -57,142 +2252,176 @@
         ]
     },
     {
-        "question": "What is the percentage of cars that was produced by Japan among those that have a sweep volume of no less than 30?",
-        "llm_answer": "",
+        "question": "Provide the ID of cars from Japan worth greater than 35000 and have an acceleration of 14.",
+        "llm_answer": "SELECT T1.ID FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin INNER JOIN price AS T4 ON T1.ID = T4.ID WHERE T3.country = 'Japan' AND T4.price > 35000 AND T1.acceleration = 14",
         "llm_results": [],
-        "correct_answer": "SELECT CAST(SUM(CASE WHEN T3.country = 'Japan' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T1.displacement / T1.cylinders > 30",
+        "correct_answer": "SELECT T4.ID FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' AND T1.price > 3500 AND T4.acceleration = 14",
         "correct_results": [
             [
-                2.6128266033254155
+                32
+            ],
+            [
+                32
+            ],
+            [
+                32
+            ],
+            [
+                32
             ]
         ]
     },
     {
-        "question": "Provide the price and country origin of the car named Ford Maverick.",
-        "llm_answer": "SELECT T2.price ,  T4.country FROM data AS T1 JOIN price AS T2 ON T1.ID  =  T2.ID JOIN production AS T3 ON T1.ID  =  T3.ID JOIN country AS T4 ON T3.country  =  T4.origin WHERE T1.car_name  =  'ford maverick'",
+        "question": "Which year did Europe produce the most cars?",
+        "llm_answer": "SELECT T2.model_year FROM country AS T1 INNER JOIN production AS T2 ON T1.origin = T2.country WHERE T1.country = 'Europe' GROUP BY T2.model_year ORDER BY COUNT(*) DESC LIMIT 1",
         "llm_results": [
             [
-                14228.30388,
-                "USA"
-            ],
-            [
-                14228.30388,
-                "USA"
-            ],
-            [
-                14228.30388,
-                "USA"
-            ],
-            [
-                14228.30388,
-                "USA"
-            ],
-            [
-                14228.30388,
-                "USA"
-            ],
-            [
-                33726.80756,
-                "USA"
-            ],
-            [
-                33726.80756,
-                "USA"
-            ],
-            [
-                33726.80756,
-                "USA"
-            ],
-            [
-                33726.80756,
-                "USA"
-            ],
-            [
-                33726.80756,
-                "USA"
-            ],
-            [
-                36836.73869,
-                "USA"
-            ],
-            [
-                36836.73869,
-                "USA"
-            ],
-            [
-                36836.73869,
-                "USA"
-            ],
-            [
-                36836.73869,
-                "USA"
-            ],
-            [
-                36836.73869,
-                "USA"
-            ],
-            [
-                30000.0,
-                "USA"
-            ],
-            [
-                30000.0,
-                "USA"
-            ],
-            [
-                30000.0,
-                "USA"
-            ],
-            [
-                30000.0,
-                "USA"
-            ],
-            [
-                30000.0,
-                "USA"
-            ],
-            [
-                50179.77946,
-                "USA"
-            ],
-            [
-                50179.77946,
-                "USA"
-            ],
-            [
-                50179.77946,
-                "USA"
-            ],
-            [
-                50179.77946,
-                "USA"
-            ],
-            [
-                50179.77946,
-                "USA"
+                1976
             ]
         ],
-        "correct_answer": "SELECT DISTINCT T1.price, T3.country FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T4.car_name = 'ford maverick'",
+        "correct_answer": "SELECT T1.model_year FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'Europe' GROUP BY T1.model_year ORDER BY COUNT(T1.model_year) DESC LIMIT 1",
         "correct_results": [
             [
-                14228.30388,
-                "USA"
+                1976
+            ]
+        ]
+    },
+    {
+        "question": "What years did the Buick Skylark 320 get in production?",
+        "llm_answer": "SELECT DISTINCT T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name LIKE 'buick skylark 320'",
+        "llm_results": [
+            [
+                1970
+            ]
+        ],
+        "correct_answer": "SELECT T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'buick skylark 320'",
+        "correct_results": [
+            [
+                1970
+            ]
+        ]
+    },
+    {
+        "question": "Please list the names of the top 3 most expensive cars.",
+        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 3",
+        "llm_results": [
+            [
+                "plymouth fury gran sedan"
             ],
             [
-                33726.80756,
-                "USA"
+                "ford ltd landau"
             ],
             [
-                36836.73869,
-                "USA"
+                "dodge colt"
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 3",
+        "correct_results": [
+            [
+                "plymouth fury gran sedan"
             ],
             [
-                30000.0,
-                "USA"
+                "ford ltd landau"
             ],
             [
-                50179.77946,
+                "dodge colt"
+            ]
+        ]
+    },
+    {
+        "question": "Among the cars with 8 cylinders, what is the name of the one that's the most expensive?",
+        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8 ORDER BY T2.price DESC LIMIT 1",
+        "llm_results": [
+            [
+                "plymouth fury gran sedan"
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8 ORDER BY T2.price DESC LIMIT 1",
+        "correct_results": [
+            [
+                "plymouth fury gran sedan"
+            ]
+        ]
+    },
+    {
+        "question": "What is the price of the car ID 15?",
+        "llm_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.ID = 15",
+        "llm_results": [
+            [
+                36927.0666
+            ]
+        ],
+        "correct_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.ID = 15",
+        "correct_results": [
+            [
+                36927.0666
+            ]
+        ]
+    },
+    {
+        "question": "How much is the Volkswagen Dasher with 14.1 mph acceleration?",
+        "llm_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'vw dasher' AND T1.acceleration = 14.1",
+        "llm_results": [],
+        "correct_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'volkswagen dasher' AND T1.acceleration = '14.1'",
+        "correct_results": [
+            [
+                20000.0
+            ]
+        ]
+    },
+    {
+        "question": "What is the average price per car produced in Japan?",
+        "llm_answer": "SELECT AVG(T2.price) FROM production AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T1.country = T3.origin WHERE T3.country = 'Japan'",
+        "llm_results": [
+            [
+                29008.68514356204
+            ]
+        ],
+        "correct_answer": "SELECT AVG(T1.price) FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Japan'",
+        "correct_results": [
+            [
+                29008.68514356204
+            ]
+        ]
+    },
+    {
+        "question": "How many cars were released in the USA in 1981?",
+        "llm_answer": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA' AND T1.model_year = 1981",
+        "llm_results": [
+            [
+                17
+            ]
+        ],
+        "correct_answer": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA' AND T1.model_year = 1981",
+        "correct_results": [
+            [
+                17
+            ]
+        ]
+    },
+    {
+        "question": "Which country does Chevy C20 come from?",
+        "llm_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T1.car_name = 'chevrolet c20'",
+        "llm_results": [],
+        "correct_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T1.car_name = 'chevy c20'",
+        "correct_results": [
+            [
                 "USA"
+            ]
+        ]
+    },
+    {
+        "question": "How many models of Ford Maverick were produced?",
+        "llm_answer": "SELECT COUNT(DISTINCT T1.model_year) FROM production AS T1 INNER JOIN data AS T2 ON T1.ID = T2.ID WHERE T2.car_name = 'ford maverick'",
+        "llm_results": [
+            [
+                5
+            ]
+        ],
+        "correct_answer": "SELECT COUNT(DISTINCT T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'ford maverick'",
+        "correct_results": [
+            [
+                5
             ]
         ]
     },
@@ -212,17 +2441,163 @@
         ]
     },
     {
-        "question": "Which year did Europe produce the most cars?",
-        "llm_answer": "SELECT T2.model_year FROM country AS T1 INNER JOIN production AS T2 ON T1.origin = T2.country WHERE T1.country = 'Europe' GROUP BY T2.model_year ORDER BY COUNT(T2.ID) DESC LIMIT 1",
-        "llm_results": [
-            [
-                1976
-            ]
-        ],
-        "correct_answer": "SELECT T1.model_year FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'Europe' GROUP BY T1.model_year ORDER BY COUNT(T1.model_year) DESC LIMIT 1",
+        "question": "Which car in the database provides the best crash protection based on its weight? How much is it?",
+        "llm_answer": "I cannot answer that question. The provided database schema does not contain information about crash protection.",
+        "llm_results": "Error",
+        "correct_answer": "SELECT T1.ID, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.weight DESC LIMIT 1",
         "correct_results": [
             [
-                1976
+                45,
+                20000.0
+            ]
+        ]
+    },
+    {
+        "question": "What is the average price of cars with 8 cylinders?",
+        "llm_answer": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8",
+        "llm_results": [
+            [
+                28982.184051757282
+            ]
+        ],
+        "correct_answer": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8",
+        "correct_results": [
+            [
+                28982.184051757282
+            ]
+        ]
+    },
+    {
+        "question": "Please list the weights of all the cars with the price over $40000.",
+        "llm_answer": "`SELECT T1.weight FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 40000`",
+        "llm_results": "Error",
+        "correct_answer": "SELECT T1.weight FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 40000",
+        "correct_results": [
+            [
+                4732
+            ],
+            [
+                3439
+            ],
+            [
+                4746
+            ],
+            [
+                2189
+            ],
+            [
+                4042
+            ],
+            [
+                4237
+            ],
+            [
+                2401
+            ],
+            [
+                2124
+            ],
+            [
+                1836
+            ],
+            [
+                4638
+            ],
+            [
+                3907
+            ],
+            [
+                4215
+            ],
+            [
+                3353
+            ],
+            [
+                3012
+            ],
+            [
+                1940
+            ],
+            [
+                2815
+            ],
+            [
+                3425
+            ],
+            [
+                2155
+            ],
+            [
+                2405
+            ],
+            [
+                2830
+            ],
+            [
+                3140
+            ],
+            [
+                2795
+            ],
+            [
+                3725
+            ],
+            [
+                1915
+            ],
+            [
+                3900
+            ],
+            [
+                2700
+            ],
+            [
+                2556
+            ],
+            [
+                2144
+            ],
+            [
+                2434
+            ],
+            [
+                2800
+            ],
+            [
+                2085
+            ],
+            [
+                2950
+            ],
+            [
+                2420
+            ],
+            [
+                2490
+            ],
+            [
+                2050
+            ],
+            [
+                1985
+            ],
+            [
+                2640
+            ],
+            [
+                2865
+            ],
+            [
+                2025
+            ],
+            [
+                2125
+            ],
+            [
+                2295
+            ],
+            [
+                2625
             ]
         ]
     },
@@ -242,17 +2617,379 @@
         ]
     },
     {
-        "question": "Which country produced the most expensive car in 1970?",
-        "llm_answer": "SELECT T3.country FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T2.model_year = 1970 ORDER BY T1.price DESC LIMIT 1",
+        "question": "What are the names of the cars worth 20000?",
+        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = 20000",
         "llm_results": [
             [
-                "USA"
+                "ford torino"
+            ],
+            [
+                "pontiac safari (sw)"
+            ],
+            [
+                "chevrolet vega (sw)"
+            ],
+            [
+                "pontiac firebird"
+            ],
+            [
+                "opel 1900"
+            ],
+            [
+                "dodge colt hardtop"
+            ],
+            [
+                "ford galaxie 500"
+            ],
+            [
+                "amc ambassador sst"
+            ],
+            [
+                "chevrolet chevelle concours (sw)"
+            ],
+            [
+                "ford pinto (sw)"
+            ],
+            [
+                "dodge colt (sw)"
+            ],
+            [
+                "buick century 350"
+            ],
+            [
+                "ford country"
+            ],
+            [
+                "datsun 610"
+            ],
+            [
+                "fiat 124 sport coupe"
+            ],
+            [
+                "plymouth duster"
+            ],
+            [
+                "chevrolet chevelle malibu classic"
+            ],
+            [
+                "buick century luxus (sw)"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "plymouth valiant custom"
+            ],
+            [
+                "dodge coronet brougham"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "vw rabbit"
+            ],
+            [
+                "ford f108"
+            ],
+            [
+                "dodge d100"
+            ],
+            [
+                "renault 5 gtl"
+            ],
+            [
+                "mercury cougar brougham"
+            ],
+            [
+                "chevrolet concours"
+            ],
+            [
+                "chrysler cordoba"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "chevrolet malibu"
+            ],
+            [
+                "buick regal sport coupe (turbo)"
+            ],
+            [
+                "honda accord lx"
+            ],
+            [
+                "pontiac lemans v6"
+            ],
+            [
+                "ford fairmont 4"
+            ],
+            [
+                "maxda glc deluxe"
+            ],
+            [
+                "mercedes benz 300d"
+            ],
+            [
+                "toyota corolla tercel"
+            ],
+            [
+                "mercedes-benz 240d"
+            ],
+            [
+                "honda civic 1500 gl"
+            ],
+            [
+                "buick skylark"
+            ],
+            [
+                "ford escort 4w"
+            ],
+            [
+                "ford escort 2h"
+            ],
+            [
+                "honda prelude"
+            ],
+            [
+                "peugeot 505s turbo diesel"
+            ],
+            [
+                "dodge aries se"
+            ],
+            [
+                "toyota celica gt"
             ]
         ],
-        "correct_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN price AS T4 ON T4.ID = T1.ID WHERE T2.model_year = 1970 ORDER BY T4.price DESC LIMIT 1",
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = 20000",
         "correct_results": [
             [
-                "USA"
+                "ford torino"
+            ],
+            [
+                "pontiac safari (sw)"
+            ],
+            [
+                "chevrolet vega (sw)"
+            ],
+            [
+                "pontiac firebird"
+            ],
+            [
+                "opel 1900"
+            ],
+            [
+                "dodge colt hardtop"
+            ],
+            [
+                "ford galaxie 500"
+            ],
+            [
+                "amc ambassador sst"
+            ],
+            [
+                "chevrolet chevelle concours (sw)"
+            ],
+            [
+                "ford pinto (sw)"
+            ],
+            [
+                "dodge colt (sw)"
+            ],
+            [
+                "buick century 350"
+            ],
+            [
+                "ford country"
+            ],
+            [
+                "datsun 610"
+            ],
+            [
+                "fiat 124 sport coupe"
+            ],
+            [
+                "plymouth duster"
+            ],
+            [
+                "chevrolet chevelle malibu classic"
+            ],
+            [
+                "buick century luxus (sw)"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "plymouth valiant custom"
+            ],
+            [
+                "dodge coronet brougham"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "vw rabbit"
+            ],
+            [
+                "ford f108"
+            ],
+            [
+                "dodge d100"
+            ],
+            [
+                "renault 5 gtl"
+            ],
+            [
+                "mercury cougar brougham"
+            ],
+            [
+                "chevrolet concours"
+            ],
+            [
+                "chrysler cordoba"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "chevrolet malibu"
+            ],
+            [
+                "buick regal sport coupe (turbo)"
+            ],
+            [
+                "honda accord lx"
+            ],
+            [
+                "pontiac lemans v6"
+            ],
+            [
+                "ford fairmont 4"
+            ],
+            [
+                "maxda glc deluxe"
+            ],
+            [
+                "mercedes benz 300d"
+            ],
+            [
+                "toyota corolla tercel"
+            ],
+            [
+                "mercedes-benz 240d"
+            ],
+            [
+                "honda civic 1500 gl"
+            ],
+            [
+                "buick skylark"
+            ],
+            [
+                "ford escort 4w"
+            ],
+            [
+                "ford escort 2h"
+            ],
+            [
+                "honda prelude"
+            ],
+            [
+                "peugeot 505s turbo diesel"
+            ],
+            [
+                "dodge aries se"
+            ],
+            [
+                "toyota celica gt"
+            ]
+        ]
+    },
+    {
+        "question": "Calculate the percentage of American cars among all cars.",
+        "llm_answer": "SELECT CAST(SUM(CASE WHEN T2.country = 1 THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID",
+        "llm_results": [
+            [
+                65.46242774566474
+            ]
+        ],
+        "correct_answer": "SELECT CAST(SUM(CASE WHEN T3.country = 'USA' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country",
+        "correct_results": [
+            [
+                65.46242774566474
+            ]
+        ]
+    },
+    {
+        "question": "Calculate the average production rate per year from 1971 to 1980. Among them, name the cars with a weight of fewer than 1800 lbs.",
+        "llm_answer": "SELECT T1.car_name, COUNT(*) OVER (PARTITION BY T2.model_year) / (1980 - 1971 + 1) AS average_production_per_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year BETWEEN 1971 AND 1980 AND T1.weight < 1800",
+        "llm_results": [
+            [
+                "toyota corolla 1200",
+                0
+            ],
+            [
+                "datsun 1200",
+                0
+            ],
+            [
+                "toyota corona",
+                0
+            ],
+            [
+                "toyota corolla 1200",
+                0
+            ],
+            [
+                "toyota corona",
+                0
+            ],
+            [
+                "honda civic",
+                0
+            ],
+            [
+                "toyota corona",
+                0
+            ],
+            [
+                "honda civic cvcc",
+                0
+            ],
+            [
+                "honda civic",
+                0
+            ],
+            [
+                "toyota corona",
+                0
+            ],
+            [
+                "honda civic cvcc",
+                0
+            ]
+        ],
+        "correct_answer": "SELECT CAST(COUNT(T1.ID) AS REAL) / 9 FROM production AS T1 INNER JOIN data AS T2 ON T2.ID = T1.ID WHERE T1.model_year BETWEEN 1971 AND 1980 UNION ALL SELECT DISTINCT T2.car_name FROM production AS T1 INNER JOIN data AS T2 ON T2.ID = T1.ID WHERE T1.model_year BETWEEN 1971 AND 1980 AND T2.weight < 1800",
+        "correct_results": [
+            [
+                62.0
+            ],
+            [
+                "toyota corolla 1200"
+            ],
+            [
+                "datsun 1200"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "honda civic"
             ]
         ]
     }
