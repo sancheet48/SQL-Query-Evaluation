@@ -1,0 +1,506 @@
+[
+  {
+    "db_id": "cars",
+    "question": "Among the cars with 8 cylinders, what is the name of the one that's the most expensive?",
+    "evidence": "with 8 cylinders refers to cylinders = 8; name of the car refers to car_name; the most expensive refers to max(price)",
+    "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8 ORDER BY T2.price DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "Among the cars over 3000lbs, how many of them cost less than $30000?",
+    "evidence": "over 3000lbs refers to weight > 3000; cost less than $30000 refers to price < 30000",
+    "SQL": "SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3000 AND T2.price < 30000"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the acceleration of the most expensive car?",
+    "evidence": "the most expensive refers to max(price)",
+    "SQL": "SELECT T1.acceleration FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "How much US dollars does a Ford Torino cost?",
+    "evidence": "cost refers to price; Ford Torino refers to car_name = 'ford torino'",
+    "SQL": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'ford torino'"
+  },
+  {
+    "db_id": "cars",
+    "question": "What was the origin country of the car model ford torino produced in 1970?",
+    "evidence": "origin country refers to country; Ford Torino refers to car_name = 'ford torino'; produced in 1970 refers to model_year = 1970",
+    "SQL": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T1.car_name = 'ford torino' AND T2.model_year = 1970"
+  },
+  {
+    "db_id": "cars",
+    "question": "Among the car models introduced in the market in 1970, how many of them have the USA as their origin country?",
+    "evidence": "introduced in the market in 1970 refers to model_year = 1970; have the USA as origin country refers to country = 'USA'",
+    "SQL": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T1.model_year = 1970 AND T2.country = 'USA'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Please list the names of all the car models whose origin country is the USA.",
+    "evidence": "name of car model refers to car_name; origin country is the USA refers to country = 'USA'",
+    "SQL": "SELECT DISTINCT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'USA'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Please list the names of the top 3 most expensive cars.",
+    "evidence": "name of the car refers to car_name; the most expensive refers to max(price)",
+    "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 3"
+  },
+  {
+    "db_id": "cars",
+    "question": "Please list all the years in which the car model Chevrolet Impala was introduced in the market.",
+    "evidence": "year refers to model_year; Chevrolet Impala refers to car_name = 'chevrolet impala'",
+    "SQL": "SELECT DISTINCT T1.model_year FROM production AS T1 INNER JOIN data AS T2 ON T1.ID = T2.ID WHERE T2.car_name = 'chevrolet impala'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Among the cars with an acceleration of over 10 miles per squared hour, how many of them cost more than $20000 and less than $30000?",
+    "evidence": "an acceleration of over 10 miles per squared hour refers to acceleration > 10; cost more than $20000 and less than $30000 refers to price < 30000 AND price > 20000",
+    "SQL": "SELECT COUNT(*) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 10 AND T2.price BETWEEN 20000 AND 30000"
+  },
+  {
+    "db_id": "cars",
+    "question": "Please list the weights of all the cars with the price over $40000.",
+    "evidence": "price over $40000 refers to price > 40000",
+    "SQL": "SELECT T1.weight FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 40000"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the maximum acceleration of a car with price over $40000?",
+    "evidence": "the maximum acceleration refers to max(acceleration); price over $40000 refers to price > 40000",
+    "SQL": "SELECT MAX(T1.acceleration) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 40000"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the average price of cars with 8 cylinders?",
+    "evidence": "with 8 cylinders refers to cylinders = 8; average price = avg(price) where cylinders = 8",
+    "SQL": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the maximum sweep volume of a car that costs less than $30000?",
+    "evidence": "cost less than $30000 refers to price < 30000; the maximum sweep volume = max(divide(displacement, cylinders)) where price < 30000",
+    "SQL": "SELECT MAX(T1.displacement / T1.cylinders) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 30000"
+  },
+  {
+    "db_id": "cars",
+    "question": "How many cars in the database are originated from Europe?",
+    "evidence": "originated from Europe refers to country = 'Europe'",
+    "SQL": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'Europe'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Show the origin country of Chevrolet Malibu.",
+    "evidence": "origin country refers to country; Chevrolet Malibu refers to car_name = 'chevrolet malibu'",
+    "SQL": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T1.car_name = 'chevrolet malibu'"
+  },
+  {
+    "db_id": "cars",
+    "question": "What are the miles per gallon of the most expensive car?",
+    "evidence": "miles per gallon refers to mpg; the most expensive refers to max(price)",
+    "SQL": "SELECT T1.mpg FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "Tell the origin country of car no.382.",
+    "evidence": "origin country refers to country; car no.382 refers to ID = 382",
+    "SQL": "SELECT DISTINCT T2.country FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T1.ID = 382"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which is the origin country of the $44274.40748 car?",
+    "evidence": "origin country refers to country; the $44274.40748 car refers to price = 44274.40748",
+    "SQL": "SELECT T3.country FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T1.price = 44274.40748"
+  },
+  {
+    "db_id": "cars",
+    "question": "How much is the Volkswagen Dasher with 14.1 mph acceleration?",
+    "evidence": "cost refers to price; Volkswagen Dasher refers to car_name = 'volkswagen dasher'; 14.1 mph acceleration refers to acceleration = 14.1",
+    "SQL": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'volkswagen dasher' AND T1.acceleration = '14.1'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Provide the engine displacement status of the $37443.85589 car.",
+    "evidence": "engine displacement status refers to displacement; the $37443.85589 car refers to price = 37443.85589",
+    "SQL": "SELECT T1.displacement FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = '37443.85589'"
+  },
+  {
+    "db_id": "cars",
+    "question": "When was the $32650.65157 car introduced to the market? State the year.",
+    "evidence": "the $32650.65157 car refers to price = 32650.65157; year refers to model",
+    "SQL": "SELECT T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = '32650.65157'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Provide the price of the only Toyota Corona hardtop in the database.",
+    "evidence": "Toyota Corona hardtop refers to car_name = 'toyota corona hardtop'",
+    "SQL": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'toyota corona hardtop'"
+  },
+  {
+    "db_id": "cars",
+    "question": "How many cylinders does the cheapest car have?",
+    "evidence": "the cheapest car refers to min(price)",
+    "SQL": "SELECT T1.cylinders FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY price ASC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which car in the database provides the best crash protection based on its weight? How much is it?",
+    "evidence": "the best crash protection refers to max(weight); cost refers to price",
+    "SQL": "SELECT T1.ID, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.weight DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "State the origin country of the fastest car in the database.",
+    "evidence": "origin country refers to country; the fastest refers to max(horsepower)",
+    "SQL": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country ORDER BY T1.horsepower DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the percentage of Japanese cars in the database?",
+    "evidence": "Japanese car refers to country = 'Japan'; percentage = divide(count(ID where country = 'Japan'), count(ID)) * 100%",
+    "SQL": "SELECT CAST(SUM(CASE WHEN T2.country = 'Japan' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin"
+  },
+  {
+    "db_id": "cars",
+    "question": "Calculate the swept volume of the $34538.97449 car.",
+    "evidence": "sweep volume = divide(displacement, cylinders); the $34538.97449 car refers to price = 34538.97449",
+    "SQL": "SELECT T1.displacement / T1.cylinders FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = 34538.97449"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the name of the most expensive car?",
+    "evidence": "name of the car refers to car_name; the most expensive refers to max(price)",
+    "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "How many cars were released in the USA in 1981?",
+    "evidence": "in the USA refers to country = 'USA'; in 1981 refers to model_year = 1981",
+    "SQL": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA' AND T1.model_year = 1981"
+  },
+  {
+    "db_id": "cars",
+    "question": "How much is the car with the highest sweep volume?",
+    "evidence": "cost refers to price; the highest sweep volume refers to max(divide(displacement, cylinders))",
+    "SQL": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.displacement / T1.cylinders DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the fastest car made by Japan?",
+    "evidence": "the fastest refers to max(horsepower); made by Japan refers to country = 'Japan'; name of the car refers to car_name",
+    "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Japan' ORDER BY T1.horsepower DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "How many times was Ford Maverick introduced to the market?",
+    "evidence": "Ford Maverick refers to car_name = 'ford maverick';",
+    "SQL": "SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'ford maverick'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which country produced the most fuel-efficient car?",
+    "evidence": "the most fuel-efficient refers to max(mpg)",
+    "SQL": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country ORDER BY T1.mpg DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which Dodge car is the cheapest?",
+    "evidence": "Dodge car refers to car_name LIKE 'dodge%'; the cheapest refers to min(price); name of the car refers to car_name",
+    "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name LIKE 'dodge%' ORDER BY T2.price ASC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the name of the most expensive car that was produced by the USA?",
+    "evidence": "name of the car refers to car_name; the most expensive refers to max(price); produced by the USA refers to country = 'USA'",
+    "SQL": "SELECT T4.car_name FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'USA' ORDER BY T1.price DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "Among the cars with an engine displacement of no less than 400 cubic millimeter, how many cars cost at least 30,000?",
+    "evidence": "engine displacement of no less than 400 cubic millimeter refers to displacement > 400; cost at least 30,000 refers to price > 30000",
+    "SQL": "SELECT COUNT(*) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 400 AND T2.price > 30000"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which year did Europe produce the most cars?",
+    "evidence": "year refers to model_year; Europe refers to country = 'Europe'; the most cars refers to max(model_year)",
+    "SQL": "SELECT T1.model_year FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'Europe' GROUP BY T1.model_year ORDER BY COUNT(T1.model_year) DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "How much is the Peugeot 505s Turbo Diesel?",
+    "evidence": "cost refers to price; Peugeot 505s Turbo Diesel refers to car_name = 'peugeot 505s turbo diesel'",
+    "SQL": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'peugeot 505s turbo diesel'"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the miles per square hour of the cheapest car produced by the USA?",
+    "evidence": "miles per square hour refers to acceleration; the cheapest refers to min(price); produced by the USA refers to country = 'USA'",
+    "SQL": "SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'USA' ORDER BY T1.price ASC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which country produced the highest number of cars? Calculate the annual average number of cars that the said country produced from the very start to the present.",
+    "evidence": "the highest number of cars refers to max(country); annual average number = divide(count(ID), count(model_year))",
+    "SQL": "SELECT T2.country, CAST(COUNT(T1.ID) AS REAL) / COUNT(DISTINCT T1.model_year) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin GROUP BY T2.country ORDER BY COUNT(T2.country) DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the percentage of cars that was produced by Japan among those that have a sweep volume of no less than 30?",
+    "evidence": "produced by Japan refers to country = 'Japan'; a sweep volume of no less than 30 refers to divide(displacement, cylinders) > 30; percentage = divide(count(ID where country = 'Japan'), count(ID)) * 100% where divide(displacement, cylinders) > 30",
+    "SQL": "SELECT CAST(SUM(CASE WHEN T3.country = 'Japan' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T1.displacement / T1.cylinders > 30"
+  },
+  {
+    "db_id": "cars",
+    "question": "List the name of the cars with model year 1975.",
+    "evidence": "name of the car refers to car_name; model year 1975 refers to model_year = 1975",
+    "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975"
+  },
+  {
+    "db_id": "cars",
+    "question": "Calculate the average price of cars from Europe.",
+    "evidence": "from Europe refers to country = 'Europe'; average price = avg(price) where country = 'Europe'",
+    "SQL": "SELECT AVG(T1.price) FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Europe'"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the price of the car ID 15?",
+    "evidence": "",
+    "SQL": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.ID = 15"
+  },
+  {
+    "db_id": "cars",
+    "question": "How many of the cars from Japan weighed less than 3000?",
+    "evidence": "from Japan refers to country = 'Japan'; weighed less than 3000 refers to weight < 3000",
+    "SQL": "SELECT COUNT(*) FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' AND T4.weight < 3000"
+  },
+  {
+    "db_id": "cars",
+    "question": "Among the cars produced in year 1973, how many of the cars have horsepower less than 100?",
+    "evidence": "produced in year 1973 refers to model_year = 1973; have horsepower less than 100 refers to horsepower < 100",
+    "SQL": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973 AND T1.horsepower < 100"
+  },
+  {
+    "db_id": "cars",
+    "question": "Provide the ID of cars from Japan worth greater than 35000 and have an acceleration of 14.",
+    "evidence": "from Japan refers to country = 'Japan'; worth greater than 35000 refers to price > 35000; have an acceleration of 14 refers to acceleration = 14",
+    "SQL": "SELECT T4.ID FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' AND T1.price > 3500 AND T4.acceleration = 14"
+  },
+  {
+    "db_id": "cars",
+    "question": "Give the model year of the heaviest car.",
+    "evidence": "the heaviest refers to max(weight)",
+    "SQL": "SELECT T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID ORDER BY T1.weight DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the horsepower and model year of the car named Subaru Dl?",
+    "evidence": "the car named Subaru Dl refers to car_name = 'subaru dl'",
+    "SQL": "SELECT T1.horsepower, T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'subaru dl'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Among the cars originated from Japan, what is the name of the car with the highest price?",
+    "evidence": "from Japan refers to country = 'Japan'; name of the car refers to car_name; the highest price refers to max(price)",
+    "SQL": "SELECT T4.car_name FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "What are the names of the cars worth 20000?",
+    "evidence": "name of the car refers to car_name; worth 20000 refers to price = 20000",
+    "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = 20000"
+  },
+  {
+    "db_id": "cars",
+    "question": "How many cars worth greater than 40000 were from the USA?",
+    "evidence": "worth greater than 40000 refers to price > 40000; from the USA refers to country = 'USA'",
+    "SQL": "SELECT COUNT(*) FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'USA' AND T1.price > 40000"
+  },
+  {
+    "db_id": "cars",
+    "question": "Provide the price and country origin of the car named Ford Maverick.",
+    "evidence": "country origin refers to country; Ford Maverick refers to car_name = 'ford maverick'",
+    "SQL": "SELECT DISTINCT T1.price, T3.country FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T4.car_name = 'ford maverick'"
+  },
+  {
+    "db_id": "cars",
+    "question": "List the car's name with a price worth greater than 85% of the average price of all cars.",
+    "evidence": "car's name refers to car_name; a price worth greater than 85% of the average price of all cars refers to price > multiply(avg(price), 0.85)",
+    "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price * 100 > ( SELECT AVG(price) * 85 FROM price )"
+  },
+  {
+    "db_id": "cars",
+    "question": "Calculate the difference between the number of cars that has a horsepower of 130 with the model year 1970 and model year 1976",
+    "evidence": "a horsepower of 130 refers to horsepower = 130; difference = subtract(count(ID where model_year = 1970), count(ID where model_year = 1976)) where horsepower = 130",
+    "SQL": "SELECT SUM(CASE WHEN T2.model_year = 1970 THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.model_year = 1976 THEN 1 ELSE 0 END) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.horsepower = 130"
+  },
+  {
+    "db_id": "cars",
+    "question": "Among the cars from Asia, list the IDs of cars that were introduced in 1979.",
+    "evidence": "from Asia refers to country = 'Japan'; introduced in 1979 refers to model_year = 1979",
+    "SQL": "SELECT T1.ID FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'Japan' AND T1.model_year = 1979"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which country produced the car with the lowest mileage per gallon?",
+    "evidence": "the lowest mileage per gallon refers to min(mpg)",
+    "SQL": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country ORDER BY T1.mpg ASC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "Provide the name, model, sweep volume, and introduced year of the car with the best crash protection.",
+    "evidence": "car's name refers to car_name; sweep volume = divide(displacement, cylinders); introduced year refers to model_year; the best crash protection refers to max(weight)",
+    "SQL": "SELECT T1.car_name, T1.model, T1.displacement / T1.cylinders, T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID ORDER BY T1.weight DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "Among the cars introduced in 1977, provide the names and the horse powers of cars from Europe.",
+    "evidence": "introduced in 1977 refers to model_year = 1977; car's name refers to car_name; from Europe refers to country = 'Europe'",
+    "SQL": "SELECT T1.car_name, T1.horsepower FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T2.model_year = 1977 AND T3.country = 'Europe'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Provide the name and model of the car with the highest price.",
+    "evidence": "car's name refers to car_name; the highest price refers to max(price)",
+    "SQL": "SELECT T1.car_name, T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the price of a Chevrolet Bel Air?",
+    "evidence": "Chevrolet Bel Air refers to car_name = 'chevrolet bel air'",
+    "SQL": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'chevrolet bel air'"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the average price per car produced in Japan?",
+    "evidence": "produced in Japan refers to country = 'Japan'; average price per car = avg(price) where country = 'Japan'",
+    "SQL": "SELECT AVG(T1.price) FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Japan'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which country produced the car with the lowest price?",
+    "evidence": "the lowest price refers to min(price)",
+    "SQL": "SELECT T3.country FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country ORDER BY T1.price ASC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "Among the cars produced in 1975, provide IDs, names, and producing countries of the cars with the maximum number of cylinders.",
+    "evidence": "produced in 1975 refers to model_year = 1975; names refers to car_name; producing countries refers to country; the maximum number of cylinders refers to max(cylinders)",
+    "SQL": "SELECT T1.ID, T1.car_name, T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T2.model_year = 1975 ORDER BY T1.cylinders DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which car is the cheapest? Provide its acceleration, number of cylinders, and producing year.",
+    "evidence": "the cheapest refers to min(price); number of cylinders refers to cylinders; producing year refers to model_year",
+    "SQL": "SELECT T1.acceleration, T1.cylinders, T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN price AS T3 ON T3.ID = T2.ID ORDER BY T3.price ASC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "List the names and prices of the cars with model 82 and mileage per gallon of greater than 30.",
+    "evidence": "car's name refers to car_name; model 82 refers to model = 82; mileage per gallon of greater than 30 refers to mpg > 30",
+    "SQL": "SELECT T2.car_name, T1.price FROM price AS T1 INNER JOIN data AS T2 ON T1.ID = T2.ID WHERE T2.model = 82 AND T2.mpg > 30"
+  },
+  {
+    "db_id": "cars",
+    "question": "How many models of Ford Maverick were produced?",
+    "evidence": "Ford Maverick refers to car_name = 'ford maverick'",
+    "SQL": "SELECT COUNT(DISTINCT T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'ford maverick'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Calculate the percentage of cars that belong to the USA.",
+    "evidence": "belong to the USA refers to country = 'USA'; percentage = divide(count(ID where country = 'USA'), count(ID)) * 100%",
+    "SQL": "SELECT CAST(SUM(CASE WHEN T2.country = 'USA' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin"
+  },
+  {
+    "db_id": "cars",
+    "question": "Calculate the average production rate per year from 1971 to 1980. Among them, name the cars with a weight of fewer than 1800 lbs.",
+    "evidence": "from 1971 to 1980 refers to model_year between 1971 and 1980; average production rate per year = divide(count(ID where model_year between 1971 and 1980), 9); car's name refers to car_name; a weight of fewer than 1800 lbs refers to weight < 1800",
+    "SQL": "SELECT CAST(COUNT(T1.ID) AS REAL) / 9 FROM production AS T1 INNER JOIN data AS T2 ON T2.ID = T1.ID WHERE T1.model_year BETWEEN 1971 AND 1980 UNION ALL SELECT DISTINCT T2.car_name FROM production AS T1 INNER JOIN data AS T2 ON T2.ID = T1.ID WHERE T1.model_year BETWEEN 1971 AND 1980 AND T2.weight < 1800"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the average price of model 70 cars?",
+    "evidence": "model 70 refers to model = 70; average price = avg(price) where model = 70",
+    "SQL": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.model = 70"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the price of Chevrolet Vega 2300?",
+    "evidence": "Chevrolet Vega 2300 refers to car_name = 'chevrolet vega 2300'",
+    "SQL": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'chevrolet vega 2300'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which country does Chevy C20 come from?",
+    "evidence": "Chevy C20 refers to car_name = 'chevy c20'",
+    "SQL": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T1.car_name = 'chevy c20'"
+  },
+  {
+    "db_id": "cars",
+    "question": "List the price of Ford cars from model 1970 to 1980.",
+    "evidence": "Ford cars refers to car_name LIKE 'ford%'; from model 1970 to 1980 refers to model_year BETWEEN 1970 AND 1980",
+    "SQL": "SELECT DISTINCT T3.price FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN price AS T3 ON T3.ID = T2.ID WHERE T1.car_name LIKE 'ford%' AND T2.model_year BETWEEN 1970 AND 1980"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which is the most fuel efficient car in 1975?",
+    "evidence": "car's name refers to car_name; the most fuel efficient refers to max(mpg); in 1975 refers to model_year = 1975",
+    "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = '1975' ORDER BY T1.mpg DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which car consumes fuel the most and has the highest price?",
+    "evidence": "consumes fuel the most refers to min(mpg); has the highest price refers to max(price)",
+    "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.mpg DESC, T2.price DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "How many American cars have an acceleration time of less than 12 seconds?",
+    "evidence": "American car refers to country = 'USA'; an acceleration time of less than 12 seconds refers to acceleration < 12",
+    "SQL": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'USA' AND T1.acceleration < 12"
+  },
+  {
+    "db_id": "cars",
+    "question": "How many Japanese cars weigh more than 2000 lbs?",
+    "evidence": "Japanese car refers to country = 'Japan'; weigh more than 2000 lbs refers to weight > 2000",
+    "SQL": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Japan' AND T1.weight > 2000"
+  },
+  {
+    "db_id": "cars",
+    "question": "List the name of the most expensive car.",
+    "evidence": "car's name refers to car_name; the most expensive refers to max(price)",
+    "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "What years did the Buick Skylark 320 get in production?",
+    "evidence": "year refers to model_year; Buick Skylark 320 refers to car_name = 'buick skylark 320'",
+    "SQL": "SELECT T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'buick skylark 320'"
+  },
+  {
+    "db_id": "cars",
+    "question": "Which country produced the most expensive car in 1970?",
+    "evidence": "the most expensive refers to max(price); in 1970 refers to model_year = 1970",
+    "SQL": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN price AS T4 ON T4.ID = T1.ID WHERE T2.model_year = 1970 ORDER BY T4.price DESC LIMIT 1"
+  },
+  {
+    "db_id": "cars",
+    "question": "How many cars with horsepower greater than 200 were produced in 1975?",
+    "evidence": "horsepower greater than 200 refers to horsepower > 200; in 1975 refers to model_year = 1975",
+    "SQL": "SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.horsepower > 200 AND T2.model_year = 1975"
+  },
+  {
+    "db_id": "cars",
+    "question": "Calculate the percentage of American cars among all cars.",
+    "evidence": "American car refers to country = 'USA'; percentage = divide(count(ID where country = 'USA'), count(ID)) * 100%",
+    "SQL": "SELECT CAST(SUM(CASE WHEN T3.country = 'USA' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country"
+  },
+  {
+    "db_id": "cars",
+    "question": "What is the average weight of Japanese cars with 4 cylinders that were produced from 1975 to 1980?",
+    "evidence": "Japanese car refers to country = 'Japan'; with 4 cylinders refers to cylinders = 4; produced from 1975 to 1980 refers to model_year BETWEEN 1975 AND 1980; average weight = avg(weight)",
+    "SQL": "SELECT AVG(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T2.model_year BETWEEN 1975 AND 1980 AND T1.cylinders = 4 AND T3.country = 'Japan'"
+  }
+]

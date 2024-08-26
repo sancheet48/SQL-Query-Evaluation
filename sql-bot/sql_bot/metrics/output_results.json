@@ -1,0 +1,259 @@
+[
+    {
+        "question": "What is the average weight of Japanese cars with 4 cylinders that were produced from 1975 to 1980?",
+        "llm_answer": "SELECT AVG(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T1.cylinders = 4 AND T2.model_year BETWEEN 1975 AND 1980",
+        "llm_results": [
+            [
+                2176.0163934426228
+            ]
+        ],
+        "correct_answer": "SELECT AVG(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T2.model_year BETWEEN 1975 AND 1980 AND T1.cylinders = 4 AND T3.country = 'Japan'",
+        "correct_results": [
+            [
+                2176.0163934426228
+            ]
+        ]
+    },
+    {
+        "question": "Among the cars with 8 cylinders, what is the name of the one that's the most expensive?",
+        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8 ORDER BY T2.price DESC LIMIT 1",
+        "llm_results": [
+            [
+                "plymouth fury gran sedan"
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8 ORDER BY T2.price DESC LIMIT 1",
+        "correct_results": [
+            [
+                "plymouth fury gran sedan"
+            ]
+        ]
+    },
+    {
+        "question": "Which car in the database provides the best crash protection based on its weight? How much is it?",
+        "llm_answer": "I cannot answer this question. The provided database schema does not contain information about crash protection for the cars.",
+        "llm_results": "Error",
+        "correct_answer": "SELECT T1.ID, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.weight DESC LIMIT 1",
+        "correct_results": [
+            [
+                45,
+                20000.0
+            ]
+        ]
+    },
+    {
+        "question": "Among the cars produced in year 1973, how many of the cars have horsepower less than 100?",
+        "llm_answer": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973 AND T1.horsepower < 100",
+        "llm_results": [
+            [
+                31
+            ]
+        ],
+        "correct_answer": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973 AND T1.horsepower < 100",
+        "correct_results": [
+            [
+                31
+            ]
+        ]
+    },
+    {
+        "question": "What is the percentage of cars that was produced by Japan among those that have a sweep volume of no less than 30?",
+        "llm_answer": "",
+        "llm_results": [],
+        "correct_answer": "SELECT CAST(SUM(CASE WHEN T3.country = 'Japan' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T1.displacement / T1.cylinders > 30",
+        "correct_results": [
+            [
+                2.6128266033254155
+            ]
+        ]
+    },
+    {
+        "question": "Provide the price and country origin of the car named Ford Maverick.",
+        "llm_answer": "SELECT T2.price ,  T4.country FROM data AS T1 JOIN price AS T2 ON T1.ID  =  T2.ID JOIN production AS T3 ON T1.ID  =  T3.ID JOIN country AS T4 ON T3.country  =  T4.origin WHERE T1.car_name  =  'ford maverick'",
+        "llm_results": [
+            [
+                14228.30388,
+                "USA"
+            ],
+            [
+                14228.30388,
+                "USA"
+            ],
+            [
+                14228.30388,
+                "USA"
+            ],
+            [
+                14228.30388,
+                "USA"
+            ],
+            [
+                14228.30388,
+                "USA"
+            ],
+            [
+                33726.80756,
+                "USA"
+            ],
+            [
+                33726.80756,
+                "USA"
+            ],
+            [
+                33726.80756,
+                "USA"
+            ],
+            [
+                33726.80756,
+                "USA"
+            ],
+            [
+                33726.80756,
+                "USA"
+            ],
+            [
+                36836.73869,
+                "USA"
+            ],
+            [
+                36836.73869,
+                "USA"
+            ],
+            [
+                36836.73869,
+                "USA"
+            ],
+            [
+                36836.73869,
+                "USA"
+            ],
+            [
+                36836.73869,
+                "USA"
+            ],
+            [
+                30000.0,
+                "USA"
+            ],
+            [
+                30000.0,
+                "USA"
+            ],
+            [
+                30000.0,
+                "USA"
+            ],
+            [
+                30000.0,
+                "USA"
+            ],
+            [
+                30000.0,
+                "USA"
+            ],
+            [
+                50179.77946,
+                "USA"
+            ],
+            [
+                50179.77946,
+                "USA"
+            ],
+            [
+                50179.77946,
+                "USA"
+            ],
+            [
+                50179.77946,
+                "USA"
+            ],
+            [
+                50179.77946,
+                "USA"
+            ]
+        ],
+        "correct_answer": "SELECT DISTINCT T1.price, T3.country FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T4.car_name = 'ford maverick'",
+        "correct_results": [
+            [
+                14228.30388,
+                "USA"
+            ],
+            [
+                33726.80756,
+                "USA"
+            ],
+            [
+                36836.73869,
+                "USA"
+            ],
+            [
+                30000.0,
+                "USA"
+            ],
+            [
+                50179.77946,
+                "USA"
+            ]
+        ]
+    },
+    {
+        "question": "Which Dodge car is the cheapest?",
+        "llm_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name LIKE 'Dodge%' ORDER BY T2.price ASC LIMIT 1",
+        "llm_results": [
+            [
+                8766.444652
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name LIKE 'dodge%' ORDER BY T2.price ASC LIMIT 1",
+        "correct_results": [
+            [
+                "dodge st. regis"
+            ]
+        ]
+    },
+    {
+        "question": "Which year did Europe produce the most cars?",
+        "llm_answer": "SELECT T2.model_year FROM country AS T1 INNER JOIN production AS T2 ON T1.origin = T2.country WHERE T1.country = 'Europe' GROUP BY T2.model_year ORDER BY COUNT(T2.ID) DESC LIMIT 1",
+        "llm_results": [
+            [
+                1976
+            ]
+        ],
+        "correct_answer": "SELECT T1.model_year FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'Europe' GROUP BY T1.model_year ORDER BY COUNT(T1.model_year) DESC LIMIT 1",
+        "correct_results": [
+            [
+                1976
+            ]
+        ]
+    },
+    {
+        "question": "How many Japanese cars weigh more than 2000 lbs?",
+        "llm_answer": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T1.weight > 2000",
+        "llm_results": [
+            [
+                102
+            ]
+        ],
+        "correct_answer": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Japan' AND T1.weight > 2000",
+        "correct_results": [
+            [
+                102
+            ]
+        ]
+    },
+    {
+        "question": "Which country produced the most expensive car in 1970?",
+        "llm_answer": "SELECT T3.country FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T2.model_year = 1970 ORDER BY T1.price DESC LIMIT 1",
+        "llm_results": [
+            [
+                "USA"
+            ]
+        ],
+        "correct_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN price AS T4 ON T4.ID = T1.ID WHERE T2.model_year = 1970 ORDER BY T4.price DESC LIMIT 1",
+        "correct_results": [
+            [
+                "USA"
+            ]
+        ]
+    }
+]
