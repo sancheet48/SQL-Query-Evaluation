@@ -1,6 +1,4 @@
 
-Okay, here's a comprehensive README based on the provided information:
-
 # Text-to-SQL Engine with Bird Benchmark Evaluation
 
 This project implements a Python-based text-to-SQL engine that leverages a Large Language Model (LLM) to translate natural language questions into SQL queries. It includes validation of the generated SQL syntax using the `sqlglot` library and evaluates the engine's performance using the Bird benchmark dataset.
