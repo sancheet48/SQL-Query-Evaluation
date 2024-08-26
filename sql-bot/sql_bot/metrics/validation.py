@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     # Select 30 random questions
     random.shuffle(data)  # Shuffle the data in-place
-    data = data[:10]
+    data = data[:30]
 
     correct = 0
     total = len(data)
@@ -90,4 +90,5 @@ if __name__ == "__main__":
         json.dump(output_data, f, indent=4)
 
     print(f"Correct: {correct}")
-    print(f"Accuracy: {correct}/{total}")
+    accuracy_percentage = (correct / total) * 100
+    print(f"Accuracy: {accuracy_percentage:.2f}")

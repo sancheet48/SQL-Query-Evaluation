@@ -39,7 +39,7 @@ The project is designed with a microservices architecture, organized into four m
 * **Microservices Architecture:** Promotes modularity, scalability, and maintainability.
 * **API Endpoints:** Provides a structured interface for interacting with the engine.
 * **Authentication:** Secures API access with token validation.
-* **Vector Embeddings:** Supports the creation of vector embeddings for potential future enhancements (e.g., semantic search).
+* **Vector Embeddings:** Supports the creation of vector embeddings for RAG queries.
 
 ## Setup and Usage
 
@@ -57,6 +57,7 @@ The project is designed with a microservices architecture, organized into four m
    * Update `const.py` with the appropriate file paths for your local database and other configuration settings.
    * Choose your desired LLM in `llm_models.py`.
    * Generate the schema for your chosen Bird benchmark dataset using `schema_generator.py`.
+   * Generate the embeddings for sample data which is different from the Bird benchmark dataset using `vector_embeddings.py`.
 
 4. **Run the application:**
    ```bash
