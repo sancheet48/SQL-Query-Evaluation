@@ -90,7 +90,10 @@ Contributions are welcome! Please follow these guidelines:
 
 This project is licensed under the [MIT License](LICENSE).
 
+## Workflow Diagram
 ![alt text](image.png)
+
+## Results
 
 I have achieved an accuracy of 53.33% 
 ![alt text](image-1.png)
