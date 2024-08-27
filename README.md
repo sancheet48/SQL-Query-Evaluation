@@ -95,3 +95,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 I have achieved an accuracy of 53.33% 
 ![alt text](image-1.png)
+
+
+Updated Accuracy Score (on 27th August, 2024):
+![alt text](image-2.png)
