@@ -37,12 +37,17 @@ def evaluate_answers(llm_answer, correct_answer, conn, output_data):
     Compares the LLM's answer with the correct answer, saves the details to 
     output_data, and returns the comparison result
     """
-    try:
-        llm_answer = llm_answer['model_response']
-        llm_results = execute_query(conn, llm_answer)
-    except Exception as e:
-        llm_results = "Error"
-        print(e)
+    if llm_answer['is_valid_syntax'] == True:
+            
+        try:
+            llm_answer = llm_answer['model_response']
+            llm_results = execute_query(conn, llm_answer)
+        except Exception as e:
+            llm_results = "Error"
+            #print(e)
+    else:
+        llm_results = "Invalid Syntax"
+
 
     correct_results = execute_query(conn, correct_answer)
 
@@ -64,7 +69,7 @@ if __name__ == "__main__":
 
     # Select 30 random questions
     random.shuffle(data)  # Shuffle the data in-place
-    data = data[:30]
+    data = data[:10]
 
     correct = 0
     total = len(data)

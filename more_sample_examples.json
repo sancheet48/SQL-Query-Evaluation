@@ -1,0 +1,298 @@
+[
+    {
+        "question": "What is the average horsepower of cars produced in 1978?",
+        "evidence": "1978 refers to model_year = 1978; average horsepower refers to AVG(horsepower)",
+        "SQL": "SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1978"
+    },
+    {
+        "question": "Which car has the maximum weight among those priced under $20000?",
+        "evidence": "weight refers to weight; under $20000 refers to price < 20000; maximum weight refers to MAX(weight)",
+        "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 20000 ORDER BY T1.weight DESC LIMIT 1"
+    },
+    {
+        "question": "List all cars with a displacement greater than 300.",
+        "evidence": "displacement greater than 300 refers to displacement > 300",
+        "SQL": "SELECT T1.car_name FROM data AS T1 WHERE T1.displacement > 300"
+    },
+    {
+        "question": "What is the total number of cars produced in the United States?",
+        "evidence": "United States refers to country = 'USA'; total number refers to COUNT(*)",
+        "SQL": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA'"
+    },
+    {
+        "question": "What is the average price of cars with an acceleration over 15?",
+        "evidence": "acceleration over 15 refers to acceleration > 15; average price refers to AVG(price)",
+        "SQL": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 15"
+    },
+    {
+        "question": "Find the names of cars with exactly 6 cylinders.",
+        "evidence": "exactly 6 cylinders refers to cylinders = 6",
+        "SQL": "SELECT T1.car_name FROM data AS T1 WHERE T1.cylinders = 6"
+    },
+    {
+        "question": "Which model year had the highest average mpg?",
+        "evidence": "highest average mpg refers to MAX(AVG(mpg)); model year refers to model_year",
+        "SQL": "SELECT T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID GROUP BY T2.model_year ORDER BY AVG(T1.mpg) DESC LIMIT 1"
+    },
+    {
+        "question": "Which car has the lowest weight among those made in 1980?",
+        "evidence": "lowest weight refers to MIN(weight); made in 1980 refers to model_year = 1980",
+        "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980 ORDER BY T1.weight ASC LIMIT 1"
+    },
+    {
+        "question": "How many cars have a horsepower between 100 and 150?",
+        "evidence": "horsepower between 100 and 150 refers to horsepower BETWEEN 100 AND 150",
+        "SQL": "SELECT COUNT(T1.ID) FROM data AS T1 WHERE T1.horsepower BETWEEN 100 AND 150"
+    },
+    {
+        "question": "What is the most common number of cylinders for cars priced over $30000?",
+        "evidence": "most common refers to MODE(cylinders); priced over $30000 refers to price > 30000",
+        "SQL": "SELECT MODE(T1.cylinders) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 30000"
+    },
+    {
+        "question": "What is the horsepower of the lightest car?",
+        "evidence": "lightest car refers to min(weight); horsepower refers to horsepower column",
+        "SQL": "SELECT T1.horsepower FROM data AS T1 ORDER BY T1.weight ASC LIMIT 1"
+    },
+    {
+        "question": "Which car model has the highest mpg produced in 1975?",
+        "evidence": "highest mpg refers to max(mpg); produced in 1975 refers to model_year = 1975",
+        "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 ORDER BY T1.mpg DESC LIMIT 1"
+    },
+    {
+        "question": "What is the average price of cars with a displacement over 200?",
+        "evidence": "displacement over 200 refers to displacement > 200; average price refers to AVG(price)",
+        "SQL": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 200"
+    },
+    {
+        "question": "How many cars with a model year before 1980 have more than 100 horsepower?",
+        "evidence": "model year before 1980 refers to model_year < 1980; more than 100 horsepower refers to horsepower > 100",
+        "SQL": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100"
+    },
+    {
+        "question": "List all the cars from Japan that were produced after 1975.",
+        "evidence": "from Japan refers to country = 'Japan'; produced after 1975 refers to model_year > 1975",
+        "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T2.model_year > 1975"
+    },
+    {
+        "question": "What is the total weight of all cars produced in 1980?",
+        "evidence": "total weight refers to SUM(weight); produced in 1980 refers to model_year = 1980",
+        "SQL": "SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980"
+    },
+    {
+        "question": "Find the car with the smallest acceleration that costs more than $15000.",
+        "evidence": "smallest acceleration refers to min(acceleration); costs more than $15000 refers to price > 15000",
+        "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 15000 ORDER BY T1.acceleration ASC LIMIT 1"
+    },
+    {
+        "question": "How many car models have a displacement less than 150 and were produced in 1972?",
+        "evidence": "displacement less than 150 refers to displacement < 150; produced in 1972 refers to model_year = 1972",
+        "SQL": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.displacement < 150 AND T2.model_year = 1972"
+    },
+    {
+        "question": "What is the average mpg of cars with 4 cylinders?",
+        "evidence": "average mpg refers to AVG(mpg); with 4 cylinders refers to cylinders = 4",
+        "SQL": "SELECT AVG(T1.mpg) FROM data AS T1 WHERE T1.cylinders = 4"
+    },
+    {
+        "question": "List all car names and their prices for cars that have more than 6 cylinders and were produced before 1975.",
+        "evidence": "more than 6 cylinders refers to cylinders > 6; produced before 1975 refers to model_year < 1975",
+        "SQL": "SELECT T1.car_name, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID INNER JOIN production AS T3 ON T1.ID = T3.ID WHERE T1.cylinders > 6 AND T3.model_year < 1975"
+    },
+    {
+        "question": "Which car model has the lowest horsepower but weighs more than 2500lbs?",
+        "evidence": "lowest horsepower refers to min(horsepower); weighs more than 2500lbs refers to weight > 2500",
+        "SQL": "SELECT T1.car_name FROM data AS T1 WHERE T1.weight > 2500 ORDER BY T1.horsepower ASC LIMIT 1"
+    },
+    {
+        "question": "What is the total number of cars produced in the 1970s?",
+        "evidence": "produced in the 1970s refers to model_year >= 1970 AND model_year < 1980",
+        "SQL": "SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980"
+    },
+    {
+        "question": "Find the average displacement of cars produced in Germany.",
+        "evidence": "average displacement refers to AVG(displacement); produced in Germany refers to country = 'Germany'",
+        "SQL": "SELECT AVG(T1.displacement) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Germany'"
+    },
+    {
+        "question": "How many cars have a model year of 1968 and an acceleration greater than 15?",
+        "evidence": "model year of 1968 refers to model_year = 1968; acceleration greater than 15 refers to acceleration > 15",
+        "SQL": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1968 AND T1.acceleration > 15"
+    },
+    {
+        "question": "List the names of all car models that were produced in Italy after 1970 and have more than 4 cylinders.",
+        "evidence": "produced in Italy refers to country = 'Italy'; after 1970 refers to model_year > 1970; more than 4 cylinders refers to cylinders > 4",
+        "SQL": "SELECT DISTINCT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Italy' AND T2.model_year > 1970 AND T1.cylinders > 4"
+    },
+    {
+        "question": "What is the maximum price of cars with 6 cylinders?",
+        "evidence": "maximum price refers to MAX(price); with 6 cylinders refers to cylinders = 6",
+        "SQL": "SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6"
+    },
+    {
+        "question": "Which car model has the highest weight and was produced in Japan?",
+        "evidence": "highest weight refers to max(weight); produced in Japan refers to country = 'Japan'",
+        "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1"
+    },
+    {
+        "question": "How many cars have a price between $10,000 and $20,000?",
+        "evidence": "price between $10,000 and $20,000 refers to price >= 10000 AND price <= 20000",
+        "SQL": "SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000"
+    },
+    {
+        "question": "What is the average horsepower of cars produced by USA manufacturers in 1971?",
+        "evidence": "average horsepower refers to AVG(horsepower); produced by USA manufacturers refers to country = 'USA'; in 1971 refers to model_year = 1971",
+        "SQL": "SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'USA' AND T2.model_year = 1971"
+    },
+    {
+        "question": "Find the name of the car model with the fastest acceleration produced in France.",
+        "evidence": "fastest acceleration refers to max(acceleration); produced in France refers to country = 'France'",
+        "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'France' ORDER BY T1.acceleration DESC LIMIT 1"
+    },
+    {
+        "question": "What is the total number of cars with more than 4 cylinders produced after 1975?",
+        "evidence": "more than 4 cylinders refers to cylinders > 4; produced after 1975 refers to model_year > 1975",
+        "SQL": "SELECT COUNT(T1.ID) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.cylinders > 4 AND T2.model_year > 1975"
+    },
+    {
+        "question": "What is the name of the car with the highest displacement and produced in 1972?",
+        "evidence": "highest displacement refers to MAX(displacement); produced in 1972 refers to model_year = 1972",
+        "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1"
+    },
+    {
+        "question": "Find the car models that were produced for three consecutive years.",
+        "evidence": "produced for three consecutive years refers to having entries in three different years for the same model",
+        "SQL": "SELECT T1.model FROM production AS T1 GROUP BY T1.model HAVING COUNT(DISTINCT T1.model_year) = 3"
+    },
+    {
+        "question": "Which car has the lowest mpg and how much does it cost?",
+        "evidence": "lowest mpg refers to MIN(mpg); cost refers to price",
+        "SQL": "SELECT T1.car_name, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.mpg ASC LIMIT 1"
+    },
+    {
+        "question": "List the car names and their weights for cars produced in Japan with more than 120 horsepower.",
+        "evidence": "produced in Japan refers to country = 'Japan'; more than 120 horsepower refers to horsepower > 120",
+        "SQL": "SELECT T1.car_name, T1.weight FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T1.horsepower > 120"
+    },
+    {
+        "question": "What is the name of the lightest car from Europe and what is its weight?",
+        "evidence": "lightest car refers to MIN(weight); from Europe refers to country = 'Europe'",
+        "SQL": "SELECT T1.car_name, T1.weight FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Europe' ORDER BY T1.weight ASC LIMIT 1"
+    },
+    {
+        "question": "Find the average displacement of cars with a price above $25,000.",
+        "evidence": "price above $25,000 refers to price > 25000; average displacement refers to AVG(displacement)",
+        "SQL": "SELECT AVG(T1.displacement) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 25000"
+    },
+    {
+        "question": "Which cars have an acceleration greater than 15 and a weight less than 2000?",
+        "evidence": "acceleration greater than 15 refers to acceleration > 15; weight less than 2000 refers to weight < 2000",
+        "SQL": "SELECT T1.car_name FROM data AS T1 WHERE T1.acceleration > 15 AND T1.weight < 2000"
+    },
+    {
+        "question": "What is the maximum horsepower for cars produced in 1973?",
+        "evidence": "maximum horsepower refers to MAX(horsepower); produced in 1973 refers to model_year = 1973",
+        "SQL": "SELECT MAX(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973"
+    },
+    {
+        "question": "Find the average weight of cars produced in Germany.",
+        "evidence": "produced in Germany refers to country = 'Germany'; average weight refers to AVG(weight)",
+        "SQL": "SELECT AVG(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Germany'"
+    },
+    {
+        "db_id": "cars",
+        "question": "Among the cars over 3200lbs, how many of them cost less than $28000?",
+        "evidence": "over 3200lbs refers to weight > 3200; cost less than $28000 refers to price < 28000",
+        "SQL": "SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3200 AND T2.price < 28000"
+    },
+    {
+        "db_id": "cars",
+        "question": "What is the acceleration of the cheapest car produced by Japan?",
+        "evidence": "acceleration refers to acceleration; the cheapest refers to min(price); produced by Japan refers to country = 'Japan'",
+        "SQL": "SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1"
+    },
+    {
+        "db_id": "cars",
+        "question": "How many times was Toyota Corolla introduced to the market?",
+        "evidence": "Toyota Corolla refers to car_name = 'toyota corolla';",
+        "SQL": "SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'toyota corolla'"
+    },
+    {
+        "db_id": "cars",
+        "question": "Among the cars produced in the year 1975, how many of the cars have horsepower less than 110?",
+        "evidence": "produced in the year 1975 refers to model_year = 1975; have horsepower less than 110 refers to horsepower < 110",
+        "SQL": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 AND T1.horsepower < 110"
+    },
+    {
+        "db_id": "cars",
+        "question": "Calculate the percentage of cars that belong to Japan.",
+        "evidence": "belong to Japan refers to country = 'Japan'; percentage = divide(count(ID where country = 'Japan'), count(ID)) * 100%",
+        "SQL": "SELECT CAST(SUM(CASE WHEN T2.country = 'Japan' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin"
+    },
+    {
+        "db_id": "cars",
+        "question": "When was the $35420.78956 car introduced to the market? State the year.",
+        "evidence": "the $35420.78956 car refers to price = 35420.78956; year refers to model",
+        "SQL": "SELECT T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = '35420.78956'"
+    },
+    {
+        "db_id": "cars",
+        "question": "Which car has the highest horsepower among those priced under $25000?",
+        "evidence": "highest horsepower refers to MAX(horsepower); priced under $25000 refers to price < 25000",
+        "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 25000 ORDER BY T1.horsepower DESC LIMIT 1"
+    },
+    {
+        "db_id": "cars",
+        "question": "How many cars produced in Japan have a weight greater than 2500 lbs?",
+        "evidence": "produced in Japan refers to country = 'Japan'; weight greater than 2500 lbs refers to weight > 2500",
+        "SQL": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T1.weight > 2500"
+    },
+    {
+        "db_id": "cars",
+        "question": "What is the average acceleration of cars produced by Germany?",
+        "evidence": "produced by Germany refers to country = 'Germany'; average acceleration refers to AVG(acceleration)",
+        "SQL": "SELECT AVG(T1.acceleration) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Germany'"
+    },
+    {
+        "db_id": "cars",
+        "question": "List the names of cars with a price above $40000 and an acceleration below 12 mph.",
+        "evidence": "price above $40000 refers to price > 40000; acceleration below 12 mph refers to acceleration < 12",
+        "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 40000 AND T1.acceleration < 12"
+    },
+    {
+        "db_id": "cars",
+        "question": "What is the total number of cars produced in 1985 that have more than 100 horsepower?",
+        "evidence": "produced in 1985 refers to model_year = 1985; more than 100 horsepower refers to horsepower > 100",
+        "SQL": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1985 AND T1.horsepower > 100"
+    },
+    {
+        "db_id": "cars",
+        "question": "Find the car with the lowest weight that was introduced in the year 1979.",
+        "evidence": "lowest weight refers to MIN(weight); introduced in the year 1979 refers to model_year = 1979",
+        "SQL": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1979 ORDER BY T1.weight ASC LIMIT 1"
+    },
+    {
+        "db_id": "cars",
+        "question": "How many cars in the database have exactly 8 cylinders?",
+        "evidence": "exactly 8 cylinders refers to cylinders = 8",
+        "SQL": "SELECT COUNT(*) FROM data WHERE cylinders = 8"
+    },
+    {
+        "db_id": "cars",
+        "question": "What is the average price of cars produced by the USA in 1975?",
+        "evidence": "produced by the USA refers to country = 'USA'; in 1975 refers to model_year = 1975; average price refers to AVG(price)",
+        "SQL": "SELECT AVG(T2.price) FROM price AS T2 INNER JOIN production AS T1 ON T2.ID = T1.ID INNER JOIN country AS T3 ON T1.country = T3.origin WHERE T1.model_year = 1975 AND T3.country = 'USA'"
+    },
+    {
+        "db_id": "cars",
+        "question": "List all the cars that have a displacement between 100 and 200 cubic inches.",
+        "evidence": "displacement between 100 and 200 cubic inches refers to displacement BETWEEN 100 AND 200",
+        "SQL": "SELECT T1.car_name FROM data AS T1 WHERE T1.displacement BETWEEN 100 AND 200"
+    },
+    {
+        "db_id": "cars",
+        "question": "Find the car name and price for cars produced in 1972 with at least 6 cylinders.",
+        "evidence": "produced in 1972 refers to model_year = 1972; at least 6 cylinders refers to cylinders >= 6",
+        "SQL": "SELECT T1.car_name, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID INNER JOIN production AS T3 ON T1.ID = T3.ID WHERE T1.cylinders >= 6 AND T3.model_year = 1972"
+    }
+]
