@@ -95,28 +95,24 @@ def shutdown():
 
 
 
-
-def retrieve_vdb(query: str) -> str:
-    """Load the vectordb from local path and return the examples.
-
+def retrieve_vdb(query: str) -> tuple:
+    """Load the vectordb from local path and return the examples and similarity scores.
 
     Args:
         query (str): The question to be asked.
 
-
     Returns:
-        str: Gives the nearest examples for the corresponding input query.
+        tuple: A tuple containing the examples string and a list of similarity scores.
     """
     if not CHAT_COLLECTION:
-        return ""
+        return "", []
     query_result = CHAT_COLLECTION.query(query_texts=query, n_results=4)
 
-
     output_string = ""
+    similarity_scores = []
 
-
-    for document, metadata in zip(
-        query_result["documents"][0], query_result["metadatas"][0]
+    for document, metadata, distance in zip(
+        query_result["documents"][0], query_result["metadatas"][0], query_result["distances"][0]
     ):
         input_text = document
         response = metadata["response"]
@@ -126,24 +122,22 @@ def retrieve_vdb(query: str) -> str:
             f"    'sql_query': '{response}'\n"
             f"}},\n"
         )
-
+        similarity_scores.append(1 - distance)  # Convert distance to similarity score
 
     # Removing the trailing comma and newline
     output_string = output_string.rstrip(",\n")
-    return output_string
+    return output_string, similarity_scores
 
-
-def model_output(input_question: str, examples: str) -> tuple:
+def model_output(input_question: str, examples: str, similarity_scores: list) -> dict:
     """Get the corresponding sql query for the input question.
-
 
     Args:
         input_question (str): The question to be asked
         examples (str): The examples to be added in the prompt.
-
+        similarity_scores (list): The similarity scores for the examples.
 
     Returns:
-        str: Gives the answer for the corresponding input query.
+        dict: Gives the answer for the corresponding input query.
     """
     logging.info("User query: '%s'", input_question)
     start_time = time()
@@ -155,39 +149,47 @@ def model_output(input_question: str, examples: str) -> tuple:
     api_response = get_api_response_template()
     api_response["model_response"] = response
     api_response["time_taken"] = time_taken
+    api_response["similarity_scores"] = similarity_scores
     return api_response
-
 
 def get_api_response_template() -> dict:
     """Get API response template.
-
 
     Returns:
         dict: Response template
     """
     return {
         "model_response": "",
-        "is_valid_syntax" : False,
+        "is_valid_syntax": False,
         "time_taken": 0,
-
+        "examples": "",
+        "similarity_scores": [],
     }
 
 def query_parser(query: str):
-    return query.replace('```sql\n', '').replace('\n```', '').strip()
+    return query.replace('```sql\n', '').replace('\n```', '').replace('`', '').strip()
+
+def add_case_insensetiveness(query:str)->str:
+    return query + " COLLATE NOCASE "
+
+# def add_distinct(query: str) -> str:
+#     return query.replace("SELECT", "SELECT DISTINCT ")
+
+
 
 def sql_connect(api_response: dict) -> dict:
     """Get list of sytems for the given response.
-
-
     Args:
         response (str): Response for the given llm
-
-
     Returns:
         list: List of systems having the desired criteria.
     """
 
     api_response["model_response"] = query_parser(api_response["model_response"])
+
+    api_response["model_response"] = add_case_insensetiveness(api_response["model_response"])
+
+    # api_response["model_response"] = add_distinct(api_response["model_response"])
 
     api_response["is_valid_syntax"] = output_modifier.validate_sql(api_response["model_response"])
 
@@ -197,18 +199,16 @@ def sql_connect(api_response: dict) -> dict:
 def get_db_query(query: str) -> dict:
     """Get System from query.
 
-
     Args:
         query (str): Natural Language Query
-
 
     Returns:
         list: List of systems
     """
-    examples = retrieve_vdb(query)
+    examples, similarity_scores = retrieve_vdb(query)
 
-
-    api_response = model_output(query, examples)
+    api_response = model_output(query, examples, similarity_scores)
+    api_response["examples"] = examples
     try:
         api_response = sql_connect(api_response)
     except Exception as expt:
