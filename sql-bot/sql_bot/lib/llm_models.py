@@ -1,7 +1,7 @@
 """Download LLM from hugging face repository."""
 # pylint: disable=no-name-in-module
 from langchain_community.llms import CTransformers
-from sql_bot import const
+import const
 from langchain_google_genai import ChatGoogleGenerativeAI
 
 

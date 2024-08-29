@@ -2,7 +2,7 @@
 from fastapi import Header
 from fastapi import status
 from fastapi.exceptions import HTTPException
-from sql_bot import const
+import const
 
 async def verify_token(x_token: str = Header()):
     """

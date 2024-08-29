@@ -1,118 +1,109 @@
-# import json
-# import sys
-
-# def load_json_file(file_path):
-#     with open(file_path, 'r') as file:
-#         return json.load(file)
-
-# def find_db_schema(data, target_db_id):
-#     return next((item for item in data if item['db_id'] == target_db_id), None)
-
-# def create_schema(db_schema):
-#     if not db_schema:
-#         return None
-
-#     schema = {
-#         "db_id": db_schema['db_id'],
-#         "tables": []
-#     }
-
-#     for i, table_name in enumerate(db_schema['table_names_original']):
-#         table = {
-#             "table_name": table_name,
-#             "columns": []
-#         }
-
-#         # Add columns
-#         for j, (table_id, column_name) in enumerate(db_schema['column_names_original']):
-#             if table_id == i:
-#                 column = {
-#                     "column_name": column_name,
-#                     "column_type": db_schema['column_types'][j]
-#                 }
-#                 if j in db_schema['primary_keys']:
-#                     column["primary_key"] = True
-#                 table["columns"].append(column)
-
-#         # Add primary keys for composite keys
-#         if isinstance(db_schema['primary_keys'][-1], list) and db_schema['primary_keys'][-1][0] in [col['column_name'] for col in table['columns']]:
-#             table["primary_keys"] = [{"column_name": db_schema['column_names_original'][pk][1]} for pk in db_schema['primary_keys'][-1]]
-
-#         # Add foreign keys
-#         foreign_keys = []
-#         for fk in db_schema['foreign_keys']:
-#             if db_schema['column_names_original'][fk[0]][0] == i:
-#                 foreign_key = {
-#                     "column_name": db_schema['column_names_original'][fk[0]][1],
-#                     "referenced_table": db_schema['table_names_original'][db_schema['column_names_original'][fk[1]][0]],
-#                     "referenced_column": db_schema['column_names_original'][fk[1]][1]
-#                 }
-#                 foreign_keys.append(foreign_key)
-        
-#         if foreign_keys:
-#             table["foreign_keys"] = foreign_keys
-
-#         schema["tables"].append(table)
-
-#     return schema
-
-# def main():
-#     if len(sys.argv) != 3:
-#         print("Usage: python script.py <json_file_path> <db_id>")
-#         sys.exit(1)
-
-#     json_file_path = sys.argv[1]
-#     target_db_id = sys.argv[2]
-
-#     data = load_json_file(json_file_path)
-#     db_schema = find_db_schema(data, target_db_id)
-
-#     if not db_schema:
-#         print(f"No schema found for db_id: {target_db_id}")
-#         sys.exit(1)
-
-#     schema = create_schema(db_schema)
-#     with open("sql_bot/lib/llm_schema.json", "w") as file:
-#         json.dump(schema, file, indent=2)
-
-#     print("Schema created successfully!")
-
-
-# if __name__ == "__main__":
-#     main()
-
-
 import json
 import argparse
 
-def generate_schema(db_data, db_id):
-    # Find the database object based on db_id
-    db = next((db for db in db_data if db["db_id"] == db_id), None)
-    
-    if not db:
-        print(f"No database found with db_id: {db_id}")
-        return None
+class SchemaGenerator:
+    """
+    A class responsible for generating a database schema from JSON data.
+    """
 
-    schema = {"db_id": db_id, "tables": []}
-    
-    # Extract table and column information
-    table_names = db["table_names_original"]
-    column_names = db["column_names_original"]
-    column_types = db["column_types"]
-    primary_keys = set()
+    def __init__(self, db_data):
+        """
+        Initializes the SchemaGenerator with the database data.
 
-    # Collect primary key indexes into a set for easy lookup
-    for pk in db["primary_keys"]:
-        if isinstance(pk, list):
-            primary_keys.update(pk)
-        else:
-            primary_keys.add(pk)
+        Args:
+            db_data (list): A list of dictionaries representing database information.
+        """
+        self.db_data = db_data
 
-    # Collect foreign keys as a dictionary mapping
-    foreign_keys = {fk[0]: fk[1] for fk in db["foreign_keys"]}
-    
-    # Construct the tables and columns with primary keys and foreign keys information
-    for table_index, table_name in enumerate(table_names):
+    def find_database(self, db_id):
+        """
+        Finds the database object based on the given db_id.
+
+        Args:
+            db_id (int): The ID of the database to find.
+
+        Returns:
+            dict or None: The database object if found, otherwise None.
+        """
+        return next((db for db in self.db_data if db["db_id"] == db_id), None)
+
+    def generate_schema(self, db_id):
+        """
+        Generates a schema for the given database ID.
+
+        Args:
+            db_id (int): The ID of the database to generate the schema for.
+
+        Returns:
+            dict or None: The generated schema if successful, otherwise None.
+        """
+        db = self.find_database(db_id)
+
+        if not db:
+            print(f"No database found with db_id: {db_id}")
+            return None
+
+        schema = {"db_id": db_id, "tables": []}
+
+        table_names = db["table_names_original"]
+        column_names = db["column_names_original"]
+        column_types = db["column_types"]
+        primary_keys = self._extract_primary_keys(db)
+        foreign_keys = self._extract_foreign_keys(db)
+
+        for table_index, table_name in enumerate(table_names):
+            table_schema = self._generate_table_schema(
+                table_index, table_name, column_names, column_types, primary_keys, foreign_keys
+            )
+            schema["tables"].append(table_schema)
+
+        return schema
+
+    def _extract_primary_keys(self, db):
+        """
+        Extracts primary key indexes from the database data.
+
+        Args:
+            db (dict): The database object.
+
+        Returns:
+            set: A set of primary key indexes.
+        """
+        primary_keys = set()
+        for pk in db["primary_keys"]:
+            if isinstance(pk, list):
+                primary_keys.update(pk)
+            else:
+                primary_keys.add(pk)
+        return primary_keys
+
+    def _extract_foreign_keys(self, db):
+        """
+        Extracts foreign key relationships from the database data.
+
+        Args:
+            db (dict): The database object.
+
+        Returns:
+            dict: A dictionary mapping foreign key column indexes to referenced column indexes.
+        """
+        return {fk[0]: fk[1] for fk in db["foreign_keys"]}
+
+    def _generate_table_schema(self, table_index, table_name, column_names, column_types, primary_keys, foreign_keys):
+        """
+        Generates the schema for a single table.
+
+        Args:
+            table_index (int): The index of the table.
+            table_name (str): The name of the table.
+            column_names (list): A list of tuples containing column table indexes and column names.
+            column_types (list): A list of column types.
+            primary_keys (set): A set of primary key indexes.
+            foreign_keys (dict): A dictionary mapping foreign key column indexes to referenced column indexes.
+
+        Returns:
+            dict: The generated schema for the table.
+        """
         table_schema = {"table_name": table_name, "columns": []}
 
         for col_index, (col_table_index, col_name) in enumerate(column_names):
@@ -125,30 +116,28 @@ def generate_schema(db_data, db_id):
                     column_schema["primary_key"] = True
                 if col_index in foreign_keys:
                     column_schema["foreign_key"] = True
-                    # Optionally add more foreign key details if needed
                 table_schema["columns"].append(column_schema)
-        
-        schema["tables"].append(table_schema)
 
-    return schema
+        return table_schema
 
-if __name__ == "__main__":
+def main():
+    """
+    The main function to handle command-line arguments and schema generation.
+    """
     parser = argparse.ArgumentParser(description="Generate schema from JSON file.")
     parser.add_argument("json_file", help="Path to the JSON file containing database schema.")
     parser.add_argument("db_id", help="Database ID to generate schema for.")
     args = parser.parse_args()
 
-    # Load JSON data from file
     with open(args.json_file, "r") as f:
         db_data = json.load(f)
 
-    # Generate schema
-    schema = generate_schema(db_data, args.db_id)
+    generator = SchemaGenerator(db_data)
+    schema = generator.generate_schema(args.db_id)
 
     if schema:
-        # Print schema in JSON format
-        # print(json.dumps(schema, indent=2))
         with open("sql_bot/lib/llm_schema.txt", "w") as file:
             json.dump(schema, file, indent=2)
 
-
+if __name__ == "__main__":
+    main()

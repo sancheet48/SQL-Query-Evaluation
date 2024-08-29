@@ -6,7 +6,7 @@ import fastapi
 from fastapi import Depends
 from pydantic import BaseModel
 from pydantic import Field
-from sql_bot import const
+import const
 from sql_bot.lib import bot
 from sql_bot.routes import validate_token
 
