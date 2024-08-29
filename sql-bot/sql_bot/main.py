@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import JSONResponse
 from fastapi.responses import Response
-from sql_bot import const
+import const
 from sql_bot.routes import llm_bot
 
 

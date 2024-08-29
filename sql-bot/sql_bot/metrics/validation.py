@@ -1,16 +1,20 @@
 import json
 import requests
-import const
+# import const
 import sqlite3
 import random
 import time
 
+
+SQL_DB_PATH=r"D:\Downloads\train\train\train_databases\train_databases\cars\cars.sqlite"
+output_data = []
 correct_output_data = []
 incorrect_output_data = []
+    
 # Database Interaction Module
 def connect_to_database():
     """Establishes a connection to the SQLite database."""
-    return sqlite3.connect(const.SQL_DB_PATH)
+    return sqlite3.connect(SQL_DB_PATH)
 
 def execute_query(conn, query):
     """Executes a query on the given database connection."""
@@ -35,7 +39,7 @@ def send_question_to_llm(question):
         return None
 
 # Evaluation Module
-def evaluate_answers(llm_answer_dict, correct_answer, conn, output_data):
+def evaluate_answers(question,llm_answer_dict, correct_answer, conn):
     """
     Compares the LLM's answer with the correct answer, saves the details to 
     output_data, and returns the comparison result
@@ -69,40 +73,43 @@ def evaluate_answers(llm_answer_dict, correct_answer, conn, output_data):
     
     output_data.append(output)
 
-
-
     if llm_results == correct_results:
         correct_output_data.append(output)
-
     else:
         incorrect_output_data.append(output)
-
-
 
     return llm_results == correct_results
 
 
+def save_output_data(output_data):
+    """Saves the output data to a JSON file."""
+    with open('sql_bot/metrics/output_results.json', 'w') as f:
+        json.dump(output_data, f, indent=4)
 
+def save_correct_data(correct_data):
+    """Saves the correct data to a JSON file."""
+    with open('sql_bot/metrics/correct_output_data.json', 'w') as f:
+        json.dump(correct_data, f, indent=4)
 
-
+def save_incorrect_data(incorrect_data):
+    """Saves the incorrect data to a JSON file."""
+    with open('sql_bot/metrics/incorrect_output_data.json', 'w') as f:
+        json.dump(incorrect_data, f, indent=4)
+    
 
 # Main Execution
 if __name__ == "__main__":
-    with open('cars.json', 'r') as f:
+    with open('sql_bot/metrics/cars.json', 'r') as f:
         data = json.load(f)
 
     # Select 30 random questions
     random.shuffle(data)  # Shuffle the data in-place
-    data = data[:30]
+    data = data[:3]
 
     correct = 0
     total = len(data)
 
     conn = connect_to_database()
-
-    # Initialize list to store output data
-    output_data = []
-
 
     start_time = time.time()
 
@@ -112,22 +119,18 @@ if __name__ == "__main__":
 
         llm_answer = send_question_to_llm(question)
         if llm_answer:
-            if evaluate_answers(llm_answer, correct_answer, conn, output_data):
+            if evaluate_answers(question,llm_answer, correct_answer, conn):
                 correct += 1
 
     conn.close()
 
     end_time = time.time()
     # Save output data to JSON file
-    with open('output_results.json', 'w') as f:
-        json.dump(output_data, f, indent=4)
 
-    with open('correct_output_data.json', 'w') as f:
-        json.dump(correct_output_data, f, indent=4)
+    save_output_data(output_data)
+    save_correct_data(correct_output_data)
+    save_incorrect_data(incorrect_output_data)
 
-    
-    with open('incorrect_output_data.json', 'w') as f:
-        json.dump(incorrect_output_data, f, indent=4)
 
 
     print(f"Total time taken: {end_time - start_time} seconds")

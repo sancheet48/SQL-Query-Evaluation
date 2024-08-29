@@ -11,3 +11,6 @@ chromadb
 motor
 sqlglot
 langchain-google-genai
+pytest 
+requests 
+requests-mock

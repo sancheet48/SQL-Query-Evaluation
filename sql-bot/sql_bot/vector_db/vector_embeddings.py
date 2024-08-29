@@ -21,9 +21,7 @@ def create_vector_db(
 
 
     Args:
-        connection_string (str): The connection string for the sqlDB.
-        db_name (str): The name of the sqlDB database.
-        collection_name (str): The name of the sqlDB collection.
+        filepath (str): The path to the sql DB.
         vector_db_path (str): The path to store the vector DB.
     """
     if os.path.isdir(vector_db_path):

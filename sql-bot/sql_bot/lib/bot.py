@@ -1,27 +1,21 @@
 """Query BOT module."""
 import argparse
-import json
 import logging
 import os
 import sys
 from logging.handlers import RotatingFileHandler
 from time import time
-
-
 import chromadb
 from chromadb.config import Settings
 from fastapi.responses import JSONResponse
 from langchain.chains import LLMChain
 from langchain.prompts import PromptTemplate
-from sql_bot import const
+import const
 from sql_bot.lib import output_modifier
 from sql_bot.lib.llm_models import LLM_MODEL
 from sql_bot.vector_db.vector_db_models import EMBEDDING_FUNCTION
-
 import warnings
 warnings.filterwarnings("ignore")
-
-
 
 logger = logging.getLogger(__file__)
 
@@ -37,11 +31,8 @@ LLM_TEMPLATE = (
 )
 
 
-
-
 LLM_SCHEMA = None
 CHAT_COLLECTION = None
-
 
 LLM_PROMPT = PromptTemplate(
     template=LLM_TEMPLATE, input_variables=["question", "schema"]
@@ -87,8 +78,6 @@ def startup():
         )
 
 
-
-
 def shutdown():
     """Teardown function."""
     ...
@@ -112,7 +101,9 @@ def retrieve_vdb(query: str) -> tuple:
     similarity_scores = []
 
     for document, metadata, distance in zip(
-        query_result["documents"][0], query_result["metadatas"][0], query_result["distances"][0]
+        query_result["documents"][0], 
+        query_result["metadatas"][0], 
+        query_result["distances"][0]
     ):
         input_text = document
         response = metadata["response"]
@@ -166,14 +157,6 @@ def get_api_response_template() -> dict:
         "similarity_scores": [],
     }
 
-def query_parser(query: str):
-    return query.replace('```sql\n', '').replace('\n```', '').replace('`', '').strip()
-
-def add_case_insensetiveness(query:str)->str:
-    return query + " COLLATE NOCASE "
-
-# def add_distinct(query: str) -> str:
-#     return query.replace("SELECT", "SELECT DISTINCT ")
 
 
 
@@ -184,17 +167,13 @@ def sql_connect(api_response: dict) -> dict:
     Returns:
         list: List of systems having the desired criteria.
     """
-
-    api_response["model_response"] = query_parser(api_response["model_response"])
-
-    api_response["model_response"] = add_case_insensetiveness(api_response["model_response"])
-
+    api_response["model_response"] = output_modifier.query_parser(api_response["model_response"])
+    api_response["model_response"] = output_modifier.add_case_insensetiveness(api_response["model_response"])
     # api_response["model_response"] = add_distinct(api_response["model_response"])
-
     api_response["is_valid_syntax"] = output_modifier.validate_sql(api_response["model_response"])
 
-
     return api_response
+
 
 def get_db_query(query: str) -> dict:
     """Get System from query.
