@@ -1,46 +1,358 @@
 [
     {
-        "question": "How many Japanese cars weigh more than 2000 lbs?",
-        "llm_answer": "SELECT COUNT(*) FROM data AS T1 JOIN production AS T2 ON T1.ID = T2.ID JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T1.weight > 2000 COLLATE NOCASE ",
+        "question": "How many times was Ford Maverick introduced to the market?",
+        "llm_answer": "SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'ford maverick' COLLATE NOCASE ",
         "llm_results": [
             [
-                102
+                25
             ]
         ],
-        "correct_answer": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Japan' AND T1.weight > 2000",
+        "correct_answer": "SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'ford maverick'",
         "correct_results": [
             [
-                102
+                25
             ]
         ],
-        "examples": "{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'What is the total weight of all cars produced in 1980?',\n    'sql_query': 'SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980'\n},\n{\n    'question': 'What are the distinct countries that have produced cars weighing less than 2000 lbs?',\n    'sql_query': 'SELECT DISTINCT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T1.weight < 2000'\n},\n{\n    'question': 'Which cars have an acceleration greater than 15 and a weight less than 2000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.acceleration > 15 AND T1.weight < 2000'\n}",
+        "examples": "{\n    'question': 'How many times was Toyota Corolla introduced to the market?',\n    'sql_query': 'SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'toyota corolla''\n},\n{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'When was the $35420.78956 car introduced to the market? State the year.',\n    'sql_query': 'SELECT T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = '35420.78956''\n},\n{\n    'question': 'How many cars with a model year before 1980 have more than 100 horsepower?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100'\n}",
         "similarity_scores": [
-            0.5949953670850858,
-            0.5655330210194011,
-            0.5028789970718521,
-            0.4779479991112504
+            0.3820242245981197,
+            0.27629432930871023,
+            0.22529340511696416,
+            0.19408791287600702
         ]
     },
     {
-        "question": "What years did the Buick Skylark 320 get in production?",
-        "llm_answer": "SELECT T2.model_year FROM data AS T1 JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = \"buick skylark 320\" GROUP BY T2.model_year COLLATE NOCASE ",
+        "question": "How many cars were released in the USA in 1981?",
+        "llm_answer": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA' AND T1.model_year = 1981 COLLATE NOCASE ",
         "llm_results": [
             [
-                1970
+                17
             ]
         ],
-        "correct_answer": "SELECT T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'buick skylark 320'",
+        "correct_answer": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA' AND T1.model_year = 1981",
         "correct_results": [
             [
-                1970
+                17
             ]
         ],
-        "examples": "{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'What is the total weight of all cars produced in 1980?',\n    'sql_query': 'SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980'\n},\n{\n    'question': 'What is the maximum horsepower for cars produced in 1973?',\n    'sql_query': 'SELECT MAX(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973'\n},\n{\n    'question': 'What is the average horsepower of cars produced in 1978?',\n    'sql_query': 'SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1978'\n}",
+        "examples": "{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'What is the total weight of all cars produced in 1980?',\n    'sql_query': 'SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980'\n},\n{\n    'question': 'How many cars with a model year before 1980 have more than 100 horsepower?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100'\n},\n{\n    'question': 'What is the average horsepower of cars produced in 1978?',\n    'sql_query': 'SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1978'\n}",
         "similarity_scores": [
-            0.24900776967231153,
-            0.22000536948120808,
-            0.21306574699055092,
-            0.20070607314122868
+            0.6132267193392826,
+            0.5499587834441224,
+            0.5331769161878479,
+            0.4758527221840154
+        ]
+    },
+    {
+        "question": "What is the fastest car made by Japan?",
+        "llm_answer": "SELECT T4.car_name FROM country AS T1 INNER JOIN production AS T2 ON T1.origin = T2.country INNER JOIN price AS T3 ON T3.ID = T2.ID INNER JOIN data AS T4 ON T4.ID = T3.ID WHERE T1.country = 'Japan' ORDER BY T4.acceleration LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "datsun 280-zx"
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Japan' ORDER BY T1.horsepower DESC LIMIT 1",
+        "correct_results": [
+            [
+                "datsun 280-zx"
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n},\n{\n    'question': 'List all the cars from Japan that were produced after 1975.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T2.model_year > 1975'\n}",
+        "similarity_scores": [
+            0.6826349065475135,
+            0.6298888392582515,
+            0.4104951391233017,
+            0.4096196339958166
+        ]
+    },
+    {
+        "question": "What is the acceleration of the most expensive car?",
+        "llm_answer": "SELECT T2.acceleration FROM price AS T1 INNER JOIN data AS T2 ON T1.ID = T2.ID ORDER BY T1.price DESC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                14.5
+            ]
+        ],
+        "correct_answer": "SELECT T1.acceleration FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1",
+        "correct_results": [
+            [
+                14.5
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'What is the average price of cars with an acceleration over 15?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 15'\n},\n{\n    'question': 'Which cars have an acceleration greater than 15 and a weight less than 2000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.acceleration > 15 AND T1.weight < 2000'\n},\n{\n    'question': 'What is the horsepower of the lightest car?',\n    'sql_query': 'SELECT T1.horsepower FROM data AS T1 ORDER BY T1.weight ASC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.6369846379291124,
+            0.57940113784105,
+            0.49237424315596756,
+            0.4659069954224897
+        ]
+    },
+    {
+        "question": "Please list the weights of all the cars with the price over $40000.",
+        "llm_answer": "SELECT T1.weight FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 40000 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                4732
+            ],
+            [
+                3439
+            ],
+            [
+                4746
+            ],
+            [
+                2189
+            ],
+            [
+                4042
+            ],
+            [
+                4237
+            ],
+            [
+                2401
+            ],
+            [
+                2124
+            ],
+            [
+                1836
+            ],
+            [
+                4638
+            ],
+            [
+                3907
+            ],
+            [
+                4215
+            ],
+            [
+                3353
+            ],
+            [
+                3012
+            ],
+            [
+                1940
+            ],
+            [
+                2815
+            ],
+            [
+                3425
+            ],
+            [
+                2155
+            ],
+            [
+                2405
+            ],
+            [
+                2830
+            ],
+            [
+                3140
+            ],
+            [
+                2795
+            ],
+            [
+                3725
+            ],
+            [
+                1915
+            ],
+            [
+                3900
+            ],
+            [
+                2700
+            ],
+            [
+                2556
+            ],
+            [
+                2144
+            ],
+            [
+                2434
+            ],
+            [
+                2800
+            ],
+            [
+                2085
+            ],
+            [
+                2950
+            ],
+            [
+                2420
+            ],
+            [
+                2490
+            ],
+            [
+                2050
+            ],
+            [
+                1985
+            ],
+            [
+                2640
+            ],
+            [
+                2865
+            ],
+            [
+                2025
+            ],
+            [
+                2125
+            ],
+            [
+                2295
+            ],
+            [
+                2625
+            ]
+        ],
+        "correct_answer": "SELECT T1.weight FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 40000",
+        "correct_results": [
+            [
+                4732
+            ],
+            [
+                3439
+            ],
+            [
+                4746
+            ],
+            [
+                2189
+            ],
+            [
+                4042
+            ],
+            [
+                4237
+            ],
+            [
+                2401
+            ],
+            [
+                2124
+            ],
+            [
+                1836
+            ],
+            [
+                4638
+            ],
+            [
+                3907
+            ],
+            [
+                4215
+            ],
+            [
+                3353
+            ],
+            [
+                3012
+            ],
+            [
+                1940
+            ],
+            [
+                2815
+            ],
+            [
+                3425
+            ],
+            [
+                2155
+            ],
+            [
+                2405
+            ],
+            [
+                2830
+            ],
+            [
+                3140
+            ],
+            [
+                2795
+            ],
+            [
+                3725
+            ],
+            [
+                1915
+            ],
+            [
+                3900
+            ],
+            [
+                2700
+            ],
+            [
+                2556
+            ],
+            [
+                2144
+            ],
+            [
+                2434
+            ],
+            [
+                2800
+            ],
+            [
+                2085
+            ],
+            [
+                2950
+            ],
+            [
+                2420
+            ],
+            [
+                2490
+            ],
+            [
+                2050
+            ],
+            [
+                1985
+            ],
+            [
+                2640
+            ],
+            [
+                2865
+            ],
+            [
+                2025
+            ],
+            [
+                2125
+            ],
+            [
+                2295
+            ],
+            [
+                2625
+            ]
+        ],
+        "examples": "{\n    'question': 'Among the cars over 3200lbs, how many of them cost less than $28000?',\n    'sql_query': 'SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3200 AND T2.price < 28000'\n},\n{\n    'question': 'Which car has the maximum weight among those priced under $20000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 20000 ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'What is the total weight of all cars produced in 1980?',\n    'sql_query': 'SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980'\n},\n{\n    'question': 'Which car has the lowest weight among those made in 1980?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980 ORDER BY T1.weight ASC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.535464545755731,
+            0.5034664148047334,
+            0.4330454810427732,
+            0.34865087300322806
         ]
     }
 ]

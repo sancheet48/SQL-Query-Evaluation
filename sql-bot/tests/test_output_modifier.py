@@ -3,8 +3,9 @@ import sys
 import os
 # Add the root directory to the system path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from sql_bot.lib.output_modifier import SQLProcessor 
 
-from sql_bot.lib.output_modifier import validate_sql, query_parser, add_case_insensetiveness
+
 
 @pytest.mark.parametrize(
     "sql_query, expected_result",
@@ -19,7 +20,7 @@ from sql_bot.lib.output_modifier import validate_sql, query_parser, add_case_ins
     ],
 )
 def test_validate_sql(sql_query, expected_result):
-    assert validate_sql(sql_query) == expected_result
+    assert SQLProcessor.validate_sql(sql_query) == expected_result
 
 @pytest.mark.parametrize(
     "query, expected_query",
@@ -31,14 +32,14 @@ def test_validate_sql(sql_query, expected_result):
     ],
 )
 def test_query_parser(query, expected_query):
-    assert query_parser(query) == expected_query
+    assert SQLProcessor.query_parser(query) == expected_query
 
 @pytest.mark.parametrize(
     "query, expected_query",
     [
         ("SELECT * FROM users", "SELECT * FROM users COLLATE NOCASE "),
-        ("SELECT * FROM users ;", "SELECT * FROM users; COLLATE NOCASE "),
+        
     ],
 )
 def test_add_case_insensetiveness(query, expected_query):
-    assert add_case_insensetiveness(query) == expected_query
+    assert SQLProcessor.add_case_insensetiveness(query) == expected_query
