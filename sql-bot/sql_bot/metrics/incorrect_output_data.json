@@ -1,1 +1,83 @@
-[]
+[
+    {
+        "question": "Calculate the average production rate per year from 1971 to 1980. Among them, name the cars with a weight of fewer than 1800 lbs.",
+        "llm_answer": "SELECT T2.car_name, COUNT(T1.ID) / COUNT(DISTINCT T1.model_year) AS avg_production_per_year FROM production AS T1 INNER JOIN data AS T2 ON T1.ID = T2.ID WHERE T1.model_year BETWEEN 1971 AND 1980 AND T2.weight < 1800 GROUP BY T1.ID COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "toyota corolla 1200",
+                1
+            ],
+            [
+                "datsun 1200",
+                1
+            ],
+            [
+                "toyota corona",
+                1
+            ],
+            [
+                "honda civic cvcc",
+                1
+            ],
+            [
+                "honda civic",
+                1
+            ]
+        ],
+        "correct_answer": "SELECT CAST(COUNT(T1.ID) AS REAL) / 9 FROM production AS T1 INNER JOIN data AS T2 ON T2.ID = T1.ID WHERE T1.model_year BETWEEN 1971 AND 1980 UNION ALL SELECT DISTINCT T2.car_name FROM production AS T1 INNER JOIN data AS T2 ON T2.ID = T1.ID WHERE T1.model_year BETWEEN 1971 AND 1980 AND T2.weight < 1800",
+        "correct_results": [
+            [
+                62.0
+            ],
+            [
+                "toyota corolla 1200"
+            ],
+            [
+                "datsun 1200"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "honda civic"
+            ]
+        ],
+        "examples": "{\n    'question': 'Find the average weight of cars produced in Germany.',\n    'sql_query': 'SELECT AVG(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Germany''\n},\n{\n    'question': 'What is the total weight of all cars produced in 1980?',\n    'sql_query': 'SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980'\n},\n{\n    'question': 'Find the car models that were produced for three consecutive years.',\n    'sql_query': 'SELECT T1.model FROM production AS T1 GROUP BY T1.model HAVING COUNT(DISTINCT T1.model_year) = 3'\n},\n{\n    'question': 'Find the average displacement of cars produced in Germany.',\n    'sql_query': 'SELECT AVG(T1.displacement) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Germany''\n}",
+        "similarity_scores": [
+            0.39474955481658636,
+            0.29955325267126043,
+            0.28977149491949505,
+            0.2802390366488242
+        ]
+    },
+    {
+        "question": "Provide the ID of cars from Japan worth greater than 35000 and have an acceleration of 14.",
+        "llm_answer": "SELECT T1.ID FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' AND T1.price > 35000 AND T4.acceleration = 14 COLLATE NOCASE ",
+        "llm_results": [],
+        "correct_answer": "SELECT T4.ID FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' AND T1.price > 3500 AND T4.acceleration = 14",
+        "correct_results": [
+            [
+                32
+            ],
+            [
+                32
+            ],
+            [
+                32
+            ],
+            [
+                32
+            ]
+        ],
+        "examples": "{\n    'question': 'List the car names and their weights for cars produced in Japan with more than 120 horsepower.',\n    'sql_query': 'SELECT T1.car_name, T1.weight FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T1.horsepower > 120'\n},\n{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'Which cars have an acceleration greater than 15 and a weight less than 2000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.acceleration > 15 AND T1.weight < 2000'\n},\n{\n    'question': 'List all the cars from Japan that were produced after 1975.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T2.model_year > 1975'\n}",
+        "similarity_scores": [
+            0.4850808642972555,
+            0.4814728787530631,
+            0.4372931981987618,
+            0.3796966948796059
+        ]
+    }
+]

@@ -149,8 +149,6 @@ async def custom_swagger_ui_html(request: Request):
 )
 def health():
     """
-
-
     """
     return JSONResponse(content="OK", status_code=status.HTTP_200_OK)
 
