@@ -1936,24 +1936,47 @@
         ]
     },
     {
-        "question": "Provide the name, model, sweep volume, and introduced year of the car with the best crash protection.",
-        "llm_answer": "I cannot provide an adequate query for the request. The database schema does not contain any information about crash protection. COLLATE NOCASE ",
-        "llm_results": "Invalid Syntax",
-        "correct_answer": "SELECT T1.car_name, T1.model, T1.displacement / T1.cylinders, T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID ORDER BY T1.weight DESC LIMIT 1",
-        "correct_results": [
+        "question": "Among the cars with an acceleration of over 10 miles per squared hour, how many of them cost more than $20000 and less than $30000?",
+        "llm_answer": "SELECT COUNT(*) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 10 AND T2.price > 20000 AND T2.price < 30000 COLLATE NOCASE ",
+        "llm_results": [
             [
-                "pontiac safari (sw)",
-                71,
-                50.0,
-                1971
+                70
             ]
         ],
-        "examples": "{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n},\n{\n    'question': 'Which car has the maximum weight among those priced under $20000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 20000 ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'List all cars with a displacement greater than 300.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.displacement > 300'\n}",
+        "correct_answer": "SELECT COUNT(*) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 10 AND T2.price BETWEEN 20000 AND 30000",
+        "correct_results": [
+            [
+                199
+            ]
+        ],
+        "examples": "{\n    'question': 'Find the car with the smallest acceleration that costs more than $15000.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 15000 ORDER BY T1.acceleration ASC LIMIT 1'\n},\n{\n    'question': 'Among the cars over 3200lbs, how many of them cost less than $28000?',\n    'sql_query': 'SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3200 AND T2.price < 28000'\n},\n{\n    'question': 'What is the average price of cars with an acceleration over 15?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 15'\n},\n{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n}",
         "similarity_scores": [
-            0.03801944390500911,
-            0.02120577979562288,
-            0.01656589227820504,
-            -0.028263036347627724
+            0.4124126867282124,
+            0.3727182187710065,
+            0.34422631844226315,
+            0.29283381120637664
+        ]
+    },
+    {
+        "question": "What is the maximum sweep volume of a car that costs less than $30000?",
+        "llm_answer": "SELECT MAX(T1.displacement) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 30000 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                455.0
+            ]
+        ],
+        "correct_answer": "SELECT MAX(T1.displacement / T1.cylinders) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 30000",
+        "correct_results": [
+            [
+                56.875
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the average price of cars with a displacement over 200?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 200'\n},\n{\n    'question': 'What is the maximum price of cars with 6 cylinders?',\n    'sql_query': 'SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6'\n},\n{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n},\n{\n    'question': 'Among the cars over 3200lbs, how many of them cost less than $28000?',\n    'sql_query': 'SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3200 AND T2.price < 28000'\n}",
+        "similarity_scores": [
+            0.46218331724588757,
+            0.3700522616245455,
+            0.2613508374344332,
+            0.2525779872032293
         ]
     },
     {
@@ -1979,6 +2002,467 @@
             0.03702620101322518,
             0.016050664936085646,
             -0.018078356166393972
+        ]
+    },
+    {
+        "question": "How much is the Volkswagen Dasher with 14.1 mph acceleration?",
+        "llm_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'Volkswagen Dasher' AND T1.acceleration = 14.1 COLLATE NOCASE ",
+        "llm_results": [],
+        "correct_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'volkswagen dasher' AND T1.acceleration = '14.1'",
+        "correct_results": [
+            [
+                20000.0
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the average price of cars with an acceleration over 15?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 15'\n},\n{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'Which cars have an acceleration greater than 15 and a weight less than 2000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.acceleration > 15 AND T1.weight < 2000'\n},\n{\n    'question': 'What is the horsepower of the lightest car?',\n    'sql_query': 'SELECT T1.horsepower FROM data AS T1 ORDER BY T1.weight ASC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.4537570258990794,
+            0.34843245684824864,
+            0.24726883633633723,
+            0.21658512521848994
+        ]
+    },
+    {
+        "question": "Provide the engine displacement status of the $37443.85589 car.",
+        "llm_answer": "SELECT T1.displacement FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = 37443.85589; COLLATE NOCASE ",
+        "llm_results": "Error",
+        "correct_answer": "SELECT T1.displacement FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = '37443.85589'",
+        "correct_results": [
+            [
+                200.0
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n},\n{\n    'question': 'How many car models have a displacement less than 150 and were produced in 1972?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.displacement < 150 AND T2.model_year = 1972'\n},\n{\n    'question': 'What is the average price of cars with a displacement over 200?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 200'\n},\n{\n    'question': 'Find the average displacement of cars with a price above $25,000.',\n    'sql_query': 'SELECT AVG(T1.displacement) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 25000'\n}",
+        "similarity_scores": [
+            0.3242348897674171,
+            0.30294076977814866,
+            0.2725184612950001,
+            0.2251166598623774
+        ]
+    },
+    {
+        "question": "When was the $32650.65157 car introduced to the market? State the year.",
+        "llm_answer": "SELECT T1.model_year FROM production AS T1 INNER JOIN data AS T2 ON T1.ID = T2.ID INNER JOIN price AS T3 ON T2.ID = T3.ID WHERE T3.price = 32650.65157 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                1980
+            ]
+        ],
+        "correct_answer": "SELECT T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = '32650.65157'",
+        "correct_results": [
+            [
+                80
+            ]
+        ],
+        "examples": "{\n    'question': 'When was the $35420.78956 car introduced to the market? State the year.',\n    'sql_query': 'SELECT T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = '35420.78956''\n},\n{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'How many times was Toyota Corolla introduced to the market?',\n    'sql_query': 'SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'toyota corolla''\n},\n{\n    'question': 'List all car names and their prices for cars that have more than 6 cylinders and were produced before 1975.',\n    'sql_query': 'SELECT T1.car_name, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID INNER JOIN production AS T3 ON T1.ID = T3.ID WHERE T1.cylinders > 6 AND T3.model_year < 1975'\n}",
+        "similarity_scores": [
+            0.9906581709490855,
+            0.25051723036913653,
+            0.24630245423065888,
+            0.2370108643876363
+        ]
+    },
+    {
+        "question": "Which car in the database provides the best crash protection based on its weight? How much is it?",
+        "llm_answer": "The provided database schema does not contain information about crash protection. COLLATE NOCASE ",
+        "llm_results": "Invalid Syntax",
+        "correct_answer": "SELECT T1.ID, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.weight DESC LIMIT 1",
+        "correct_results": [
+            [
+                45,
+                20000.0
+            ]
+        ],
+        "examples": "{\n    'question': 'Which car has the maximum weight among those priced under $20000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 20000 ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'Among the cars over 3200lbs, how many of them cost less than $28000?',\n    'sql_query': 'SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3200 AND T2.price < 28000'\n},\n{\n    'question': 'Which car has the lowest weight among those made in 1980?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980 ORDER BY T1.weight ASC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.284878641763908,
+            0.1799653773741441,
+            0.1268621906471461,
+            0.10265818964439233
+        ]
+    },
+    {
+        "question": "State the origin country of the fastest car in the database.",
+        "llm_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin ORDER BY T1.acceleration DESC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "Europe"
+            ]
+        ],
+        "correct_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country ORDER BY T1.horsepower DESC LIMIT 1",
+        "correct_results": [
+            [
+                "USA"
+            ]
+        ],
+        "examples": "{\n    'question': 'Find the name of the car model with the fastest acceleration produced in France.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'France' ORDER BY T1.acceleration DESC LIMIT 1'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n},\n{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.2608384520439284,
+            0.07511901291872791,
+            0.07130802944871018,
+            0.057688255034535674
+        ]
+    },
+    {
+        "question": "Calculate the swept volume of the $34538.97449 car.",
+        "llm_answer": "SELECT T1.displacement FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = 34538.97449 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                350.0
+            ]
+        ],
+        "correct_answer": "SELECT T1.displacement / T1.cylinders FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = 34538.97449",
+        "correct_results": [
+            [
+                43.75
+            ]
+        ],
+        "examples": "{\n    'question': 'Find the average displacement of cars with a price above $25,000.',\n    'sql_query': 'SELECT AVG(T1.displacement) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 25000'\n},\n{\n    'question': 'Find the average displacement of cars produced in Germany.',\n    'sql_query': 'SELECT AVG(T1.displacement) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Germany''\n},\n{\n    'question': 'Find the car with the smallest acceleration that costs more than $15000.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 15000 ORDER BY T1.acceleration ASC LIMIT 1'\n},\n{\n    'question': 'What is the average price of cars with a displacement over 200?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 200'\n}",
+        "similarity_scores": [
+            0.1850106714413361,
+            0.01965142421365762,
+            -0.016460746635480472,
+            -0.10879568442479437
+        ]
+    },
+    {
+        "question": "Which Dodge car is the cheapest?",
+        "llm_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name LIKE 'Dodge%' ORDER BY T2.price ASC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                8766.444652
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name LIKE 'dodge%' ORDER BY T2.price ASC LIMIT 1",
+        "correct_results": [
+            [
+                "dodge st. regis"
+            ]
+        ],
+        "examples": "{\n    'question': 'Which car has the lowest mpg and how much does it cost?',\n    'sql_query': 'SELECT T1.car_name, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.mpg ASC LIMIT 1'\n},\n{\n    'question': 'Which car model has the lowest horsepower but weighs more than 2500lbs?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.weight > 2500 ORDER BY T1.horsepower ASC LIMIT 1'\n},\n{\n    'question': 'Which car has the lowest weight among those made in 1980?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980 ORDER BY T1.weight ASC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest mpg produced in 1975?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 ORDER BY T1.mpg DESC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.3826731163246976,
+            0.30840392229735036,
+            0.2971169834731835,
+            0.26917638117002807
+        ]
+    },
+    {
+        "question": "Among the cars with an engine displacement of no less than 400 cubic millimeter, how many cars cost at least 30,000?",
+        "llm_answer": "SELECT COUNT(*) FROM data AS T1 JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement >= 400 AND T2.price >= 30000 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                11
+            ]
+        ],
+        "correct_answer": "SELECT COUNT(*) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 400 AND T2.price > 30000",
+        "correct_results": [
+            [
+                3
+            ]
+        ],
+        "examples": "{\n    'question': 'List all cars with a displacement greater than 300.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.displacement > 300'\n},\n{\n    'question': 'Find the average displacement of cars with a price above $25,000.',\n    'sql_query': 'SELECT AVG(T1.displacement) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 25000'\n},\n{\n    'question': 'Among the cars over 3200lbs, how many of them cost less than $28000?',\n    'sql_query': 'SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3200 AND T2.price < 28000'\n},\n{\n    'question': 'What is the average price of cars with a displacement over 200?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 200'\n}",
+        "similarity_scores": [
+            0.4868716126430874,
+            0.4462699668017308,
+            0.43761207508029865,
+            0.4000119275873908
+        ]
+    },
+    {
+        "question": "How much is the Peugeot 505s Turbo Diesel?",
+        "llm_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'Peugeot 504' COLLATE NOCASE ",
+        "llm_results": [
+            [
+                40000.0
+            ],
+            [
+                30000.0
+            ],
+            [
+                26121.73551
+            ],
+            [
+                24639.37404
+            ]
+        ],
+        "correct_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'peugeot 505s turbo diesel'",
+        "correct_results": [
+            [
+                20000.0
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the maximum price of cars with 6 cylinders?',\n    'sql_query': 'SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6'\n},\n{\n    'question': 'What is the maximum horsepower for cars produced in 1973?',\n    'sql_query': 'SELECT MAX(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973'\n},\n{\n    'question': 'Which car model has the highest mpg produced in 1975?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 ORDER BY T1.mpg DESC LIMIT 1'\n},\n{\n    'question': 'What is the average horsepower of cars produced in 1978?',\n    'sql_query': 'SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1978'\n}",
+        "similarity_scores": [
+            0.2779632783921244,
+            0.1970904087211579,
+            0.18394168173651493,
+            0.15472299696022218
+        ]
+    },
+    {
+        "question": "What is the miles per square hour of the cheapest car produced by the USA?",
+        "llm_answer": "SELECT T4.mpg FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'USA' ORDER BY T1.price ASC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                15.0
+            ]
+        ],
+        "correct_answer": "SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'USA' ORDER BY T1.price ASC LIMIT 1",
+        "correct_results": [
+            [
+                12.5
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest mpg produced in 1975?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 ORDER BY T1.mpg DESC LIMIT 1'\n},\n{\n    'question': 'What is the average mpg of cars with 4 cylinders?',\n    'sql_query': 'SELECT AVG(T1.mpg) FROM data AS T1 WHERE T1.cylinders = 4'\n},\n{\n    'question': 'What is the average horsepower of cars produced by USA manufacturers in 1971?',\n    'sql_query': 'SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'USA' AND T2.model_year = 1971'\n}",
+        "similarity_scores": [
+            0.48543640590033754,
+            0.4631298100912863,
+            0.3931373501769213,
+            0.3812715603777469
+        ]
+    },
+    {
+        "question": "Which country produced the highest number of cars? Calculate the annual average number of cars that the said country produced from the very start to the present.",
+        "llm_answer": " COLLATE NOCASE ",
+        "llm_results": "Error",
+        "correct_answer": "SELECT T2.country, CAST(COUNT(T1.ID) AS REAL) / COUNT(DISTINCT T1.model_year) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin GROUP BY T2.country ORDER BY COUNT(T2.country) DESC LIMIT 1",
+        "correct_results": [
+            [
+                "USA",
+                34.84615384615385
+            ]
+        ],
+        "examples": "{\n    'question': 'Find the average displacement of cars produced in Germany.',\n    'sql_query': 'SELECT AVG(T1.displacement) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Germany''\n},\n{\n    'question': 'Find the average weight of cars produced in Germany.',\n    'sql_query': 'SELECT AVG(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Germany''\n},\n{\n    'question': 'Find the car models that were produced for three consecutive years.',\n    'sql_query': 'SELECT T1.model FROM production AS T1 GROUP BY T1.model HAVING COUNT(DISTINCT T1.model_year) = 3'\n},\n{\n    'question': 'What is the total number of cars produced in the United States?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA''\n}",
+        "similarity_scores": [
+            0.3527588968061448,
+            0.30539047874447833,
+            0.2865907867681422,
+            0.2198169045795162
+        ]
+    },
+    {
+        "question": "What is the percentage of cars that was produced by Japan among those that have a sweep volume of no less than 30?",
+        "llm_answer": "SELECT CAST(SUM(CASE WHEN T3.country = 'Japan' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T1.displacement >= 30 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                19.797687861271676
+            ]
+        ],
+        "correct_answer": "SELECT CAST(SUM(CASE WHEN T3.country = 'Japan' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T1.displacement / T1.cylinders > 30",
+        "correct_results": [
+            [
+                2.6128266033254155
+            ]
+        ],
+        "examples": "{\n    'question': 'Calculate the percentage of cars that belong to Japan.',\n    'sql_query': 'SELECT CAST(SUM(CASE WHEN T2.country = 'Japan' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin'\n},\n{\n    'question': 'How many car models have a displacement less than 150 and were produced in 1972?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.displacement < 150 AND T2.model_year = 1972'\n},\n{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'What is the total weight of all cars produced in 1980?',\n    'sql_query': 'SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980'\n}",
+        "similarity_scores": [
+            0.5349397228878134,
+            0.31693037041014993,
+            0.2864558489393456,
+            0.2749311988116606
+        ]
+    },
+    {
+        "question": "Provide the ID of cars from Japan worth greater than 35000 and have an acceleration of 14.",
+        "llm_answer": "SELECT T1.ID FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' AND T1.price > 35000 AND T4.acceleration = 14 COLLATE NOCASE ",
+        "llm_results": [],
+        "correct_answer": "SELECT T4.ID FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' AND T1.price > 3500 AND T4.acceleration = 14",
+        "correct_results": [
+            [
+                32
+            ],
+            [
+                32
+            ],
+            [
+                32
+            ],
+            [
+                32
+            ]
+        ],
+        "examples": "{\n    'question': 'List the car names and their weights for cars produced in Japan with more than 120 horsepower.',\n    'sql_query': 'SELECT T1.car_name, T1.weight FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T1.horsepower > 120'\n},\n{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'Which cars have an acceleration greater than 15 and a weight less than 2000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.acceleration > 15 AND T1.weight < 2000'\n},\n{\n    'question': 'List all the cars from Japan that were produced after 1975.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T2.model_year > 1975'\n}",
+        "similarity_scores": [
+            0.4850808642972555,
+            0.4814728787530631,
+            0.4372931981987618,
+            0.3796966948796059
+        ]
+    },
+    {
+        "question": "Provide the price and country origin of the car named Ford Maverick.",
+        "llm_answer": "SELECT T2.price, T4.country FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID INNER JOIN production AS T3 ON T1.ID = T3.ID INNER JOIN country AS T4 ON T3.country = T4.origin WHERE T1.car_name = 'Ford Maverick' COLLATE NOCASE ",
+        "llm_results": [
+            [
+                14228.30388,
+                "USA"
+            ],
+            [
+                14228.30388,
+                "USA"
+            ],
+            [
+                14228.30388,
+                "USA"
+            ],
+            [
+                14228.30388,
+                "USA"
+            ],
+            [
+                14228.30388,
+                "USA"
+            ],
+            [
+                33726.80756,
+                "USA"
+            ],
+            [
+                33726.80756,
+                "USA"
+            ],
+            [
+                33726.80756,
+                "USA"
+            ],
+            [
+                33726.80756,
+                "USA"
+            ],
+            [
+                33726.80756,
+                "USA"
+            ],
+            [
+                36836.73869,
+                "USA"
+            ],
+            [
+                36836.73869,
+                "USA"
+            ],
+            [
+                36836.73869,
+                "USA"
+            ],
+            [
+                36836.73869,
+                "USA"
+            ],
+            [
+                36836.73869,
+                "USA"
+            ],
+            [
+                30000.0,
+                "USA"
+            ],
+            [
+                30000.0,
+                "USA"
+            ],
+            [
+                30000.0,
+                "USA"
+            ],
+            [
+                30000.0,
+                "USA"
+            ],
+            [
+                30000.0,
+                "USA"
+            ],
+            [
+                50179.77946,
+                "USA"
+            ],
+            [
+                50179.77946,
+                "USA"
+            ],
+            [
+                50179.77946,
+                "USA"
+            ],
+            [
+                50179.77946,
+                "USA"
+            ],
+            [
+                50179.77946,
+                "USA"
+            ]
+        ],
+        "correct_answer": "SELECT DISTINCT T1.price, T3.country FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T4.car_name = 'ford maverick'",
+        "correct_results": [
+            [
+                14228.30388,
+                "USA"
+            ],
+            [
+                33726.80756,
+                "USA"
+            ],
+            [
+                36836.73869,
+                "USA"
+            ],
+            [
+                30000.0,
+                "USA"
+            ],
+            [
+                50179.77946,
+                "USA"
+            ]
+        ],
+        "examples": "{\n    'question': 'When was the $35420.78956 car introduced to the market? State the year.',\n    'sql_query': 'SELECT T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = '35420.78956''\n},\n{\n    'question': 'List all car names and their prices for cars that have more than 6 cylinders and were produced before 1975.',\n    'sql_query': 'SELECT T1.car_name, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID INNER JOIN production AS T3 ON T1.ID = T3.ID WHERE T1.cylinders > 6 AND T3.model_year < 1975'\n},\n{\n    'question': 'Which car model has the highest mpg produced in 1975?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 ORDER BY T1.mpg DESC LIMIT 1'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n}",
+        "similarity_scores": [
+            -0.041994204737853646,
+            -0.046196916568985724,
+            -0.056385404930043403,
+            -0.07430059170332903
+        ]
+    },
+    {
+        "question": "Calculate the difference between the number of cars that has a horsepower of 130 with the model year 1970 and model year 1976",
+        "llm_answer": " COLLATE NOCASE ",
+        "llm_results": "Error",
+        "correct_answer": "SELECT SUM(CASE WHEN T2.model_year = 1970 THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.model_year = 1976 THEN 1 ELSE 0 END) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.horsepower = 130",
+        "correct_results": [
+            [
+                0
+            ]
+        ],
+        "examples": "{\n    'question': 'Among the cars produced in the year 1975, how many of the cars have horsepower less than 110?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 AND T1.horsepower < 110'\n},\n{\n    'question': 'How many cars with a model year before 1980 have more than 100 horsepower?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100'\n},\n{\n    'question': 'What is the maximum horsepower for cars produced in 1973?',\n    'sql_query': 'SELECT MAX(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973'\n},\n{\n    'question': 'Which unique model years are associated with cars that have a horsepower greater than 150?',\n    'sql_query': 'SELECT DISTINCT T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.horsepower > 150'\n}",
+        "similarity_scores": [
+            0.4382578670300675,
+            0.32833646786213777,
+            0.2807044297299788,
+            0.2592876179120438
+        ]
+    },
+    {
+        "question": "Provide the name, model, sweep volume, and introduced year of the car with the best crash protection.",
+        "llm_answer": "I cannot answer this question. The provided database schema does not contain any information about crash protection. COLLATE NOCASE ",
+        "llm_results": "Invalid Syntax",
+        "correct_answer": "SELECT T1.car_name, T1.model, T1.displacement / T1.cylinders, T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID ORDER BY T1.weight DESC LIMIT 1",
+        "correct_results": [
+            [
+                "pontiac safari (sw)",
+                71,
+                50.0,
+                1971
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n},\n{\n    'question': 'Which car has the maximum weight among those priced under $20000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 20000 ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'List all cars with a displacement greater than 300.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.displacement > 300'\n}",
+        "similarity_scores": [
+            0.03801944390500911,
+            0.02120577979562288,
+            0.01656589227820504,
+            -0.028263036347627724
         ]
     }
 ]

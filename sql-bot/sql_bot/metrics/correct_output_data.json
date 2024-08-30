@@ -1,90 +1,112 @@
 [
     {
-        "question": "What is the average price of model 70 cars?",
-        "llm_answer": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.model = 70 COLLATE NOCASE ",
+        "question": "Among the cars with 8 cylinders, what is the name of the one that's the most expensive?",
+        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8 ORDER BY T2.price DESC LIMIT 1 COLLATE NOCASE ",
         "llm_results": [
             [
-                27464.198037931033
+                "plymouth fury gran sedan"
             ]
         ],
-        "correct_answer": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.model = 70",
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8 ORDER BY T2.price DESC LIMIT 1",
         "correct_results": [
             [
-                27464.198037931033
+                "plymouth fury gran sedan"
             ]
         ],
-        "examples": "{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n},\n{\n    'question': 'What is the average price of cars with an acceleration over 15?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 15'\n},\n{\n    'question': 'What is the average horsepower of cars produced in 1978?',\n    'sql_query': 'SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1978'\n}",
+        "examples": "{\n    'question': 'What is the maximum price of cars with 6 cylinders?',\n    'sql_query': 'SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6'\n},\n{\n    'question': 'What is the most common number of cylinders for cars priced over $30000?',\n    'sql_query': 'SELECT MODE(T1.cylinders) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 30000'\n},\n{\n    'question': 'List all unique car names that have more than 6 cylinders.',\n    'sql_query': 'SELECT DISTINCT T1.car_name FROM data AS T1 WHERE T1.cylinders > 6'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n}",
         "similarity_scores": [
-            0.44424616782484705,
-            0.4440249728681688,
-            0.4438854719816604,
-            0.42174848741233506
+            0.5453931733545786,
+            0.40345886915437235,
+            0.3301709312652765,
+            0.3271078372116716
         ]
     },
     {
-        "question": "How many times was Ford Maverick introduced to the market?",
-        "llm_answer": "SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'ford maverick' COLLATE NOCASE ",
+        "question": "Among the cars over 3000lbs, how many of them cost less than $30000?",
+        "llm_answer": "SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3000 AND T2.price < 30000 COLLATE NOCASE ",
         "llm_results": [
             [
-                25
+                78
             ]
         ],
-        "correct_answer": "SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'ford maverick'",
+        "correct_answer": "SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3000 AND T2.price < 30000",
         "correct_results": [
             [
-                25
+                78
             ]
         ],
-        "examples": "{\n    'question': 'How many times was Toyota Corolla introduced to the market?',\n    'sql_query': 'SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'toyota corolla''\n},\n{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'When was the $35420.78956 car introduced to the market? State the year.',\n    'sql_query': 'SELECT T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = '35420.78956''\n},\n{\n    'question': 'How many cars with a model year before 1980 have more than 100 horsepower?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100'\n}",
+        "examples": "{\n    'question': 'Among the cars over 3200lbs, how many of them cost less than $28000?',\n    'sql_query': 'SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3200 AND T2.price < 28000'\n},\n{\n    'question': 'Which car has the maximum weight among those priced under $20000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 20000 ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n},\n{\n    'question': 'What is the most common number of cylinders for cars priced over $30000?',\n    'sql_query': 'SELECT MODE(T1.cylinders) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 30000'\n}",
         "similarity_scores": [
-            0.3820242245981197,
-            0.27629432930871023,
-            0.22529340511696416,
-            0.19408791287600702
+            0.8877168884008154,
+            0.4874208781005491,
+            0.4294793800901022,
+            0.3609401441084158
         ]
     },
     {
-        "question": "How many cars were released in the USA in 1981?",
-        "llm_answer": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country  =  T2.origin WHERE T2.country  =  'USA' AND T1.model_year  =  1981 COLLATE NOCASE ",
+        "question": "What is the acceleration of the most expensive car?",
+        "llm_answer": "SELECT T2.acceleration FROM price AS T1 INNER JOIN data AS T2 ON T1.ID = T2.ID ORDER BY T1.price DESC LIMIT 1 COLLATE NOCASE ",
         "llm_results": [
             [
-                17
+                14.5
             ]
         ],
-        "correct_answer": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA' AND T1.model_year = 1981",
+        "correct_answer": "SELECT T1.acceleration FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1",
         "correct_results": [
             [
-                17
+                14.5
             ]
         ],
-        "examples": "{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'What is the total weight of all cars produced in 1980?',\n    'sql_query': 'SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980'\n},\n{\n    'question': 'How many cars with a model year before 1980 have more than 100 horsepower?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100'\n},\n{\n    'question': 'What is the average horsepower of cars produced in 1978?',\n    'sql_query': 'SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1978'\n}",
+        "examples": "{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'What is the average price of cars with an acceleration over 15?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 15'\n},\n{\n    'question': 'Which cars have an acceleration greater than 15 and a weight less than 2000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.acceleration > 15 AND T1.weight < 2000'\n},\n{\n    'question': 'What is the horsepower of the lightest car?',\n    'sql_query': 'SELECT T1.horsepower FROM data AS T1 ORDER BY T1.weight ASC LIMIT 1'\n}",
         "similarity_scores": [
-            0.6132267193392826,
-            0.5499587834441224,
-            0.5331769161878479,
-            0.4758527221840154
+            0.6369846379291124,
+            0.57940113784105,
+            0.49237424315596756,
+            0.4659069954224897
         ]
     },
     {
-        "question": "What is the fastest car made by Japan?",
-        "llm_answer": "SELECT T4.car_name FROM country AS T1 INNER JOIN production AS T2 ON T1.origin = T2.country INNER JOIN price AS T3 ON T2.ID = T3.ID INNER JOIN data AS T4 ON T3.ID = T4.ID WHERE T1.country = 'Japan' ORDER BY T4.acceleration LIMIT 1 COLLATE NOCASE ",
+        "question": "How much US dollars does a Ford Torino cost?",
+        "llm_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'Ford Torino' COLLATE NOCASE ",
         "llm_results": [
             [
-                "datsun 280-zx"
+                20000.0
             ]
         ],
-        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Japan' ORDER BY T1.horsepower DESC LIMIT 1",
+        "correct_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'ford torino'",
         "correct_results": [
             [
-                "datsun 280-zx"
+                20000.0
             ]
         ],
-        "examples": "{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n},\n{\n    'question': 'List all the cars from Japan that were produced after 1975.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T2.model_year > 1975'\n}",
+        "examples": "{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'What is the maximum price of cars with 6 cylinders?',\n    'sql_query': 'SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6'\n},\n{\n    'question': 'What is the total weight of all cars produced in 1980?',\n    'sql_query': 'SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980'\n},\n{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n}",
         "similarity_scores": [
-            0.6826349065475135,
-            0.6298888392582515,
-            0.4104951391233017,
-            0.4096196339958166
+            0.17107962338547478,
+            0.13801157177220535,
+            0.10666075372868133,
+            0.10588678569959764
+        ]
+    },
+    {
+        "question": "What was the origin country of the car model ford torino produced in 1970?",
+        "llm_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T1.car_name = 'ford torino' AND T2.model_year = 1970 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "USA"
+            ]
+        ],
+        "correct_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T1.car_name = 'ford torino' AND T2.model_year = 1970",
+        "correct_results": [
+            [
+                "USA"
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'What is the maximum horsepower for cars produced in 1973?',\n    'sql_query': 'SELECT MAX(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.3227739172667008,
+            0.24021300012215674,
+            0.2238425084092438,
+            0.22098778594514024
         ]
     },
     {
@@ -110,6 +132,3512 @@
         ]
     },
     {
+        "question": "Please list the names of the top 3 most expensive cars.",
+        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 3 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "plymouth fury gran sedan"
+            ],
+            [
+                "ford ltd landau"
+            ],
+            [
+                "dodge colt"
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 3",
+        "correct_results": [
+            [
+                "plymouth fury gran sedan"
+            ],
+            [
+                "ford ltd landau"
+            ],
+            [
+                "dodge colt"
+            ]
+        ],
+        "examples": "{\n    'question': 'List all car names and their prices for cars that have more than 6 cylinders and were produced before 1975.',\n    'sql_query': 'SELECT T1.car_name, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID INNER JOIN production AS T3 ON T1.ID = T3.ID WHERE T1.cylinders > 6 AND T3.model_year < 1975'\n},\n{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n},\n{\n    'question': 'Find the car models that were produced for three consecutive years.',\n    'sql_query': 'SELECT T1.model FROM production AS T1 GROUP BY T1.model HAVING COUNT(DISTINCT T1.model_year) = 3'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.21031496462245958,
+            0.20703786587780182,
+            0.1947851153666169,
+            0.1582737592826834
+        ]
+    },
+    {
+        "question": "Please list all the years in which the car model Chevrolet Impala was introduced in the market.",
+        "llm_answer": "SELECT DISTINCT T2.model_year FROM data AS T1 JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'Chevrolet Impala' COLLATE NOCASE ",
+        "llm_results": [
+            [
+                1970
+            ],
+            [
+                1971
+            ],
+            [
+                1972
+            ],
+            [
+                1973
+            ]
+        ],
+        "correct_answer": "SELECT DISTINCT T1.model_year FROM production AS T1 INNER JOIN data AS T2 ON T1.ID = T2.ID WHERE T2.car_name = 'chevrolet impala'",
+        "correct_results": [
+            [
+                1970
+            ],
+            [
+                1971
+            ],
+            [
+                1972
+            ],
+            [
+                1973
+            ]
+        ],
+        "examples": "{\n    'question': 'When was the $35420.78956 car introduced to the market? State the year.',\n    'sql_query': 'SELECT T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = '35420.78956''\n},\n{\n    'question': 'Find the car models that were produced for three consecutive years.',\n    'sql_query': 'SELECT T1.model FROM production AS T1 GROUP BY T1.model HAVING COUNT(DISTINCT T1.model_year) = 3'\n},\n{\n    'question': 'How many cars have a model year of 1968 and an acceleration greater than 15?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1968 AND T1.acceleration > 15'\n},\n{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n}",
+        "similarity_scores": [
+            0.3310056348169428,
+            0.29137101437982027,
+            0.2141581343730996,
+            0.15809783433381341
+        ]
+    },
+    {
+        "question": "Please list the weights of all the cars with the price over $40000.",
+        "llm_answer": "SELECT T1.weight FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 40000 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                4732
+            ],
+            [
+                3439
+            ],
+            [
+                4746
+            ],
+            [
+                2189
+            ],
+            [
+                4042
+            ],
+            [
+                4237
+            ],
+            [
+                2401
+            ],
+            [
+                2124
+            ],
+            [
+                1836
+            ],
+            [
+                4638
+            ],
+            [
+                3907
+            ],
+            [
+                4215
+            ],
+            [
+                3353
+            ],
+            [
+                3012
+            ],
+            [
+                1940
+            ],
+            [
+                2815
+            ],
+            [
+                3425
+            ],
+            [
+                2155
+            ],
+            [
+                2405
+            ],
+            [
+                2830
+            ],
+            [
+                3140
+            ],
+            [
+                2795
+            ],
+            [
+                3725
+            ],
+            [
+                1915
+            ],
+            [
+                3900
+            ],
+            [
+                2700
+            ],
+            [
+                2556
+            ],
+            [
+                2144
+            ],
+            [
+                2434
+            ],
+            [
+                2800
+            ],
+            [
+                2085
+            ],
+            [
+                2950
+            ],
+            [
+                2420
+            ],
+            [
+                2490
+            ],
+            [
+                2050
+            ],
+            [
+                1985
+            ],
+            [
+                2640
+            ],
+            [
+                2865
+            ],
+            [
+                2025
+            ],
+            [
+                2125
+            ],
+            [
+                2295
+            ],
+            [
+                2625
+            ]
+        ],
+        "correct_answer": "SELECT T1.weight FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 40000",
+        "correct_results": [
+            [
+                4732
+            ],
+            [
+                3439
+            ],
+            [
+                4746
+            ],
+            [
+                2189
+            ],
+            [
+                4042
+            ],
+            [
+                4237
+            ],
+            [
+                2401
+            ],
+            [
+                2124
+            ],
+            [
+                1836
+            ],
+            [
+                4638
+            ],
+            [
+                3907
+            ],
+            [
+                4215
+            ],
+            [
+                3353
+            ],
+            [
+                3012
+            ],
+            [
+                1940
+            ],
+            [
+                2815
+            ],
+            [
+                3425
+            ],
+            [
+                2155
+            ],
+            [
+                2405
+            ],
+            [
+                2830
+            ],
+            [
+                3140
+            ],
+            [
+                2795
+            ],
+            [
+                3725
+            ],
+            [
+                1915
+            ],
+            [
+                3900
+            ],
+            [
+                2700
+            ],
+            [
+                2556
+            ],
+            [
+                2144
+            ],
+            [
+                2434
+            ],
+            [
+                2800
+            ],
+            [
+                2085
+            ],
+            [
+                2950
+            ],
+            [
+                2420
+            ],
+            [
+                2490
+            ],
+            [
+                2050
+            ],
+            [
+                1985
+            ],
+            [
+                2640
+            ],
+            [
+                2865
+            ],
+            [
+                2025
+            ],
+            [
+                2125
+            ],
+            [
+                2295
+            ],
+            [
+                2625
+            ]
+        ],
+        "examples": "{\n    'question': 'Among the cars over 3200lbs, how many of them cost less than $28000?',\n    'sql_query': 'SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3200 AND T2.price < 28000'\n},\n{\n    'question': 'Which car has the maximum weight among those priced under $20000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 20000 ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'What is the total weight of all cars produced in 1980?',\n    'sql_query': 'SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980'\n},\n{\n    'question': 'Which car has the lowest weight among those made in 1980?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980 ORDER BY T1.weight ASC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.535464545755731,
+            0.5034664148047334,
+            0.4330454810427732,
+            0.34865087300322806
+        ]
+    },
+    {
+        "question": "What is the maximum acceleration of a car with price over $40000?",
+        "llm_answer": "SELECT T2.acceleration FROM price AS T1 INNER JOIN data AS T2 ON T1.ID = T2.ID WHERE T1.price  >  40000 ORDER BY T2.acceleration DESC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                21.7
+            ]
+        ],
+        "correct_answer": "SELECT MAX(T1.acceleration) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 40000",
+        "correct_results": [
+            [
+                21.7
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the average price of cars with an acceleration over 15?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 15'\n},\n{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'Which cars have an acceleration greater than 15 and a weight less than 2000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.acceleration > 15 AND T1.weight < 2000'\n},\n{\n    'question': 'What is the average price of cars with a displacement over 200?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 200'\n}",
+        "similarity_scores": [
+            0.6165240936535212,
+            0.4230925501012528,
+            0.4177472399375193,
+            0.3970724586939115
+        ]
+    },
+    {
+        "question": "What is the average price of cars with 8 cylinders?",
+        "llm_answer": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                28982.184051757282
+            ]
+        ],
+        "correct_answer": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8",
+        "correct_results": [
+            [
+                28982.184051757282
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the maximum price of cars with 6 cylinders?',\n    'sql_query': 'SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6'\n},\n{\n    'question': 'What is the average mpg of cars with 4 cylinders?',\n    'sql_query': 'SELECT AVG(T1.mpg) FROM data AS T1 WHERE T1.cylinders = 4'\n},\n{\n    'question': 'What is the most common number of cylinders for cars priced over $30000?',\n    'sql_query': 'SELECT MODE(T1.cylinders) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 30000'\n},\n{\n    'question': 'What is the average price of cars with a displacement over 200?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 200'\n}",
+        "similarity_scores": [
+            0.7904363588800132,
+            0.5552580825004558,
+            0.5357767180487284,
+            0.4647611448442037
+        ]
+    },
+    {
+        "question": "How many cars in the database are originated from Europe?",
+        "llm_answer": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country  =  T2.origin WHERE T2.country  =  'Europe' COLLATE NOCASE ",
+        "llm_results": [
+            [
+                102
+            ]
+        ],
+        "correct_answer": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'Europe'",
+        "correct_results": [
+            [
+                102
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the total number of cars produced in the United States?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA''\n},\n{\n    'question': 'What are the distinct countries that have produced cars weighing less than 2000 lbs?',\n    'sql_query': 'SELECT DISTINCT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T1.weight < 2000'\n},\n{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'Calculate the percentage of cars that belong to Japan.',\n    'sql_query': 'SELECT CAST(SUM(CASE WHEN T2.country = 'Japan' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin'\n}",
+        "similarity_scores": [
+            0.221916073031325,
+            0.1351436843829621,
+            0.12833138232469787,
+            0.11656831739939777
+        ]
+    },
+    {
+        "question": "Show the origin country of Chevrolet Malibu.",
+        "llm_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T1.car_name = 'chevrolet malibu' COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "USA"
+            ],
+            [
+                "USA"
+            ],
+            [
+                "USA"
+            ],
+            [
+                "USA"
+            ]
+        ],
+        "correct_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T1.car_name = 'chevrolet malibu'",
+        "correct_results": [
+            [
+                "USA"
+            ],
+            [
+                "USA"
+            ],
+            [
+                "USA"
+            ],
+            [
+                "USA"
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the total number of cars produced in the United States?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA''\n},\n{\n    'question': 'What are the distinct countries that have produced cars weighing less than 2000 lbs?',\n    'sql_query': 'SELECT DISTINCT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T1.weight < 2000'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n},\n{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n}",
+        "similarity_scores": [
+            -0.08700669605981282,
+            -0.09051374002584045,
+            -0.12219341733771127,
+            -0.1427987852354402
+        ]
+    },
+    {
+        "question": "What are the miles per gallon of the most expensive car?",
+        "llm_answer": "SELECT T1.mpg FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                14.0
+            ]
+        ],
+        "correct_answer": "SELECT T1.mpg FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1",
+        "correct_results": [
+            [
+                14.0
+            ]
+        ],
+        "examples": "{\n    'question': 'Which car model has the highest mpg produced in 1975?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 ORDER BY T1.mpg DESC LIMIT 1'\n},\n{\n    'question': 'Which model year had the highest average mpg?',\n    'sql_query': 'SELECT T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID GROUP BY T2.model_year ORDER BY AVG(T1.mpg) DESC LIMIT 1'\n},\n{\n    'question': 'What is the average mpg of cars with 4 cylinders?',\n    'sql_query': 'SELECT AVG(T1.mpg) FROM data AS T1 WHERE T1.cylinders = 4'\n},\n{\n    'question': 'Which car has the lowest mpg and how much does it cost?',\n    'sql_query': 'SELECT T1.car_name, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.mpg ASC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.5821101923179723,
+            0.5021338117821577,
+            0.46882193366084035,
+            0.3886375963785135
+        ]
+    },
+    {
+        "question": "Which is the origin country of the $44274.40748 car?",
+        "llm_answer": "SELECT T3.country FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T1.price = 44274.40748 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "USA"
+            ]
+        ],
+        "correct_answer": "SELECT T3.country FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T1.price = 44274.40748",
+        "correct_results": [
+            [
+                "USA"
+            ]
+        ],
+        "examples": "{\n    'question': 'What are the distinct countries that have produced cars weighing less than 2000 lbs?',\n    'sql_query': 'SELECT DISTINCT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T1.weight < 2000'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n},\n{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.27581048525398644,
+            0.24305079276112274,
+            0.19129671278293248,
+            0.18885234108565951
+        ]
+    },
+    {
+        "question": "Provide the price of the only Toyota Corona hardtop in the database.",
+        "llm_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'toyota corona hardtop' COLLATE NOCASE ",
+        "llm_results": [
+            [
+                40000.0
+            ]
+        ],
+        "correct_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'toyota corona hardtop'",
+        "correct_results": [
+            [
+                40000.0
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the maximum price of cars with 6 cylinders?',\n    'sql_query': 'SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6'\n},\n{\n    'question': 'List all car names and their prices for cars that have more than 6 cylinders and were produced before 1975.',\n    'sql_query': 'SELECT T1.car_name, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID INNER JOIN production AS T3 ON T1.ID = T3.ID WHERE T1.cylinders > 6 AND T3.model_year < 1975'\n},\n{\n    'question': 'How many times was Toyota Corolla introduced to the market?',\n    'sql_query': 'SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'toyota corolla''\n},\n{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n}",
+        "similarity_scores": [
+            0.09174315223456597,
+            0.04008375320847968,
+            0.006231947077703692,
+            -0.050368490236790686
+        ]
+    },
+    {
+        "question": "How many cylinders does the cheapest car have?",
+        "llm_answer": "SELECT T1.cylinders FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price ASC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                8
+            ]
+        ],
+        "correct_answer": "SELECT T1.cylinders FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY price ASC LIMIT 1",
+        "correct_results": [
+            [
+                8
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the maximum price of cars with 6 cylinders?',\n    'sql_query': 'SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6'\n},\n{\n    'question': 'What is the average mpg of cars with 4 cylinders?',\n    'sql_query': 'SELECT AVG(T1.mpg) FROM data AS T1 WHERE T1.cylinders = 4'\n},\n{\n    'question': 'What is the most common number of cylinders for cars priced over $30000?',\n    'sql_query': 'SELECT MODE(T1.cylinders) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 30000'\n},\n{\n    'question': 'What is the horsepower of the lightest car?',\n    'sql_query': 'SELECT T1.horsepower FROM data AS T1 ORDER BY T1.weight ASC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.6904018081836666,
+            0.48962017270975333,
+            0.4818027110772244,
+            0.47868143173299127
+        ]
+    },
+    {
+        "question": "What is the percentage of Japanese cars in the database?",
+        "llm_answer": "SELECT CAST(SUM(CASE WHEN T2.country = 'Japan' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin COLLATE NOCASE ",
+        "llm_results": [
+            [
+                19.797687861271676
+            ]
+        ],
+        "correct_answer": "SELECT CAST(SUM(CASE WHEN T2.country = 'Japan' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin",
+        "correct_results": [
+            [
+                19.797687861271676
+            ]
+        ],
+        "examples": "{\n    'question': 'Calculate the percentage of cars that belong to Japan.',\n    'sql_query': 'SELECT CAST(SUM(CASE WHEN T2.country = 'Japan' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin'\n},\n{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'List all the cars from Japan that were produced after 1975.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T2.model_year > 1975'\n}",
+        "similarity_scores": [
+            0.6140941160191622,
+            0.2766104013406818,
+            0.24414420804602133,
+            0.20921235514316328
+        ]
+    },
+    {
+        "question": "What is the name of the most expensive car?",
+        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "plymouth fury gran sedan"
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1",
+        "correct_results": [
+            [
+                "plymouth fury gran sedan"
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest mpg produced in 1975?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 ORDER BY T1.mpg DESC LIMIT 1'\n},\n{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n}",
+        "similarity_scores": [
+            0.4508180848161949,
+            0.3956732414771781,
+            0.30732629086115226,
+            0.30139008993692473
+        ]
+    },
+    {
+        "question": "How many cars were released in the USA in 1981?",
+        "llm_answer": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA' AND T1.model_year = 1981 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                17
+            ]
+        ],
+        "correct_answer": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA' AND T1.model_year = 1981",
+        "correct_results": [
+            [
+                17
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'What is the total weight of all cars produced in 1980?',\n    'sql_query': 'SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980'\n},\n{\n    'question': 'How many cars with a model year before 1980 have more than 100 horsepower?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100'\n},\n{\n    'question': 'What is the average horsepower of cars produced in 1978?',\n    'sql_query': 'SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1978'\n}",
+        "similarity_scores": [
+            0.6132267193392826,
+            0.5499587834441224,
+            0.5331769161878479,
+            0.4758527221840154
+        ]
+    },
+    {
+        "question": "How much is the car with the highest sweep volume?",
+        "llm_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.displacement DESC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                32882.53714
+            ]
+        ],
+        "correct_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.displacement / T1.cylinders DESC LIMIT 1",
+        "correct_results": [
+            [
+                32882.53714
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the average price of cars with a displacement over 200?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 200'\n},\n{\n    'question': 'What is the maximum price of cars with 6 cylinders?',\n    'sql_query': 'SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6'\n},\n{\n    'question': 'What is the average price of cars with an acceleration over 15?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 15'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.32372173964701945,
+            0.26993408990995915,
+            0.2645728073519338,
+            0.2449336373553056
+        ]
+    },
+    {
+        "question": "What is the fastest car made by Japan?",
+        "llm_answer": "SELECT T4.car_name FROM country AS T1 INNER JOIN production AS T2 ON T1.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T2.ID WHERE T1.country = 'Japan' ORDER BY T4.acceleration LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "datsun 280-zx"
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Japan' ORDER BY T1.horsepower DESC LIMIT 1",
+        "correct_results": [
+            [
+                "datsun 280-zx"
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n},\n{\n    'question': 'List all the cars from Japan that were produced after 1975.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T2.model_year > 1975'\n}",
+        "similarity_scores": [
+            0.6826349065475135,
+            0.6298888392582515,
+            0.4104951391233017,
+            0.4096196339958166
+        ]
+    },
+    {
+        "question": "How many times was Ford Maverick introduced to the market?",
+        "llm_answer": "SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'ford maverick' COLLATE NOCASE ",
+        "llm_results": [
+            [
+                25
+            ]
+        ],
+        "correct_answer": "SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'ford maverick'",
+        "correct_results": [
+            [
+                25
+            ]
+        ],
+        "examples": "{\n    'question': 'How many times was Toyota Corolla introduced to the market?',\n    'sql_query': 'SELECT COUNT(T2.model_year) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'toyota corolla''\n},\n{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'When was the $35420.78956 car introduced to the market? State the year.',\n    'sql_query': 'SELECT T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = '35420.78956''\n},\n{\n    'question': 'How many cars with a model year before 1980 have more than 100 horsepower?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100'\n}",
+        "similarity_scores": [
+            0.3820242245981197,
+            0.27629432930871023,
+            0.22529340511696416,
+            0.19408791287600702
+        ]
+    },
+    {
+        "question": "Which country produced the most fuel-efficient car?",
+        "llm_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country ORDER BY T1.mpg DESC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "Japan"
+            ]
+        ],
+        "correct_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country ORDER BY T1.mpg DESC LIMIT 1",
+        "correct_results": [
+            [
+                "Japan"
+            ]
+        ],
+        "examples": "{\n    'question': 'Which car model has the highest mpg produced in 1975?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 ORDER BY T1.mpg DESC LIMIT 1'\n},\n{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'Which model year had the highest average mpg?',\n    'sql_query': 'SELECT T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID GROUP BY T2.model_year ORDER BY AVG(T1.mpg) DESC LIMIT 1'\n},\n{\n    'question': 'What is the maximum horsepower for cars produced in 1973?',\n    'sql_query': 'SELECT MAX(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973'\n}",
+        "similarity_scores": [
+            0.5851171473370136,
+            0.40381738778557286,
+            0.3863235860642745,
+            0.37275895160685524
+        ]
+    },
+    {
+        "question": "What is the name of the most expensive car that was produced by the USA?",
+        "llm_answer": "SELECT T3.car_name FROM price AS T1 INNER JOIN data AS T3 ON T1.ID = T3.ID INNER JOIN production AS T2 ON T2.ID = T3.ID INNER JOIN country AS T4 ON T4.origin = T2.country WHERE T4.country = 'USA' ORDER BY T1.price DESC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "plymouth fury gran sedan"
+            ]
+        ],
+        "correct_answer": "SELECT T4.car_name FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'USA' ORDER BY T1.price DESC LIMIT 1",
+        "correct_results": [
+            [
+                "plymouth fury gran sedan"
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest mpg produced in 1975?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 ORDER BY T1.mpg DESC LIMIT 1'\n},\n{\n    'question': 'What is the total number of cars produced in the United States?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA''\n}",
+        "similarity_scores": [
+            0.5652418926018279,
+            0.459051474486212,
+            0.45160121570805145,
+            0.4312800878809837
+        ]
+    },
+    {
+        "question": "Which year did Europe produce the most cars?",
+        "llm_answer": "SELECT T2.model_year FROM country AS T1 INNER JOIN production AS T2 ON T1.origin = T2.country WHERE T1.country = 'Europe' GROUP BY T2.model_year ORDER BY COUNT(T2.ID) DESC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                1976
+            ]
+        ],
+        "correct_answer": "SELECT T1.model_year FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'Europe' GROUP BY T1.model_year ORDER BY COUNT(T1.model_year) DESC LIMIT 1",
+        "correct_results": [
+            [
+                1976
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'What is the total number of cars produced in the United States?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA''\n},\n{\n    'question': 'What is the total weight of all cars produced in 1980?',\n    'sql_query': 'SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.5965710791940987,
+            0.49189469724639157,
+            0.46780382630280715,
+            0.41835973014399663
+        ]
+    },
+    {
+        "question": "List the name of the cars with model year 1975.",
+        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "pontiac catalina"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "amc gremlin"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc gremlin"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "ford ltd"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "amc gremlin"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "audi 100ls"
+            ],
+            [
+                "saab 99le"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "datsun 710"
+            ],
+            [
+                "plymouth valiant custom"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "mercury monarch"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "chevrolet bel air"
+            ],
+            [
+                "plymouth grand fury"
+            ],
+            [
+                "ford ltd"
+            ],
+            [
+                "buick century"
+            ],
+            [
+                "chevroelt chevelle malibu"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "plymouth fury"
+            ],
+            [
+                "buick skyhawk"
+            ],
+            [
+                "chevrolet monza 2+2"
+            ],
+            [
+                "ford mustang ii"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc gremlin"
+            ],
+            [
+                "pontiac astro"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "datsun 710"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "volkswagen rabbit"
+            ],
+            [
+                "amc pacer"
+            ],
+            [
+                "audi 100ls"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "volvo 244dl"
+            ],
+            [
+                "saab 99le"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "volkswagen rabbit"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "buick century"
+            ],
+            [
+                "toyota corolla"
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975",
+        "correct_results": [
+            [
+                "pontiac catalina"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "amc gremlin"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc gremlin"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "ford ltd"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "amc gremlin"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "audi 100ls"
+            ],
+            [
+                "saab 99le"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "datsun 710"
+            ],
+            [
+                "plymouth valiant custom"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "mercury monarch"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "chevrolet bel air"
+            ],
+            [
+                "plymouth grand fury"
+            ],
+            [
+                "ford ltd"
+            ],
+            [
+                "buick century"
+            ],
+            [
+                "chevroelt chevelle malibu"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "plymouth fury"
+            ],
+            [
+                "buick skyhawk"
+            ],
+            [
+                "chevrolet monza 2+2"
+            ],
+            [
+                "ford mustang ii"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc gremlin"
+            ],
+            [
+                "pontiac astro"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "datsun 710"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "volkswagen rabbit"
+            ],
+            [
+                "amc pacer"
+            ],
+            [
+                "audi 100ls"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "volvo 244dl"
+            ],
+            [
+                "saab 99le"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "volkswagen rabbit"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "buick century"
+            ],
+            [
+                "toyota corolla"
+            ]
+        ],
+        "examples": "{\n    'question': 'List all the cars from Japan that were produced after 1975.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T2.model_year > 1975'\n},\n{\n    'question': 'List all car names and their prices for cars that have more than 6 cylinders and were produced before 1975.',\n    'sql_query': 'SELECT T1.car_name, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID INNER JOIN production AS T3 ON T1.ID = T3.ID WHERE T1.cylinders > 6 AND T3.model_year < 1975'\n},\n{\n    'question': 'Which car model has the highest mpg produced in 1975?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 ORDER BY T1.mpg DESC LIMIT 1'\n},\n{\n    'question': 'Among the cars produced in the year 1975, how many of the cars have horsepower less than 110?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 AND T1.horsepower < 110'\n}",
+        "similarity_scores": [
+            0.4856059017787774,
+            0.4351394844165988,
+            0.3639723352815549,
+            0.3567357345322799
+        ]
+    },
+    {
+        "question": "Calculate the average price of cars from Europe.",
+        "llm_answer": "SELECT AVG(T2.price) FROM country AS T1 INNER JOIN production AS T3 ON T1.origin = T3.country INNER JOIN price AS T2 ON T3.ID = T2.ID WHERE T1.country = 'Europe' COLLATE NOCASE ",
+        "llm_results": [
+            [
+                29751.51903526471
+            ]
+        ],
+        "correct_answer": "SELECT AVG(T1.price) FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Europe'",
+        "correct_results": [
+            [
+                29751.51903526471
+            ]
+        ],
+        "examples": "{\n    'question': 'Find the average displacement of cars produced in Germany.',\n    'sql_query': 'SELECT AVG(T1.displacement) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Germany''\n},\n{\n    'question': 'Find the average weight of cars produced in Germany.',\n    'sql_query': 'SELECT AVG(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Germany''\n},\n{\n    'question': 'Find the average displacement of cars with a price above $25,000.',\n    'sql_query': 'SELECT AVG(T1.displacement) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 25000'\n},\n{\n    'question': 'What is the average price of cars with a displacement over 200?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 200'\n}",
+        "similarity_scores": [
+            0.33018342445169035,
+            0.3169866086891516,
+            0.1999636905567389,
+            0.14461747186892104
+        ]
+    },
+    {
+        "question": "What is the price of the car ID 15?",
+        "llm_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.ID = 15 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                36927.0666
+            ]
+        ],
+        "correct_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.ID = 15",
+        "correct_results": [
+            [
+                36927.0666
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the average price of cars with an acceleration over 15?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 15'\n},\n{\n    'question': 'What is the maximum price of cars with 6 cylinders?',\n    'sql_query': 'SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6'\n},\n{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n},\n{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.3382797332330303,
+            0.21717132913445436,
+            0.21051063959515026,
+            0.1277499710167076
+        ]
+    },
+    {
+        "question": "How many of the cars from Japan weighed less than 3000?",
+        "llm_answer": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T1.weight < 3000 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                137
+            ]
+        ],
+        "correct_answer": "SELECT COUNT(*) FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' AND T4.weight < 3000",
+        "correct_results": [
+            [
+                137
+            ]
+        ],
+        "examples": "{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'What is the total weight of all cars produced in 1980?',\n    'sql_query': 'SELECT SUM(T1.weight) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980'\n},\n{\n    'question': 'Among the cars over 3200lbs, how many of them cost less than $28000?',\n    'sql_query': 'SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3200 AND T2.price < 28000'\n},\n{\n    'question': 'What are the distinct countries that have produced cars weighing less than 2000 lbs?',\n    'sql_query': 'SELECT DISTINCT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T1.weight < 2000'\n}",
+        "similarity_scores": [
+            0.5226885321852933,
+            0.5119852087671362,
+            0.5027472769791563,
+            0.47706343546924723
+        ]
+    },
+    {
+        "question": "Among the cars produced in year 1973, how many of the cars have horsepower less than 100?",
+        "llm_answer": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973 AND T1.horsepower  <  100 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                31
+            ]
+        ],
+        "correct_answer": "SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973 AND T1.horsepower < 100",
+        "correct_results": [
+            [
+                31
+            ]
+        ],
+        "examples": "{\n    'question': 'Among the cars produced in the year 1975, how many of the cars have horsepower less than 110?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 AND T1.horsepower < 110'\n},\n{\n    'question': 'What is the maximum horsepower for cars produced in 1973?',\n    'sql_query': 'SELECT MAX(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973'\n},\n{\n    'question': 'How many cars with a model year before 1980 have more than 100 horsepower?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100'\n},\n{\n    'question': 'How many cars have a horsepower between 100 and 150?',\n    'sql_query': 'SELECT COUNT(T1.ID) FROM data AS T1 WHERE T1.horsepower BETWEEN 100 AND 150'\n}",
+        "similarity_scores": [
+            0.839521289267206,
+            0.6415537455699257,
+            0.6344125360907673,
+            0.5897088902689294
+        ]
+    },
+    {
+        "question": "Give the model year of the heaviest car.",
+        "llm_answer": "SELECT T2.model_year FROM data AS T1 JOIN production AS T2 ON T1.ID = T2.ID ORDER BY T1.weight DESC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                1971
+            ]
+        ],
+        "correct_answer": "SELECT T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID ORDER BY T1.weight DESC LIMIT 1",
+        "correct_results": [
+            [
+                1971
+            ]
+        ],
+        "examples": "{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'Which car has the maximum weight among those priced under $20000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 20000 ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'Which car has the lowest weight among those made in 1980?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1980 ORDER BY T1.weight ASC LIMIT 1'\n},\n{\n    'question': 'Which cars have an acceleration greater than 15 and a weight less than 2000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.acceleration > 15 AND T1.weight < 2000'\n}",
+        "similarity_scores": [
+            0.5421615208506765,
+            0.5030573966688487,
+            0.45138827958814787,
+            0.3976367087121524
+        ]
+    },
+    {
+        "question": "What is the horsepower and model year of the car named Subaru Dl?",
+        "llm_answer": "SELECT T1.horsepower, T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'Subaru DL' COLLATE NOCASE ",
+        "llm_results": [
+            [
+                67,
+                1977
+            ],
+            [
+                67,
+                1980
+            ],
+            [
+                67,
+                1977
+            ],
+            [
+                67,
+                1980
+            ]
+        ],
+        "correct_answer": "SELECT T1.horsepower, T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'subaru dl'",
+        "correct_results": [
+            [
+                67,
+                1977
+            ],
+            [
+                67,
+                1980
+            ],
+            [
+                67,
+                1977
+            ],
+            [
+                67,
+                1980
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the maximum horsepower for cars produced in 1973?',\n    'sql_query': 'SELECT MAX(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973'\n},\n{\n    'question': 'How many cars with a model year before 1980 have more than 100 horsepower?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100'\n},\n{\n    'question': 'What is the average horsepower of cars produced in 1978?',\n    'sql_query': 'SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1978'\n},\n{\n    'question': 'What is the average horsepower of cars produced by USA manufacturers in 1971?',\n    'sql_query': 'SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'USA' AND T2.model_year = 1971'\n}",
+        "similarity_scores": [
+            0.4591860927221064,
+            0.4475524090303409,
+            0.41196647635353834,
+            0.37552559329695556
+        ]
+    },
+    {
+        "question": "Among the cars originated from Japan, what is the name of the car with the highest price?",
+        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin INNER JOIN price AS T4 ON T1.ID = T4.ID WHERE T3.country = 'Japan' ORDER BY T4.price DESC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "toyota tercel"
+            ]
+        ],
+        "correct_answer": "SELECT T4.car_name FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price DESC LIMIT 1",
+        "correct_results": [
+            [
+                "toyota tercel"
+            ]
+        ],
+        "examples": "{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'List all the cars from Japan that were produced after 1975.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T2.model_year > 1975'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n}",
+        "similarity_scores": [
+            0.5844464351754106,
+            0.4115235756997032,
+            0.3872071862807095,
+            0.33980344671348894
+        ]
+    },
+    {
+        "question": "What are the names of the cars worth 20000?",
+        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = 20000 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "ford torino"
+            ],
+            [
+                "pontiac safari (sw)"
+            ],
+            [
+                "chevrolet vega (sw)"
+            ],
+            [
+                "pontiac firebird"
+            ],
+            [
+                "opel 1900"
+            ],
+            [
+                "dodge colt hardtop"
+            ],
+            [
+                "ford galaxie 500"
+            ],
+            [
+                "amc ambassador sst"
+            ],
+            [
+                "chevrolet chevelle concours (sw)"
+            ],
+            [
+                "ford pinto (sw)"
+            ],
+            [
+                "dodge colt (sw)"
+            ],
+            [
+                "buick century 350"
+            ],
+            [
+                "ford country"
+            ],
+            [
+                "datsun 610"
+            ],
+            [
+                "fiat 124 sport coupe"
+            ],
+            [
+                "plymouth duster"
+            ],
+            [
+                "chevrolet chevelle malibu classic"
+            ],
+            [
+                "buick century luxus (sw)"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "plymouth valiant custom"
+            ],
+            [
+                "dodge coronet brougham"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "vw rabbit"
+            ],
+            [
+                "ford f108"
+            ],
+            [
+                "dodge d100"
+            ],
+            [
+                "renault 5 gtl"
+            ],
+            [
+                "mercury cougar brougham"
+            ],
+            [
+                "chevrolet concours"
+            ],
+            [
+                "chrysler cordoba"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "chevrolet malibu"
+            ],
+            [
+                "buick regal sport coupe (turbo)"
+            ],
+            [
+                "honda accord lx"
+            ],
+            [
+                "pontiac lemans v6"
+            ],
+            [
+                "ford fairmont 4"
+            ],
+            [
+                "maxda glc deluxe"
+            ],
+            [
+                "mercedes benz 300d"
+            ],
+            [
+                "toyota corolla tercel"
+            ],
+            [
+                "mercedes-benz 240d"
+            ],
+            [
+                "honda civic 1500 gl"
+            ],
+            [
+                "buick skylark"
+            ],
+            [
+                "ford escort 4w"
+            ],
+            [
+                "ford escort 2h"
+            ],
+            [
+                "honda prelude"
+            ],
+            [
+                "peugeot 505s turbo diesel"
+            ],
+            [
+                "dodge aries se"
+            ],
+            [
+                "toyota celica gt"
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price = 20000",
+        "correct_results": [
+            [
+                "ford torino"
+            ],
+            [
+                "pontiac safari (sw)"
+            ],
+            [
+                "chevrolet vega (sw)"
+            ],
+            [
+                "pontiac firebird"
+            ],
+            [
+                "opel 1900"
+            ],
+            [
+                "dodge colt hardtop"
+            ],
+            [
+                "ford galaxie 500"
+            ],
+            [
+                "amc ambassador sst"
+            ],
+            [
+                "chevrolet chevelle concours (sw)"
+            ],
+            [
+                "ford pinto (sw)"
+            ],
+            [
+                "dodge colt (sw)"
+            ],
+            [
+                "buick century 350"
+            ],
+            [
+                "ford country"
+            ],
+            [
+                "datsun 610"
+            ],
+            [
+                "fiat 124 sport coupe"
+            ],
+            [
+                "plymouth duster"
+            ],
+            [
+                "chevrolet chevelle malibu classic"
+            ],
+            [
+                "buick century luxus (sw)"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "plymouth valiant custom"
+            ],
+            [
+                "dodge coronet brougham"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "vw rabbit"
+            ],
+            [
+                "ford f108"
+            ],
+            [
+                "dodge d100"
+            ],
+            [
+                "renault 5 gtl"
+            ],
+            [
+                "mercury cougar brougham"
+            ],
+            [
+                "chevrolet concours"
+            ],
+            [
+                "chrysler cordoba"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "chevrolet malibu"
+            ],
+            [
+                "buick regal sport coupe (turbo)"
+            ],
+            [
+                "honda accord lx"
+            ],
+            [
+                "pontiac lemans v6"
+            ],
+            [
+                "ford fairmont 4"
+            ],
+            [
+                "maxda glc deluxe"
+            ],
+            [
+                "mercedes benz 300d"
+            ],
+            [
+                "toyota corolla tercel"
+            ],
+            [
+                "mercedes-benz 240d"
+            ],
+            [
+                "honda civic 1500 gl"
+            ],
+            [
+                "buick skylark"
+            ],
+            [
+                "ford escort 4w"
+            ],
+            [
+                "ford escort 2h"
+            ],
+            [
+                "honda prelude"
+            ],
+            [
+                "peugeot 505s turbo diesel"
+            ],
+            [
+                "dodge aries se"
+            ],
+            [
+                "toyota celica gt"
+            ]
+        ],
+        "examples": "{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n},\n{\n    'question': 'Which cars have an acceleration greater than 15 and a weight less than 2000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.acceleration > 15 AND T1.weight < 2000'\n},\n{\n    'question': 'Which car has the maximum weight among those priced under $20000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 20000 ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'Among the cars over 3200lbs, how many of them cost less than $28000?',\n    'sql_query': 'SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3200 AND T2.price < 28000'\n}",
+        "similarity_scores": [
+            0.47681206081643834,
+            0.3583738677001047,
+            0.31195540917986486,
+            0.30167679726018704
+        ]
+    },
+    {
+        "question": "How many cars worth greater than 40000 were from the USA?",
+        "llm_answer": "SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin INNER JOIN price AS T3 ON T1.ID = T3.ID WHERE T2.country = 'USA' AND T3.price > 40000 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                47
+            ]
+        ],
+        "correct_answer": "SELECT COUNT(*) FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'USA' AND T1.price > 40000",
+        "correct_results": [
+            [
+                47
+            ]
+        ],
+        "examples": "{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n},\n{\n    'question': 'What is the total number of cars produced in the United States?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'USA''\n},\n{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'Among the cars over 3200lbs, how many of them cost less than $28000?',\n    'sql_query': 'SELECT COUNT(T1.car_name) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.weight > 3200 AND T2.price < 28000'\n}",
+        "similarity_scores": [
+            0.5548500954353471,
+            0.5289770283073951,
+            0.4987697059950237,
+            0.46326693240400807
+        ]
+    },
+    {
+        "question": "List the car's name with a price worth greater than 85% of the average price of all cars.",
+        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > (SELECT AVG(price) FROM price) * 0.85 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "chevrolet chevelle malibu"
+            ],
+            [
+                "plymouth satellite"
+            ],
+            [
+                "amc rebel sst"
+            ],
+            [
+                "ford galaxie 500"
+            ],
+            [
+                "chevrolet impala"
+            ],
+            [
+                "plymouth fury iii"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "amc ambassador dpl"
+            ],
+            [
+                "dodge challenger se"
+            ],
+            [
+                "plymouth 'cuda 340"
+            ],
+            [
+                "chevrolet monte carlo"
+            ],
+            [
+                "buick estate wagon (sw)"
+            ],
+            [
+                "toyota corona mark ii"
+            ],
+            [
+                "volkswagen 1131 deluxe sedan"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "audi 100 ls"
+            ],
+            [
+                "ford f250"
+            ],
+            [
+                "chevy c20"
+            ],
+            [
+                "hi 1200d"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc gremlin"
+            ],
+            [
+                "plymouth satellite custom"
+            ],
+            [
+                "chevrolet chevelle malibu"
+            ],
+            [
+                "ford torino 500"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "chevrolet impala"
+            ],
+            [
+                "pontiac catalina brougham"
+            ],
+            [
+                "ford galaxie 500"
+            ],
+            [
+                "ford country squire (sw)"
+            ],
+            [
+                "amc hornet sportabout (sw)"
+            ],
+            [
+                "ford mustang"
+            ],
+            [
+                "mercury capri 2000"
+            ],
+            [
+                "peugeot 304"
+            ],
+            [
+                "toyota corolla 1200"
+            ],
+            [
+                "datsun 1200"
+            ],
+            [
+                "volkswagen model 111"
+            ],
+            [
+                "plymouth cricket"
+            ],
+            [
+                "toyota corona hardtop"
+            ],
+            [
+                "volkswagen type 3"
+            ],
+            [
+                "chevrolet vega"
+            ],
+            [
+                "ford pinto runabout"
+            ],
+            [
+                "chevrolet impala"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "plymouth fury iii"
+            ],
+            [
+                "oldsmobile delta 88 royale"
+            ],
+            [
+                "chrysler newport royal"
+            ],
+            [
+                "mazda rx2 coupe"
+            ],
+            [
+                "ford gran torino (sw)"
+            ],
+            [
+                "plymouth satellite custom (sw)"
+            ],
+            [
+                "volvo 145e (sw)"
+            ],
+            [
+                "volkswagen 411 (sw)"
+            ],
+            [
+                "renault 12 (sw)"
+            ],
+            [
+                "datsun 510 (sw)"
+            ],
+            [
+                "toyouta corona mark ii (sw)"
+            ],
+            [
+                "toyota corolla 1600 (sw)"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "ford gran torino"
+            ],
+            [
+                "dodge coronet custom"
+            ],
+            [
+                "mercury marquis brougham"
+            ],
+            [
+                "chevrolet caprice classic"
+            ],
+            [
+                "ford ltd"
+            ],
+            [
+                "plymouth fury gran sedan"
+            ],
+            [
+                "chrysler new yorker brougham"
+            ],
+            [
+                "buick electra 225 custom"
+            ],
+            [
+                "amc ambassador brougham"
+            ],
+            [
+                "chevrolet nova custom"
+            ],
+            [
+                "amc hornet"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "volkswagen super beetle"
+            ],
+            [
+                "plymouth custom suburb"
+            ],
+            [
+                "oldsmobile vista cruiser"
+            ],
+            [
+                "toyota carina"
+            ],
+            [
+                "chevrolet vega"
+            ],
+            [
+                "maxda rx3"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "mercury capri v6"
+            ],
+            [
+                "chevrolet monte carlo s"
+            ],
+            [
+                "pontiac grand prix"
+            ],
+            [
+                "fiat 128"
+            ],
+            [
+                "opel manta"
+            ],
+            [
+                "audi 100ls"
+            ],
+            [
+                "volvo 144ea"
+            ],
+            [
+                "dodge dart custom"
+            ],
+            [
+                "saab 99le"
+            ],
+            [
+                "toyota mark ii"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "amc hornet"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "datsun b210"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "toyota corolla 1200"
+            ],
+            [
+                "chevrolet vega"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "plymouth satellite sebring"
+            ],
+            [
+                "ford gran torino"
+            ],
+            [
+                "dodge coronet custom (sw)"
+            ],
+            [
+                "ford gran torino (sw)"
+            ],
+            [
+                "amc matador (sw)"
+            ],
+            [
+                "audi fox"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "dodge colt"
+            ],
+            [
+                "fiat 128"
+            ],
+            [
+                "honda civic"
+            ],
+            [
+                "subaru"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "ford ltd"
+            ],
+            [
+                "buick century"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "plymouth fury"
+            ],
+            [
+                "buick skyhawk"
+            ],
+            [
+                "chevrolet monza 2+2"
+            ],
+            [
+                "ford mustang ii"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "pontiac astro"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc pacer"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "volvo 244dl"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "fiat 131"
+            ],
+            [
+                "capri ii"
+            ],
+            [
+                "dodge colt"
+            ],
+            [
+                "renault 12tl"
+            ],
+            [
+                "chevrolet chevelle malibu classic"
+            ],
+            [
+                "ford gran torino"
+            ],
+            [
+                "plymouth valiant"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "chevrolet chevette"
+            ],
+            [
+                "chevrolet woody"
+            ],
+            [
+                "honda civic"
+            ],
+            [
+                "dodge aspen se"
+            ],
+            [
+                "ford granada ghia"
+            ],
+            [
+                "pontiac ventura sj"
+            ],
+            [
+                "amc pacer d/l"
+            ],
+            [
+                "datsun b-210"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "volvo 245"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "chevy c10"
+            ],
+            [
+                "buick opel isuzu deluxe"
+            ],
+            [
+                "plymouth arrow gs"
+            ],
+            [
+                "datsun f-10 hatchback"
+            ],
+            [
+                "chevrolet caprice classic"
+            ],
+            [
+                "oldsmobile cutlass supreme"
+            ],
+            [
+                "dodge monaco brougham"
+            ],
+            [
+                "buick skylark"
+            ],
+            [
+                "plymouth volare custom"
+            ],
+            [
+                "ford granada"
+            ],
+            [
+                "chevrolet monte carlo landau"
+            ],
+            [
+                "ford thunderbird"
+            ],
+            [
+                "volkswagen rabbit custom"
+            ],
+            [
+                "ford mustang ii 2+2"
+            ],
+            [
+                "chevrolet chevette"
+            ],
+            [
+                "dodge colt m/m"
+            ],
+            [
+                "subaru dl"
+            ],
+            [
+                "datsun 810"
+            ],
+            [
+                "volkswagen rabbit custom diesel"
+            ],
+            [
+                "ford fiesta"
+            ],
+            [
+                "mazda glc deluxe"
+            ],
+            [
+                "datsun b210 gx"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "oldsmobile cutlass salon brougham"
+            ],
+            [
+                "dodge diplomat"
+            ],
+            [
+                "mercury monarch ghia"
+            ],
+            [
+                "pontiac phoenix lj"
+            ],
+            [
+                "ford fairmont (auto)"
+            ],
+            [
+                "ford fairmont (man)"
+            ],
+            [
+                "plymouth volare"
+            ],
+            [
+                "amc concord"
+            ],
+            [
+                "buick century special"
+            ],
+            [
+                "mercury zephyr"
+            ],
+            [
+                "dodge aspen"
+            ],
+            [
+                "amc concord d/l"
+            ],
+            [
+                "chevrolet monte carlo landau"
+            ],
+            [
+                "ford futura"
+            ],
+            [
+                "dodge magnum xe"
+            ],
+            [
+                "chevrolet chevette"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "datsun 510"
+            ],
+            [
+                "plymouth sapporo"
+            ],
+            [
+                "oldsmobile starfire sx"
+            ],
+            [
+                "datsun 200-sx"
+            ],
+            [
+                "audi 5000"
+            ],
+            [
+                "volvo 264gl"
+            ],
+            [
+                "saab 99gle"
+            ],
+            [
+                "volkswagen scirocco"
+            ],
+            [
+                "mercury zephyr 6"
+            ],
+            [
+                "dodge aspen 6"
+            ],
+            [
+                "chevrolet caprice classic"
+            ],
+            [
+                "ford ltd landau"
+            ],
+            [
+                "ford country squire (sw)"
+            ],
+            [
+                "chevrolet malibu classic (sw)"
+            ],
+            [
+                "vw rabbit custom"
+            ],
+            [
+                "dodge colt hatchback custom"
+            ],
+            [
+                "amc spirit dl"
+            ],
+            [
+                "cadillac eldorado"
+            ],
+            [
+                "oldsmobile cutlass salon brougham"
+            ],
+            [
+                "plymouth horizon"
+            ],
+            [
+                "datsun 210"
+            ],
+            [
+                "fiat strada custom"
+            ],
+            [
+                "buick skylark limited"
+            ],
+            [
+                "chevrolet citation"
+            ],
+            [
+                "oldsmobile omega brougham"
+            ],
+            [
+                "pontiac phoenix"
+            ],
+            [
+                "vw rabbit"
+            ],
+            [
+                "datsun 310"
+            ],
+            [
+                "chevrolet citation"
+            ],
+            [
+                "amc concord"
+            ],
+            [
+                "dodge aspen"
+            ],
+            [
+                "audi 4000"
+            ],
+            [
+                "toyota corona liftback"
+            ],
+            [
+                "mazda 626"
+            ],
+            [
+                "datsun 510 hatchback"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "mazda glc"
+            ],
+            [
+                "dodge colt"
+            ],
+            [
+                "datsun 210"
+            ],
+            [
+                "vw rabbit c (diesel)"
+            ],
+            [
+                "vw dasher (diesel)"
+            ],
+            [
+                "audi 5000s (diesel)"
+            ],
+            [
+                "renault lecar deluxe"
+            ],
+            [
+                "subaru dl"
+            ],
+            [
+                "vokswagen rabbit"
+            ],
+            [
+                "datsun 280-zx"
+            ],
+            [
+                "mazda rx-7 gs"
+            ],
+            [
+                "triumph tr7 coupe"
+            ],
+            [
+                "honda accord"
+            ],
+            [
+                "plymouth reliant"
+            ],
+            [
+                "chevrolet citation"
+            ],
+            [
+                "plymouth reliant"
+            ],
+            [
+                "toyota starlet"
+            ],
+            [
+                "honda civic 1300"
+            ],
+            [
+                "toyota tercel"
+            ],
+            [
+                "mazda glc 4"
+            ],
+            [
+                "plymouth horizon 4"
+            ],
+            [
+                "volkswagen jetta"
+            ],
+            [
+                "renault 18i"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "datsun 200sx"
+            ],
+            [
+                "mazda 626"
+            ],
+            [
+                "volvo diesel"
+            ],
+            [
+                "toyota cressida"
+            ],
+            [
+                "datsun 810 maxima"
+            ],
+            [
+                "buick century"
+            ],
+            [
+                "oldsmobile cutlass ls"
+            ],
+            [
+                "ford granada gl"
+            ],
+            [
+                "chevrolet cavalier"
+            ],
+            [
+                "chevrolet cavalier wagon"
+            ],
+            [
+                "chevrolet cavalier 2-door"
+            ],
+            [
+                "pontiac j2000 se hatchback"
+            ],
+            [
+                "pontiac phoenix"
+            ],
+            [
+                "ford fairmont futura"
+            ],
+            [
+                "amc concord dl"
+            ],
+            [
+                "volkswagen rabbit l"
+            ],
+            [
+                "mazda glc custom l"
+            ],
+            [
+                "mazda glc custom"
+            ],
+            [
+                "plymouth horizon miser"
+            ],
+            [
+                "mercury lynx l"
+            ],
+            [
+                "nissan stanza xe"
+            ],
+            [
+                "honda accord"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "honda civic"
+            ],
+            [
+                "honda civic (auto)"
+            ],
+            [
+                "datsun 310 gx"
+            ],
+            [
+                "buick century limited"
+            ],
+            [
+                "chrysler lebaron medallion"
+            ],
+            [
+                "vw pickup"
+            ],
+            [
+                "dodge rampage"
+            ],
+            [
+                "ford ranger"
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price * 100 > ( SELECT AVG(price) * 85 FROM price )",
+        "correct_results": [
+            [
+                "chevrolet chevelle malibu"
+            ],
+            [
+                "plymouth satellite"
+            ],
+            [
+                "amc rebel sst"
+            ],
+            [
+                "ford galaxie 500"
+            ],
+            [
+                "chevrolet impala"
+            ],
+            [
+                "plymouth fury iii"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "amc ambassador dpl"
+            ],
+            [
+                "dodge challenger se"
+            ],
+            [
+                "plymouth 'cuda 340"
+            ],
+            [
+                "chevrolet monte carlo"
+            ],
+            [
+                "buick estate wagon (sw)"
+            ],
+            [
+                "toyota corona mark ii"
+            ],
+            [
+                "volkswagen 1131 deluxe sedan"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "audi 100 ls"
+            ],
+            [
+                "ford f250"
+            ],
+            [
+                "chevy c20"
+            ],
+            [
+                "hi 1200d"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc gremlin"
+            ],
+            [
+                "plymouth satellite custom"
+            ],
+            [
+                "chevrolet chevelle malibu"
+            ],
+            [
+                "ford torino 500"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "chevrolet impala"
+            ],
+            [
+                "pontiac catalina brougham"
+            ],
+            [
+                "ford galaxie 500"
+            ],
+            [
+                "ford country squire (sw)"
+            ],
+            [
+                "amc hornet sportabout (sw)"
+            ],
+            [
+                "ford mustang"
+            ],
+            [
+                "mercury capri 2000"
+            ],
+            [
+                "peugeot 304"
+            ],
+            [
+                "toyota corolla 1200"
+            ],
+            [
+                "datsun 1200"
+            ],
+            [
+                "volkswagen model 111"
+            ],
+            [
+                "plymouth cricket"
+            ],
+            [
+                "toyota corona hardtop"
+            ],
+            [
+                "volkswagen type 3"
+            ],
+            [
+                "chevrolet vega"
+            ],
+            [
+                "ford pinto runabout"
+            ],
+            [
+                "chevrolet impala"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "plymouth fury iii"
+            ],
+            [
+                "oldsmobile delta 88 royale"
+            ],
+            [
+                "chrysler newport royal"
+            ],
+            [
+                "mazda rx2 coupe"
+            ],
+            [
+                "ford gran torino (sw)"
+            ],
+            [
+                "plymouth satellite custom (sw)"
+            ],
+            [
+                "volvo 145e (sw)"
+            ],
+            [
+                "volkswagen 411 (sw)"
+            ],
+            [
+                "renault 12 (sw)"
+            ],
+            [
+                "datsun 510 (sw)"
+            ],
+            [
+                "toyouta corona mark ii (sw)"
+            ],
+            [
+                "toyota corolla 1600 (sw)"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "ford gran torino"
+            ],
+            [
+                "dodge coronet custom"
+            ],
+            [
+                "mercury marquis brougham"
+            ],
+            [
+                "chevrolet caprice classic"
+            ],
+            [
+                "ford ltd"
+            ],
+            [
+                "plymouth fury gran sedan"
+            ],
+            [
+                "chrysler new yorker brougham"
+            ],
+            [
+                "buick electra 225 custom"
+            ],
+            [
+                "amc ambassador brougham"
+            ],
+            [
+                "chevrolet nova custom"
+            ],
+            [
+                "amc hornet"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "volkswagen super beetle"
+            ],
+            [
+                "plymouth custom suburb"
+            ],
+            [
+                "oldsmobile vista cruiser"
+            ],
+            [
+                "toyota carina"
+            ],
+            [
+                "chevrolet vega"
+            ],
+            [
+                "maxda rx3"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "mercury capri v6"
+            ],
+            [
+                "chevrolet monte carlo s"
+            ],
+            [
+                "pontiac grand prix"
+            ],
+            [
+                "fiat 128"
+            ],
+            [
+                "opel manta"
+            ],
+            [
+                "audi 100ls"
+            ],
+            [
+                "volvo 144ea"
+            ],
+            [
+                "dodge dart custom"
+            ],
+            [
+                "saab 99le"
+            ],
+            [
+                "toyota mark ii"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "amc hornet"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "datsun b210"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "toyota corolla 1200"
+            ],
+            [
+                "chevrolet vega"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "plymouth satellite sebring"
+            ],
+            [
+                "ford gran torino"
+            ],
+            [
+                "dodge coronet custom (sw)"
+            ],
+            [
+                "ford gran torino (sw)"
+            ],
+            [
+                "amc matador (sw)"
+            ],
+            [
+                "audi fox"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "dodge colt"
+            ],
+            [
+                "fiat 128"
+            ],
+            [
+                "honda civic"
+            ],
+            [
+                "subaru"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "pontiac catalina"
+            ],
+            [
+                "ford ltd"
+            ],
+            [
+                "buick century"
+            ],
+            [
+                "amc matador"
+            ],
+            [
+                "plymouth fury"
+            ],
+            [
+                "buick skyhawk"
+            ],
+            [
+                "chevrolet monza 2+2"
+            ],
+            [
+                "ford mustang ii"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "pontiac astro"
+            ],
+            [
+                "volkswagen dasher"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "amc pacer"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "volvo 244dl"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "fiat 131"
+            ],
+            [
+                "capri ii"
+            ],
+            [
+                "dodge colt"
+            ],
+            [
+                "renault 12tl"
+            ],
+            [
+                "chevrolet chevelle malibu classic"
+            ],
+            [
+                "ford gran torino"
+            ],
+            [
+                "plymouth valiant"
+            ],
+            [
+                "chevrolet nova"
+            ],
+            [
+                "ford maverick"
+            ],
+            [
+                "chevrolet chevette"
+            ],
+            [
+                "chevrolet woody"
+            ],
+            [
+                "honda civic"
+            ],
+            [
+                "dodge aspen se"
+            ],
+            [
+                "ford granada ghia"
+            ],
+            [
+                "pontiac ventura sj"
+            ],
+            [
+                "amc pacer d/l"
+            ],
+            [
+                "datsun b-210"
+            ],
+            [
+                "ford pinto"
+            ],
+            [
+                "volvo 245"
+            ],
+            [
+                "peugeot 504"
+            ],
+            [
+                "chevy c10"
+            ],
+            [
+                "buick opel isuzu deluxe"
+            ],
+            [
+                "plymouth arrow gs"
+            ],
+            [
+                "datsun f-10 hatchback"
+            ],
+            [
+                "chevrolet caprice classic"
+            ],
+            [
+                "oldsmobile cutlass supreme"
+            ],
+            [
+                "dodge monaco brougham"
+            ],
+            [
+                "buick skylark"
+            ],
+            [
+                "plymouth volare custom"
+            ],
+            [
+                "ford granada"
+            ],
+            [
+                "chevrolet monte carlo landau"
+            ],
+            [
+                "ford thunderbird"
+            ],
+            [
+                "volkswagen rabbit custom"
+            ],
+            [
+                "ford mustang ii 2+2"
+            ],
+            [
+                "chevrolet chevette"
+            ],
+            [
+                "dodge colt m/m"
+            ],
+            [
+                "subaru dl"
+            ],
+            [
+                "datsun 810"
+            ],
+            [
+                "volkswagen rabbit custom diesel"
+            ],
+            [
+                "ford fiesta"
+            ],
+            [
+                "mazda glc deluxe"
+            ],
+            [
+                "datsun b210 gx"
+            ],
+            [
+                "honda civic cvcc"
+            ],
+            [
+                "oldsmobile cutlass salon brougham"
+            ],
+            [
+                "dodge diplomat"
+            ],
+            [
+                "mercury monarch ghia"
+            ],
+            [
+                "pontiac phoenix lj"
+            ],
+            [
+                "ford fairmont (auto)"
+            ],
+            [
+                "ford fairmont (man)"
+            ],
+            [
+                "plymouth volare"
+            ],
+            [
+                "amc concord"
+            ],
+            [
+                "buick century special"
+            ],
+            [
+                "mercury zephyr"
+            ],
+            [
+                "dodge aspen"
+            ],
+            [
+                "amc concord d/l"
+            ],
+            [
+                "chevrolet monte carlo landau"
+            ],
+            [
+                "ford futura"
+            ],
+            [
+                "dodge magnum xe"
+            ],
+            [
+                "chevrolet chevette"
+            ],
+            [
+                "toyota corona"
+            ],
+            [
+                "datsun 510"
+            ],
+            [
+                "plymouth sapporo"
+            ],
+            [
+                "oldsmobile starfire sx"
+            ],
+            [
+                "datsun 200-sx"
+            ],
+            [
+                "audi 5000"
+            ],
+            [
+                "volvo 264gl"
+            ],
+            [
+                "saab 99gle"
+            ],
+            [
+                "volkswagen scirocco"
+            ],
+            [
+                "mercury zephyr 6"
+            ],
+            [
+                "dodge aspen 6"
+            ],
+            [
+                "chevrolet caprice classic"
+            ],
+            [
+                "ford ltd landau"
+            ],
+            [
+                "ford country squire (sw)"
+            ],
+            [
+                "chevrolet malibu classic (sw)"
+            ],
+            [
+                "vw rabbit custom"
+            ],
+            [
+                "dodge colt hatchback custom"
+            ],
+            [
+                "amc spirit dl"
+            ],
+            [
+                "cadillac eldorado"
+            ],
+            [
+                "oldsmobile cutlass salon brougham"
+            ],
+            [
+                "plymouth horizon"
+            ],
+            [
+                "datsun 210"
+            ],
+            [
+                "fiat strada custom"
+            ],
+            [
+                "buick skylark limited"
+            ],
+            [
+                "chevrolet citation"
+            ],
+            [
+                "oldsmobile omega brougham"
+            ],
+            [
+                "pontiac phoenix"
+            ],
+            [
+                "vw rabbit"
+            ],
+            [
+                "datsun 310"
+            ],
+            [
+                "chevrolet citation"
+            ],
+            [
+                "amc concord"
+            ],
+            [
+                "dodge aspen"
+            ],
+            [
+                "audi 4000"
+            ],
+            [
+                "toyota corona liftback"
+            ],
+            [
+                "mazda 626"
+            ],
+            [
+                "datsun 510 hatchback"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "mazda glc"
+            ],
+            [
+                "dodge colt"
+            ],
+            [
+                "datsun 210"
+            ],
+            [
+                "vw rabbit c (diesel)"
+            ],
+            [
+                "vw dasher (diesel)"
+            ],
+            [
+                "audi 5000s (diesel)"
+            ],
+            [
+                "renault lecar deluxe"
+            ],
+            [
+                "subaru dl"
+            ],
+            [
+                "vokswagen rabbit"
+            ],
+            [
+                "datsun 280-zx"
+            ],
+            [
+                "mazda rx-7 gs"
+            ],
+            [
+                "triumph tr7 coupe"
+            ],
+            [
+                "honda accord"
+            ],
+            [
+                "plymouth reliant"
+            ],
+            [
+                "chevrolet citation"
+            ],
+            [
+                "plymouth reliant"
+            ],
+            [
+                "toyota starlet"
+            ],
+            [
+                "honda civic 1300"
+            ],
+            [
+                "toyota tercel"
+            ],
+            [
+                "mazda glc 4"
+            ],
+            [
+                "plymouth horizon 4"
+            ],
+            [
+                "volkswagen jetta"
+            ],
+            [
+                "renault 18i"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "datsun 200sx"
+            ],
+            [
+                "mazda 626"
+            ],
+            [
+                "volvo diesel"
+            ],
+            [
+                "toyota cressida"
+            ],
+            [
+                "datsun 810 maxima"
+            ],
+            [
+                "buick century"
+            ],
+            [
+                "oldsmobile cutlass ls"
+            ],
+            [
+                "ford granada gl"
+            ],
+            [
+                "chevrolet cavalier"
+            ],
+            [
+                "chevrolet cavalier wagon"
+            ],
+            [
+                "chevrolet cavalier 2-door"
+            ],
+            [
+                "pontiac j2000 se hatchback"
+            ],
+            [
+                "pontiac phoenix"
+            ],
+            [
+                "ford fairmont futura"
+            ],
+            [
+                "amc concord dl"
+            ],
+            [
+                "volkswagen rabbit l"
+            ],
+            [
+                "mazda glc custom l"
+            ],
+            [
+                "mazda glc custom"
+            ],
+            [
+                "plymouth horizon miser"
+            ],
+            [
+                "mercury lynx l"
+            ],
+            [
+                "nissan stanza xe"
+            ],
+            [
+                "honda accord"
+            ],
+            [
+                "toyota corolla"
+            ],
+            [
+                "honda civic"
+            ],
+            [
+                "honda civic (auto)"
+            ],
+            [
+                "datsun 310 gx"
+            ],
+            [
+                "buick century limited"
+            ],
+            [
+                "chrysler lebaron medallion"
+            ],
+            [
+                "vw pickup"
+            ],
+            [
+                "dodge rampage"
+            ],
+            [
+                "ford ranger"
+            ]
+        ],
+        "examples": "{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n},\n{\n    'question': 'Find the car with the smallest acceleration that costs more than $15000.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 15000 ORDER BY T1.acceleration ASC LIMIT 1'\n},\n{\n    'question': 'List all cars with a displacement greater than 300.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 WHERE T1.displacement > 300'\n},\n{\n    'question': 'How many cars with a model year before 1980 have more than 100 horsepower?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100'\n}",
+        "similarity_scores": [
+            0.24867178423411374,
+            0.22249250676564103,
+            0.12653063171894752,
+            0.11388902112120936
+        ]
+    },
+    {
+        "question": "Among the cars from Asia, list the IDs of cars that were introduced in 1979.",
+        "llm_answer": "SELECT T1.ID FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'Japan' AND T1.model_year = 1979 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                295
+            ],
+            [
+                304
+            ],
+            [
+                325
+            ]
+        ],
+        "correct_answer": "SELECT T1.ID FROM production AS T1 INNER JOIN country AS T2 ON T1.country = T2.origin WHERE T2.country = 'Japan' AND T1.model_year = 1979",
+        "correct_results": [
+            [
+                295
+            ],
+            [
+                304
+            ],
+            [
+                325
+            ]
+        ],
+        "examples": "{\n    'question': 'List all the cars from Japan that were produced after 1975.',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' AND T2.model_year > 1975'\n},\n{\n    'question': 'What is the total number of cars produced in the 1970s?',\n    'sql_query': 'SELECT COUNT(*) FROM production AS T1 WHERE T1.model_year >= 1970 AND T1.model_year < 1980'\n},\n{\n    'question': 'List the names of all car models that were produced in Italy after 1970 and have more than 4 cylinders.',\n    'sql_query': 'SELECT DISTINCT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Italy' AND T2.model_year > 1970 AND T1.cylinders > 4'\n},\n{\n    'question': 'How many cars with a model year before 1980 have more than 100 horsepower?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100'\n}",
+        "similarity_scores": [
+            0.4852151726784262,
+            0.30661771480059863,
+            0.256586198720566,
+            0.23309574549239875
+        ]
+    },
+    {
+        "question": "Which country produced the car with the lowest mileage per gallon?",
+        "llm_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin ORDER BY T1.mpg LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "USA"
+            ]
+        ],
+        "correct_answer": "SELECT T3.country FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country ORDER BY T1.mpg ASC LIMIT 1",
+        "correct_results": [
+            [
+                "USA"
+            ]
+        ],
+        "examples": "{\n    'question': 'Which car model has the highest mpg produced in 1975?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 ORDER BY T1.mpg DESC LIMIT 1'\n},\n{\n    'question': 'Which model year had the highest average mpg?',\n    'sql_query': 'SELECT T2.model_year FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID GROUP BY T2.model_year ORDER BY AVG(T1.mpg) DESC LIMIT 1'\n},\n{\n    'question': 'Which car has the lowest mpg and how much does it cost?',\n    'sql_query': 'SELECT T1.car_name, T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T1.mpg ASC LIMIT 1'\n},\n{\n    'question': 'What is the average mpg of cars with 4 cylinders?',\n    'sql_query': 'SELECT AVG(T1.mpg) FROM data AS T1 WHERE T1.cylinders = 4'\n}",
+        "similarity_scores": [
+            0.648435944245939,
+            0.5414266433282408,
+            0.4816837400016898,
+            0.4126426698123894
+        ]
+    },
+    {
+        "question": "Among the cars introduced in 1977, provide the names and the horse powers of cars from Europe.",
+        "llm_answer": "SELECT T1.car_name ,  T1.horsepower FROM data AS T1 JOIN production AS T2 ON T1.ID = T2.ID JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Europe' AND T2.model_year = 1977 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "volkswagen dasher",
+                67
+            ],
+            [
+                "volkswagen dasher",
+                71
+            ],
+            [
+                "renault 5 gtl",
+                58
+            ],
+            [
+                "volkswagen rabbit custom",
+                78
+            ],
+            [
+                "volkswagen dasher",
+                78
+            ],
+            [
+                "bmw 320i",
+                110
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name, T1.horsepower FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T2.model_year = 1977 AND T3.country = 'Europe'",
+        "correct_results": [
+            [
+                "volkswagen dasher",
+                67
+            ],
+            [
+                "volkswagen dasher",
+                71
+            ],
+            [
+                "renault 5 gtl",
+                58
+            ],
+            [
+                "volkswagen rabbit custom",
+                78
+            ],
+            [
+                "volkswagen dasher",
+                78
+            ],
+            [
+                "bmw 320i",
+                110
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the maximum horsepower for cars produced in 1973?',\n    'sql_query': 'SELECT MAX(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1973'\n},\n{\n    'question': 'How many cars with a model year before 1980 have more than 100 horsepower?',\n    'sql_query': 'SELECT COUNT(*) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year < 1980 AND T1.horsepower > 100'\n},\n{\n    'question': 'What is the average horsepower of cars produced in 1978?',\n    'sql_query': 'SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1978'\n},\n{\n    'question': 'List the names of all car models that were produced in Italy after 1970 and have more than 4 cylinders.',\n    'sql_query': 'SELECT DISTINCT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Italy' AND T2.model_year > 1970 AND T1.cylinders > 4'\n}",
+        "similarity_scores": [
+            0.2675909921886904,
+            0.2289411997640488,
+            0.21853475472215722,
+            0.18792196861717858
+        ]
+    },
+    {
+        "question": "Provide the name and model of the car with the highest price.",
+        "llm_answer": "SELECT T1.car_name ,  T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1 COLLATE NOCASE ",
+        "llm_results": [
+            [
+                "plymouth fury gran sedan",
+                73
+            ]
+        ],
+        "correct_answer": "SELECT T1.car_name, T1.model FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID ORDER BY T2.price DESC LIMIT 1",
+        "correct_results": [
+            [
+                "plymouth fury gran sedan",
+                73
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n},\n{\n    'question': 'Which car has the maximum weight among those priced under $20000?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price < 20000 ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'Which car model has the highest mpg produced in 1975?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1975 ORDER BY T1.mpg DESC LIMIT 1'\n},\n{\n    'question': 'What is the maximum price of cars with 6 cylinders?',\n    'sql_query': 'SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6'\n}",
+        "similarity_scores": [
+            0.26838859745223265,
+            0.25822854431235454,
+            0.2307285919175951,
+            0.2165730993125654
+        ]
+    },
+    {
+        "question": "What is the price of a Chevrolet Bel Air?",
+        "llm_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'Chevrolet Bel Air' COLLATE NOCASE ",
+        "llm_results": [
+            [
+                8844.146509
+            ]
+        ],
+        "correct_answer": "SELECT T2.price FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.car_name = 'chevrolet bel air'",
+        "correct_results": [
+            [
+                8844.146509
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the maximum price of cars with 6 cylinders?',\n    'sql_query': 'SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6'\n},\n{\n    'question': 'How many cars have a price between $10,000 and $20,000?',\n    'sql_query': 'SELECT COUNT(*) FROM price AS T1 WHERE T1.price BETWEEN 10000 AND 20000'\n},\n{\n    'question': 'What is the average price of cars with an acceleration over 15?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.acceleration > 15'\n},\n{\n    'question': 'What is the average price of cars with a displacement over 200?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 200'\n}",
+        "similarity_scores": [
+            0.24133535894030056,
+            0.12011403189592973,
+            0.10823367871297296,
+            0.07477897922816068
+        ]
+    },
+    {
+        "question": "What is the average price per car produced in Japan?",
+        "llm_answer": "SELECT AVG(T2.price) FROM production AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T1.country = T3.origin WHERE T3.country = 'Japan' COLLATE NOCASE ",
+        "llm_results": [
+            [
+                29008.68514356204
+            ]
+        ],
+        "correct_answer": "SELECT AVG(T1.price) FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country WHERE T3.country = 'Japan'",
+        "correct_results": [
+            [
+                29008.68514356204
+            ]
+        ],
+        "examples": "{\n    'question': 'What is the acceleration of the cheapest car produced by Japan?',\n    'sql_query': 'SELECT T4.acceleration FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country INNER JOIN data AS T4 ON T4.ID = T1.ID WHERE T3.country = 'Japan' ORDER BY T1.price ASC LIMIT 1'\n},\n{\n    'question': 'What is the average price of cars with a displacement over 200?',\n    'sql_query': 'SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.displacement > 200'\n},\n{\n    'question': 'Which car model has the highest weight and was produced in Japan?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'Japan' ORDER BY T1.weight DESC LIMIT 1'\n},\n{\n    'question': 'What is the average horsepower of cars produced by USA manufacturers in 1971?',\n    'sql_query': 'SELECT AVG(T1.horsepower) FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T2.country = T3.origin WHERE T3.country = 'USA' AND T2.model_year = 1971'\n}",
+        "similarity_scores": [
+            0.6063139031691014,
+            0.40938612545197806,
+            0.40314258244791856,
+            0.3731194970411639
+        ]
+    },
+    {
         "question": "Which country produced the car with the lowest price?",
         "llm_answer": "SELECT T3.country FROM price AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID INNER JOIN country AS T3 ON T3.origin = T2.country ORDER BY T1.price ASC LIMIT 1 COLLATE NOCASE ",
         "llm_results": [
@@ -129,28 +3657,6 @@
             0.399404247352137,
             0.3880163686568959,
             0.38146971556874776
-        ]
-    },
-    {
-        "question": "Among the cars with 8 cylinders, what is the name of the one that's the most expensive?",
-        "llm_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8 ORDER BY T2.price DESC LIMIT 1 COLLATE NOCASE ",
-        "llm_results": [
-            [
-                "plymouth fury gran sedan"
-            ]
-        ],
-        "correct_answer": "SELECT T1.car_name FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 8 ORDER BY T2.price DESC LIMIT 1",
-        "correct_results": [
-            [
-                "plymouth fury gran sedan"
-            ]
-        ],
-        "examples": "{\n    'question': 'What is the maximum price of cars with 6 cylinders?',\n    'sql_query': 'SELECT MAX(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.cylinders = 6'\n},\n{\n    'question': 'What is the most common number of cylinders for cars priced over $30000?',\n    'sql_query': 'SELECT MODE(T1.cylinders) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T2.price > 30000'\n},\n{\n    'question': 'List all unique car names that have more than 6 cylinders.',\n    'sql_query': 'SELECT DISTINCT T1.car_name FROM data AS T1 WHERE T1.cylinders > 6'\n},\n{\n    'question': 'What is the name of the car with the highest displacement and produced in 1972?',\n    'sql_query': 'SELECT T1.car_name FROM data AS T1 INNER JOIN production AS T2 ON T1.ID = T2.ID WHERE T2.model_year = 1972 ORDER BY T1.displacement DESC LIMIT 1'\n}",
-        "similarity_scores": [
-            0.5453931733545786,
-            0.40345886915437235,
-            0.3301709312652765,
-            0.3271078372116716
         ]
     }
 ]
