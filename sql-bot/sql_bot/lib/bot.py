@@ -38,7 +38,7 @@
 #     template=LLM_TEMPLATE, input_variables=["question", "schema"]
 # )
 # LLM_CHAIN = LLMChain(prompt=LLM_PROMPT, llm=LLM_MODEL)
-# # LLM_CHAIN = LLMChain(prompt=LLM_PROMPT | LLM_MODEL
+# # LLM_CHAIN = LLMChain(prompt=LLM_PROMPT | LLM_MODEL)
 
 
 
@@ -255,7 +255,7 @@ class QueryBot:
     )
 
     def __init__(self):
-        self.llm_schema = None
+        self.llm_schema = ""
         self.chat_collection = None
         self.llm_prompt = PromptTemplate(
             template=self.LLM_TEMPLATE, input_variables=["question", "schema"]
@@ -351,8 +351,8 @@ class QueryBot:
         api_response["similarity_scores"] = similarity_scores
         return api_response
 
-    @staticmethod
-    def get_api_response_template() -> dict:
+
+    def get_api_response_template(self) -> dict:
         return {
             "model_response": "",
             "is_valid_syntax": False,

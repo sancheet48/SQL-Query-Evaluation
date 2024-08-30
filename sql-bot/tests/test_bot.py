@@ -16,14 +16,13 @@ def query_bot():
 
 
 def test_startup_no_schema_file(query_bot):
-    with patch('const.LLM_SCHEMA_PATH', '/invalid/path'), \
-         patch('os.path.isfile', return_value=False), \
+    with patch('os.path.isfile', return_value=False), \
          patch('sys.exit') as mock_exit, \
          patch('logging.Logger.error') as mock_logger_error:
-        
+
         query_bot.startup()
-        
-        mock_logger_error.assert_called_once_with(f"'{query_bot.llm_schema}' file not found")
+
+        mock_logger_error.assert_called_once_with(f"'{const.LLM_SCHEMA_PATH}' file not found")
         mock_exit.assert_called_once_with(-1)
 
 

@@ -19,7 +19,7 @@ import sqlglot
 class SQLProcessor:
     """A class to handle SQL query processing, including validation and case-insensitive modifications."""
 
-    @staticmethod
+
     def validate_sql(sql_query: str) -> bool:
         """
         Validates the SQL query using sqlglot.
@@ -36,7 +36,7 @@ class SQLProcessor:
         except sqlglot.errors.ParseError:
             return False
 
-    @staticmethod
+
     def query_parser(query: str) -> str:
         """
         Parses the query to remove markdown and backticks.
@@ -49,7 +49,7 @@ class SQLProcessor:
         """
         return query.replace('`sql\n', '').replace('\n`', '').replace('`', '').strip()
 
-    @staticmethod
+
     def add_case_insensetiveness(query: str) -> str:
         """
         Adds case-insensitivity to the query using COLLATE NOCASE.
