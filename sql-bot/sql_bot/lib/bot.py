@@ -38,7 +38,12 @@ class QueryBot:
         )
         self.llm_chain = LLMChain(prompt=self.llm_prompt, llm=LLM_MODEL)
 
+
     def startup(self):
+        """
+        Performs startup tasks, including loading the LLM schema and initializing the vector database.
+        """
+
         if not const.CHROMA_DB_PATH:
             logger.warning(
                 "Environment variables: 'CHROMA_DB_PATH' not defined. "
@@ -70,9 +75,16 @@ class QueryBot:
             )
 
     def shutdown(self):
+        """
+        Shuts down the QueryBot instance, releasing any resources or connections.
+        """
         pass
 
     def setup_logging():
+        """
+        Sets up logging to write messages to a rotating log file 'bot.log' and the console.
+        Log format includes timestamp, level, module, line number, and message.
+        """
         logging.basicConfig(
             level=logging.INFO,
             format="%(asctime)s | %(levelname)s | %(module)s:%(lineno)d"
@@ -88,6 +100,17 @@ class QueryBot:
             ],
         )
     def retrieve_vdb(self, query: str) -> tuple:
+        """
+        Retrieves information from the vector database based on the given query.
+
+        Args:
+            query: The user's query string.
+
+        Returns:
+            A tuple containing:
+                - A formatted string of results (questions and their corresponding SQL queries).
+                - A list of similarity scores for each result.
+        """
         if not self.chat_collection:
             return "", []
         query_result = self.chat_collection.query(query_texts=query, n_results=4)
@@ -114,6 +137,17 @@ class QueryBot:
         return output_string, similarity_scores
 
     def model_output(self, input_question: str, examples: str, similarity_scores: list) -> dict:
+        """
+        Generates a response using the LLM chain based on the input question and examples.
+
+        Args:
+            input_question: The user's query.
+            examples: Relevant examples or context.
+            similarity_scores: Similarity scores of retrieved examples.
+
+        Returns:
+            A dictionary containing the model's response, time taken, and similarity scores.
+        """
         logging.info("User query: '%s'", input_question)
         start_time = time()
         response = self.llm_chain.run(
@@ -129,6 +163,12 @@ class QueryBot:
 
 
     def get_api_response_template(self) -> dict:
+        """
+        Returns a template dictionary for structuring API responses.
+
+        Returns:
+            A dictionary with keys for model response, syntax validity, time taken, examples, and similarity scores.
+        """
         return {
             "model_response": "",
             "is_valid_syntax": False,
@@ -138,12 +178,30 @@ class QueryBot:
         }
 
     def sql_connect(self, api_response: dict) -> dict:
+        """
+        Processes the model response, likely parsing and validating SQL queries.
+
+        Args:
+            api_response: The API response dictionary.
+
+        Returns:
+            The updated API response dictionary with processed model response and syntax validity.
+        """
         api_response["model_response"] = SQLProcessor.query_parser(api_response["model_response"])
         api_response["model_response"] = SQLProcessor.add_case_insensetiveness(api_response["model_response"])
         api_response["is_valid_syntax"] = SQLProcessor.validate_sql(api_response["model_response"])
         return api_response
 
     def get_db_query(self, query: str) -> JSONResponse:
+        """
+        Handles the complete query processing flow, from retrieval to SQL execution.
+
+        Args:
+            query: The user's query string
+
+        Returns
+            A JSONResponse containing the API response (model output, syntax validity, etc.)
+        """
         examples, similarity_scores = self.retrieve_vdb(query)
         api_response = self.model_output(query, examples, similarity_scores)
         api_response["examples"] = examples

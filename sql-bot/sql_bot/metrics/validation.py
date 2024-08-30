@@ -4,6 +4,9 @@ import sqlite3
 import random
 import time
 import const
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 
 
@@ -146,10 +149,10 @@ def main():
     # Save output data to JSON files
     evaluator.save_all_data()
 
-    print(f"Total time taken: {end_time - start_time} seconds")
-    print(f"Correct: {correct}")
+    logging.info(f"- Total time taken: {end_time - start_time} seconds")
+    logging.info(f"- Correct: {correct}")
     accuracy_percentage = (correct / total) * 100
-    print(f"Accuracy: {accuracy_percentage:.2f}")
+    logging.info(f"- Accuracy: {accuracy_percentage:.2f}")
 
 
 if __name__ == "__main__":

@@ -56,30 +56,36 @@ def test_retrieve_vdb_with_collection(query_bot):
 def test_model_output(query_bot):
     mock_llm_chain = Mock()
     query_bot.llm_chain = mock_llm_chain
-    mock_llm_chain.run.return_value = "SELECT * FROM cars WHERE price < 10000"
+    mock_llm_chain.run.return_value = "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.model = 70"
     
-    response = query_bot.model_output("sample question", "example examples", [0.8])
+    response = query_bot.model_output("What is the average price of model 70 cars?", "sample examples", [0.44424616782484705,
+            0.4440249728681688,
+            0.4438854719816604,
+            0.42174848741233506])
     
-    assert response["model_response"] == "SELECT * FROM cars WHERE price < 10000"
+    assert response["model_response"] == "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.model = 70"
     assert "time_taken" in response
-    assert response["similarity_scores"] == [0.8]
+    assert response["similarity_scores"] == [0.44424616782484705,
+            0.4440249728681688,
+            0.4438854719816604,
+            0.42174848741233506]
 
 
 def test_get_db_query_success(query_bot):
     with patch.object(query_bot, 'retrieve_vdb', return_value=("examples", [0.9])), \
-         patch.object(query_bot, 'model_output', return_value={"model_response": "SELECT * FROM cars", "is_valid_syntax": True}), \
-         patch.object(query_bot, 'sql_connect', return_value={"model_response": "SELECT * FROM cars", "is_valid_syntax": True, "examples": "examples"}):
+         patch.object(query_bot, 'model_output', return_value={"model_response": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.model = 70", "is_valid_syntax": True}), \
+         patch.object(query_bot, 'sql_connect', return_value={"model_response": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.model = 70", "is_valid_syntax": True, "examples": "examples"}):
         
-        response = query_bot.get_db_query("What is the price of a car?")
+        response = query_bot.get_db_query("What is the average price of model 70 cars?")
         assert isinstance(response, JSONResponse)
         assert response.status_code == 200
 
 
 def test_get_db_query_failure(query_bot):
     with patch.object(query_bot, 'retrieve_vdb', return_value=("examples", [0.9])), \
-         patch.object(query_bot, 'model_output', return_value={"model_response": "SELECT * FROM cars", "is_valid_syntax": True}), \
+         patch.object(query_bot, 'model_output', return_value={"model_response": "SELECT AVG(T2.price) FROM data AS T1 INNER JOIN price AS T2 ON T1.ID = T2.ID WHERE T1.model = 70", "is_valid_syntax": True}), \
          patch.object(query_bot, 'sql_connect', side_effect=Exception("Test Exception")):
         
-        response = query_bot.get_db_query("What is the price of a car?")
+        response = query_bot.get_db_query("What is the average price of model 70 cars?")
         assert isinstance(response, JSONResponse)
         assert response.status_code == 400
