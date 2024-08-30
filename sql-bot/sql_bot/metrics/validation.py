@@ -121,8 +121,8 @@ def main():
         data = json.load(f)
 
     # Shuffle and select 30 random questions
-    random.shuffle(data)
-    data = data[:10]
+    # random.shuffle(data)
+    data = data[-20:]
 
     # Initialize components
     db_manager = DatabaseManager(const.SQL_DB_PATH)

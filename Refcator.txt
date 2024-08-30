@@ -1,0 +1,59 @@
+LLM_TEMPLATE = (
+    "### System: \n You are a helpful assistant to convert text to "
+    + "SQL query. Answer exactly in one line from the schema. "
+    + "Generate a single SQL query for the question from schema below ,
+    + " ensuring the generated SQL query is case-insensitive: "
+    + "{schema} "
+    + "\n### User: \n{question}"
+    + "\n### Assistant:\n "
+)
+
+
+LLM_TEMPLATE = (
+    "### System: \n You are a helpful assistant to convert text to "
+    + "SQL query. Answer exactly in one line from the schema. "
+    + "Generate a single SQL query for the question from schema below ,
+    + " ensuring the generated SQL query is case-insensitive and does not contain any backticks: "
+    + "{schema} "
+    + "\n### User: \n{question}"
+    + "\n### Assistant:\n "
+)
+
+### Tasks
+
+1. Add similarity scores along examples in the correct and incorrect json file.
+2. Backtick issue :  Added additional backtick parser.
+3. Casing issue :   Added COLLATE NOCASE  sql parser.
+4. Hallucinated answers : Added more examples( different from test data).
+5. Distinct issue : Added  more examples  (but different from test data)  (partially resolved)  
+(As some questions like this "Tell the origin country of car no.382." There is no mention of unique or distinct in the question. Trying to add exactly similar examples will cause overfitting. Also, hardcoding DISTINCT keywords will lead to some edge cases issues.  ) 
+6. Added the remaining json files. 
+7. Refactoring of code 
+8. Tests for code 
+9. Prompt Engineering
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### Commands to run
+
+"generate schema"
+
+ python sql_bot/lib/schema_generator.py  "D:\Downloads\train\train\train_tables.json"  "cars"
+
+"create vector embeddings"
+
+python -m sql_bot.vector_db.vector_embeddings --filepath "sql_bot/vector_db/sample_examples.json"  --vector_db_path "DB"
+
+uvicorn sql_bot.main:api --reload
+

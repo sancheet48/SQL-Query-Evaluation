@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import pytest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock, patch, mock_open 
 from sql_bot.lib.bot import QueryBot
 import const
 from fastapi.responses import JSONResponse
